@@ -1,0 +1,1 @@
+The right combination of parameters can vary wildly between applications and getting them right can be tricky, sharing what worked for me to get things setup as I wanted. 
