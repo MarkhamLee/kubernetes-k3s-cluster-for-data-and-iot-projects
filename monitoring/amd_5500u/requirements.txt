@@ -1,0 +1,3 @@
+influxdb-client==1.38.0
+import psutil
+
