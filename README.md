@@ -22,11 +22,9 @@ A couple of items just to illustrate how I approached this project:
 * I have an AWS account with S3 that I use for backing up longhorn (the shared storage solution)
 
 
-
-
-  ### Acknowledgements & References: 
+### Acknowledgements & References: 
   
-  * I wouldn't have made it far enough to be able to know enough to share with others if it weren't for likes of [Techno Tim, follow him on YouTube](https://www.youtube.com/@TechnoTim/videos), after finding his channel I started building and tearing down clusters, giddy over being able to get the basics setup in a few minutes. 
+* I wouldn't have made it far enough to be able to know enough to share with others if it weren't for likes of [Techno Tim, follow him on YouTube](https://www.youtube.com/@TechnoTim/videos), after finding his channel I started building and tearing down clusters, giddy over being able to get the basics setup in a few minutes. 
 
 
 
