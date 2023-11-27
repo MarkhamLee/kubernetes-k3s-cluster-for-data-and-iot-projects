@@ -8,10 +8,12 @@
 
 *Note: it goes without saying that you should use anything here at your own risk, I guarantee nothing and am just sharing how I build out my setup/what worked for me.*
 
+
  ### A couple of assumptions 
 
 A couple of items just to illustrate how I approached this project: 
 
+* I built everthing on devices running Ubuntu, which implies that everything here "should" work on any debian distro and on Linux in general. Outside of that, just know that you'll probably run into some issues. 
 * I took the approach of *"how would I build out something to support a minimally viable product for some sort of edge deployment/project at work?"*. Meaning cloud back-up, shared storage, secure certificates/encrypted connections and the like. Meaning: when this gets to a point where it seems rather over-engineered for a homelab, well, that was the point. I.e., it might get to be production production, but it should get close. 
 * Everything here is based on building out a high availability cluster, i.e., one with at least three server nodes. I used small *"Intel NUC like"* Beelink SER5 Machines I picked up for $230/each on Amazon, 6C/12, 64GB of RAM, 2 TB NVME. I think they're a great deal price to performance wise, they made me question why I spent almost double for a 12th gen Intel NUC.  
 * I use traefik for the ingress and letsencrypt to generate secure certs to make sure all of my connections are secure. 
