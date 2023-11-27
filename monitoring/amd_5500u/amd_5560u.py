@@ -17,7 +17,7 @@ logging.basicConfig(filename='hardwareDataLinuxCPU.log', level=logging.DEBUG,
                         : %(message)s')
 
 
-class Amd5560uData():
+class AMD5560Data():
 
     def __init__(self):
 
