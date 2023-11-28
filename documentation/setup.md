@@ -12,7 +12,7 @@ A couple of tricks to make it go smoother:
 
 
 ## Post Setup - Things I wish I picked up sooner    
-* Your certificate secret names are at the namespace level, so setup a new one in each namespace you have services that need certificates in. 
+* Your certificates are at the namespace level. So if something in namespace xyz needs a cert, you need to generate one in that namespace. 
 * In keeping with the above, SOME apps/services you can just give it the ingress source and the email you used with cloudflare and it will do the rest (see Rancher) others, not so much. 
 
 
