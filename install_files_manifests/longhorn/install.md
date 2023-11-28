@@ -41,3 +41,17 @@ kubectl get pod | grep longhorn-nfs-installation
 ```
 
 Finally, [use these instructions](https://longhorn.io/docs/1.5.3/deploy/install/install-with-rancher/) to do the rest. 
+
+
+#### Extras - Setting up Backup 
+
+* I setup my backup to use AWSS3 and my first attempt based on looking through Longhorn was to create a bucket, add an IAM role, create keys drop an access point into the space for backup target. <- won't work - maybe you wouldn't try this, but in case you do, don't. Chances are, you'll get 90% of the way and it won't work and you'll get frustrated - don't ask how I know. 
+* Instead you need to follow this process (the short version if you're familiar with AWS)
+    * Create the IAM role, add it to a group with a policy to access your specific buckets or S3 
+    * Create KMS keys
+    * Create your bucket, set it up to use the KMS keys you created 
+    * Create base64 strings for the key and secret
+    * Create a yaml file and use the above to create a secret 
+    * Go to general in Longhorn, scroll down and add the path to your bucket and the secret name you created above
+    * Go to each volume in longhorn and setup a back up 
+* The long-version: just follow this [blog post from Dan Foulkes](https://blog.foulkes.cloud/devops/picluster/longhorn/aws/s3/2022/12/29/pi-cluster-longhorn-aws-s3-backup.html) 
