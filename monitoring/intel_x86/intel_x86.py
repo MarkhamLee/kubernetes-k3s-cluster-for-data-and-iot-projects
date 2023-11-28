@@ -1,13 +1,14 @@
 # Markham Lee (C) 2023
 # Hardware Monitor for Linux & Windows:
-# https://github.com/MarkhamLee/k3s-data-platform-IoT
-# script to retrieve CPU related data on an AMD x86 machine
+# # https://github.com/MarkhamLee/k3s-data-platform-IoT
+# script to retrieve CPU related data on an Intel x86 machine
 # and then write to InfluxDB
 
 import psutil
 import logging
-import influxdb_client # noqa E402
+import influxdb_client
 from influxdb_client.client.write_api import SYNCHRONOUS
+
 
 # create logger for logging errors, exceptions and the like
 logging.basicConfig(filename='hardwareDataLinuxCPU.log', level=logging.DEBUG,
@@ -15,7 +16,7 @@ logging.basicConfig(filename='hardwareDataLinuxCPU.log', level=logging.DEBUG,
                         : %(message)s')
 
 
-class AMD5560Data():
+class Intelx86():
 
     def __init__(self):
 
@@ -58,13 +59,12 @@ class AMD5560Data():
         return ram_use
 
     @staticmethod
-    def amd_linux_data():
+    def getTemps():
 
+        core_temp = psutil.sensors_temperatures()['coretemp'][0].current
         nvme_temp = psutil.sensors_temperatures()['nvme'][0].current
-        cpu_temp = psutil.sensors_temperatures()['k10temp'][0].current
-        amdgpu_temp = psutil.sensors_temperatures()['amdgpu'][0].current
 
-        return nvme_temp, cpu_temp, amdgpu_temp
+        return core_temp, nvme_temp
 
     @staticmethod
     def influx_client(token: str, org: str, url: str) -> object:
