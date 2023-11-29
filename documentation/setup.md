@@ -37,8 +37,7 @@
 
 
 #### Post Setup 
-* I would experiment with building it up, resetting and building again, adding nodes, removing them, etc., and getting really comfortable with that before you go further. 
-* 
+* To add a node just update your hosts file with the IP address for the new node after getting it setup, the setup process will ignore the existing nodes and just setup the new ones. I would experiment with building things up, resetting and building again, adding nodes, removing them, etc., and getting really comfortable with that before you go further. 
 
 
 ## Things I wish I picked up sooner    
