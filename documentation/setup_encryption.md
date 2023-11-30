@@ -1,8 +1,7 @@
 ## A couple of preparation steps before getting started with encryption
-* Setup a custom router, any used computer will do, but ideally you'd get something with dual NICs. I used a small form factor PC with Dual NICs (Trigkey G5 w/ Intel N100) and  it works great, but I sometimes think I should've gotten a firewall appliances with 4-6 LAN ports instead. 
+* Setup a custom router, any used computer will do, but ideally you'd get something with dual NICs. I used a small form factor PC with Dual NICs (Trigkey G5 w/ Intel N100) and  it works great. 
 * Make sure you know how to create local domains (or host overrides) on your local network 
-* Create a CloudFlare account and setup a local domain if you want to go the full encryption route 
-
+* Create a CloudFlare account and setup a publicly available domain if you want to go the full encryption route 
 
 
 ### Setting up your cluster with secure certificates

@@ -11,7 +11,7 @@
     * Installing open-iscsi 
     * Installing the NFSv4 client to enable backups outside of your cluster. 
 
-IF you skip these steps (open-iscsi in particular) the install will either fail or partially succeed and and not work. You can read mroe about the installation pre-requisites [here](https://longhorn.io/docs/1.5.3/deploy/install/#installation-requirements). Luckily, the longhorn web site provides great instructions and makes things fairly easy, IF you use the right option(s) to install the dependencies, the first option they provide is NOT the best one. 
+IF you skip these steps (open-iscsi in particular) the install will either fail or partially succeed and and not work. You can read more about the installation prerequisites [here](https://longhorn.io/docs/1.5.3/deploy/install/#installation-requirements). Luckily, the longhorn web site provides great instructions and makes things fairly easy, IF you use the right option(s) to install the dependencies. 
 
 First: use the following to install open-iscsi - the rancher web site provides several other options to do it, but this way always worked for me, with the others giving rather mixed results: 
 

@@ -2,7 +2,7 @@
 
 * You should be able to cut and paste this into the screen for editing helm values in Rancher, or just apply it at the command line. 
 * Key items for a HA setup:
-    * Under auto scaling, set your minimum to 2 or higher, due to the same for replicas. Make sure these numbers match
+    * Under auto scaling, set your minimum to 2 or higher, do the same for replicas. Make sure these numbers match
     * Enable persistence (save your settings and such) and then change the access mode to ReadWriteMany
 * Also be sure to setup ingress:
     * I added "ingress class" to the chart, it didn't come with it for some reason. The values.yaml file in this folder has that added in.

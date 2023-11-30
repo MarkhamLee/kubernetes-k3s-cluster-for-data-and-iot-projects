@@ -7,8 +7,8 @@ The right combination of parameters can vary wildly between applications and get
 
     * Airflow 
     * Eclipse-Mosquitto
-    * Grafana
+    * Grafana [DONE]
     * InfluxDB
-    * Node-Red
+    * Node-Red [DONE]
     * PostgreSQL
 

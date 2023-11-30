@@ -10,7 +10,7 @@
 ##### Preparing your environment to run the playbook: 
 * Make sure you have an up to date version of python installed, including pip and virtual environments. 
 * Install Ansible on your machine but make sure you follow this process, as chances are your Linux distro installed an older one. This is the process I followed:
-    * Check your Ansible version the instructions say at least 2.11, FWIW I had 2.16 installed on mine. If you're above 2.11, you're good, if not, follow the next step(s):
+    * Check your Ansible version, the instructions say at least 2.11, FWIW I had 2.16 installed on mine. If you're above 2.11, you're good, if not, follow the next step(s):
     * Remove the old version: 
         * sudo apt remove ansible 
         * sudo apt --purge autoremove 
@@ -25,7 +25,7 @@
 * You may or may not get an netaddr error, so you go ahead and install that into your virtual environment. 
 * Now install the requirements.txt file that came with the repo into your virtual environment
 * **Optional Steps:**
-    * You'll need some additional server arguments to get things setup to fully use monitoring, see them below. I got these from [Tim's Video on setting up the kube-prometheus-stack](https://www.youtube.com/watch?v=fzny5uUaAeY&t=119s), using these server arguments when you first get things setup will just make things easier whether you follow Tim's instructions or just use the kube-prometheus add-on that's already in Rancher. 
+    * You'll need some additional server arguments to get things setup to fully use monitoring, see them below. I got these from [Tim's Video on setting up the kube-prometheus-stack](https://www.youtube.com/watch?v=fzny5uUaAeY&t=119s), using these server arguments when you first get things setup will just make things easier whether you follow Tim's instructions or just use the kube-prometheus add-on that's already in Ranche to deploy the monitoring stack. 
 
     ```
     extra_server_args: >-
@@ -44,6 +44,9 @@
     
 ##### Preparing your hardware 
 * Make sure you turn off swap on all your devices
+* Turn off the Ubuntu firewall or at least open all the relevant ports for K3s 
+* Install openssh so the machines can talk to each other 
+* Install venv for python virtual environments
 * Set up all your devices for passwordless SSH between them by exchange SSH keys and quadruple check this before you run the playbook. 
 * On the device you're going to run the playbook from set that one up for passwordless SSH with itself. I know it sounds goofy, but it can hang otherwise as Ansible connects to the host via SSH. FTR it will often just connect and run fine, but if it doesn't.. 
 
@@ -54,7 +57,7 @@
 
 
 #### Post Setup 
-* To add a node just update your hosts file with the IP address for the new node after getting it setup, the setup process will ignore the existing nodes and just setup the new ones. I would experiment with building things up, resetting and building again, adding nodes, removing them, etc., and getting really comfortable with that before you go further. 
+* To add a node just update your hosts file in the Ansibler repo with the IP address for the new node, the setup process will ignore the existing nodes and just setup the new ones. I would experiment with building things up, resetting and building again, adding nodes, removing them, etc., and getting really comfortable with those processes before moving on to building out cluster with all the features and apps you want/need. 
 
 
 ## Things I wish I picked up sooner    
