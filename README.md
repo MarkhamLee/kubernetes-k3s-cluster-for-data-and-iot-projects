@@ -29,7 +29,7 @@ I use **AWS S3** to back-up both Longhorn storage and Rancher.
 * Add some agent nodes 
 * Add some arm64 nodes as part of experimenting with a multi-architecture cluster. 
 * Either move the motherboards in the Beelinks into a shared enclosure of some sort and/or upgrade the fans in order to better control temperatures. 
-* Add automation for both the setup tasks, but the day DevOps/MLOps/Sys Admin tasks using one mor more of Ansible, Flux and Terrafrm. 
+* Add automation for both the setup tasks, but the day DevOps/MLOps/Sys Admin tasks using some combination of Ansible, Flux and/or Terraform. 
 
 #### General approach, relevant technologies, etc. 
 
