@@ -26,7 +26,9 @@ kubectl get pod | grep longhorn-iscsi-installation
 ```
 
 You should see something that looks like this: 
-TODO: add screenshot 
+
+![iscsi screenshot](../images/screenshot_iscsi.png)
+
 
 Next, use the following to install the NFSv4 client, again, the rancher web site will give you several other options, but this option worked the best for me: 
 
@@ -39,14 +41,26 @@ Once that's done, run the following command to verify that the installation was 
 ```
 kubectl get pod | grep longhorn-nfs-installation
 ```
+You should see something that looks like this: 
 
-Finally, [use these instructions](https://longhorn.io/docs/1.5.3/deploy/install/install-with-rancher/) to do the rest. 
+![nfs screenshot](../images/nfs_screenshot.png) 
+
+
+
+Next, use these instructions](https://longhorn.io/docs/1.5.3/deploy/install/install-with-rancher/) to do the rest. 
+
+Finally, you're going to have a situation with you longhorn and presumably local-path both set as "default storage classes". You'll need to change this before you try and deploy any applications, otherwise you'll get storage attach errors. Run the following command to ensure that only longhorn is set as your default storage class: 
+
+```
+kubectl patch storageclass name-of-storage-class -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+```
+
+You can read more about managing storage classes [here](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/).
 
 
 #### Extras - Setting up Backup 
 
-* I setup my backup to use AWSS3 and my first attempt based on looking through Longhorn was to create a bucket, add an IAM role, create keys drop an access point into the space for backup target. <- won't work - maybe you wouldn't try this, but in case you do, don't. Chances are, you'll get 90% of the way and it won't work and you'll get frustrated - don't ask how I know. 
-* Instead you need to follow this process (the short version if you're familiar with AWS)
+* Configuring Longhorn to backup to S3 is fairly simple IF you take the right approach, the basics are as follows: 
     * Create the IAM role, add it to a group with a policy to access your specific buckets or S3 
     * Create KMS keys
     * Create your bucket, set it up to use the KMS keys you created 

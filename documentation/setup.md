@@ -1,4 +1,6 @@
 
+
+
 ## Basic setup with Ansible 
 
 * Honestly, just use [Techno Tim's playbook for the basic setup](https://www.youtube.com/watch?v=CbkEWcUZ7zM&t=316s), you'll save yourself a LOT of headaches, plus learning ansible will payoff later on. 
@@ -23,11 +25,26 @@
 * You may or may not get an netaddr error, so you go ahead and install that into your virtual environment. 
 * Now install the requirements.txt file that came with the repo into your virtual environment
 * **Optional Steps:**
-    * You'll need some additional server arguments to get things setup to fully use monitoring, see them below. I got these from Tim's Video on setting up the graphs, using his server arguments when you first get things setup will just make things easier. Also, I didn't use his instructions and instead used the built in monitoring package in Rancher, as that worked better for me, but your mileage may vary. 
-    
+    * You'll need some additional server arguments to get things setup to fully use monitoring, see them below. I got these from [Tim's Video on setting up the kube-prometheus-stack](https://www.youtube.com/watch?v=fzny5uUaAeY&t=119s), using these server arguments when you first get things setup will just make things easier whether you follow Tim's instructions or just use the kube-prometheus add-on that's already in Rancher. 
 
+    ```
+    extra_server_args: >-
+  {{ extra_args }}
+  {{ '--node-taint node-role.kubernetes.io/master=true:NoSchedule' if k3s_master_taint else '' }}
+  --tls-san {{ apiserver_endpoint }}
+  --disable servicelb
+  --disable traefik
+  --kube-controller-manager-arg bind-address=0.0.0.0
+  --kube-proxy-arg metrics-bind-address=0.0.0.0
+  --kube-scheduler-arg bind-address=0.0.0.0
+  --etcd-expose-metrics true
+  --kubelet-arg containerd=/run/k3s/containerd/containerd.sock 
+    
+    ```
+    
 ##### Preparing your hardware 
 * Make sure you turn off swap on all your devices
+* Set up all your devices for passwordless SSH between them by exchange SSH keys and quadruple check this before you run the playbook. 
 * On the device you're going to run the playbook from set that one up for passwordless SSH with itself. I know it sounds goofy, but it can hang otherwise as Ansible connects to the host via SSH. FTR it will often just connect and run fine, but if it doesn't.. 
 
 ##### Other Tips 
