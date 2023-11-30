@@ -29,8 +29,7 @@ I use **AWS S3** to back-up both Longhorn storage and Rancher.
 * Add some agent nodes 
 * Add some arm64 nodes as part of experimenting with a multi-architecture cluster. 
 * Either move the motherboards in the Beelinks into a shared enclosure of some sort and/or upgrade the fans in order to better control temperatures. 
-* Find ways to automate more of the setup in addition to the day to day management/sys admin tasks with either ansible or teraform. 
-
+* Add automation for both the setup tasks, but the day DevOps/MLOps/Sys Admin tasks using one mor more of Ansible, Flux and Terrafrm. 
 
 #### General approach, relevant technologies, etc. 
 
@@ -38,7 +37,6 @@ I use **AWS S3** to back-up both Longhorn storage and Rancher.
 * I built everything on devices running Ubuntu, which implies that everything here "should" work on any debian distro and on Linux in general. Outside of that, just know that you'll probably run into some issues. 
 * I took the approach of *"how would I build out something to support a minimally viable product for an edge deployment/project at work?"*. Meaning: cloud back-up, shared storage, secure certificates/encrypted connections, CI/CD for custom code, etc. AKA a purposely over-engineered homelab cluster. *I.e., one that might not get to the level of "production production"*, but should be close. 
  
-
 ### Acknowledgements & References: 
   
 * I wouldn't have made it far enough to be able to know enough to share with others if it weren't for likes of [Techno Tim, follow him on YouTube](https://www.youtube.com/@TechnoTim/videos), after finding his channel I started building and tearing down clusters, giddy over being able to get the basics setup in a few minutes as opposed to the not so fun time I was having prior.
