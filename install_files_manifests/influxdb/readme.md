@@ -1,3 +1,13 @@
+## CRITICAL NOTE 
+
+The official helm chart as found [here] is woefully out of date, it will install InfluxDB 2.3.0 as opposed to the current version of 2.7.4. This causes a problem where Grafana (version 10.2.2) can connect to InfluxDB BUT cannot see any measurements. In order to correct this, the values.yaml file in this directory has been updated to pull the image for 2.7.4. I tested this change by: 
+
+* Installing the current helm chart as is
+* Verifying that InfluxDB installed properly 
+* Doing an upgrade in Rancher where I simply changed the image version from 2.3.0 to 2.7.4 in the values.yaml file. 
+
+So far, I haven't encountered any issues. That being said, given that this is an unofficial use or upgrade at your own risk. 
+
 #### InfluxDB Setup Instructions
 
 1) Add the Helm Chart for InfluxDB for to Rancher 

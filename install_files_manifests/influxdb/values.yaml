@@ -1,6 +1,6 @@
 adminUser:
   bucket: default
-  organization: acoolhomelab
+  organization: 
   password: ''
   retention_policy: 0s
   token: ''
@@ -11,7 +11,7 @@ fullnameOverride: 'influxdb'
 image:
   pullPolicy: IfNotPresent
   repository: influxdb
-  tag: 2.3.0-alpine
+  tag: 2.7.4-alpine
 ingress:
   annotations: {}
   enabled: true

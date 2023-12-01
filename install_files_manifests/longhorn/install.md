@@ -60,7 +60,7 @@ You can read more about managing storage classes [here](https://kubernetes.io/do
 
 #### Extras - Setting up Backup 
 
-* Configuring Longhorn to backup to S3 is fairly simple IF you take the right approach, the basics are as follows: 
+* Short-version: configuring Longhorn to backup to S3 is fairly simple IF you're familiar with AWS, it's basically S3 URI + IAM Role + Keys:
     * Create the IAM role, add it to a group with a policy to access your specific buckets or S3 
     * Create KMS keys
     * Create your bucket, set it up to use the KMS keys you created 
@@ -69,3 +69,4 @@ You can read more about managing storage classes [here](https://kubernetes.io/do
     * Go to general in Longhorn, scroll down and add the path to your bucket and the secret name you created above
     * Go to each volume in longhorn and setup a back up 
 * The long-version: just follow this [blog post from Dan Foulkes](https://blog.foulkes.cloud/devops/picluster/longhorn/aws/s3/2022/12/29/pi-cluster-longhorn-aws-s3-backup.html) 
+
