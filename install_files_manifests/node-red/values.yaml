@@ -1,4 +1,3 @@
-replicaCount: 3
 affinity: {}
 clusterRoleRules:
   enabled: false
@@ -11,7 +10,7 @@ envFrom: []
 extraSidecars: []
 extraVolumeMounts: null
 extraVolumes: null
-fullnameOverride: 'node-red'
+fullnameOverride: ''
 image:
   pullPolicy: IfNotPresent
   registry: docker.io
@@ -20,10 +19,10 @@ image:
 imagePullSecrets: ''
 ingress:
   annotations: {}
-  className: traefik
+  className: 'traefik'
   enabled: true
   hosts:
-    - host: nodered.local.markhamslab.com
+    - host: nodered.local.example.com
       paths:
         - path: /
           pathType: ImplementationSpecific
@@ -56,7 +55,7 @@ persistence:
   accessMode: ReadWriteMany
   enabled: true
   keepPVC: true
-  size: 15Gi
+  size: 5Gi
 podAnnotations: {}
 podLabels: {}
 podSecurityContext:
@@ -73,6 +72,7 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
+replicaCount: 1
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:
@@ -117,15 +117,3 @@ sidecar:
   volumeMounts: []
 terminationGracePeriodSeconds: 30
 tolerations: []
-global:
-  cattle:
-    systemProjectId: p-6scsz
-metadata:
-  name: node-red-deployment
-  labels:
-    app: node-red
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: node-red
