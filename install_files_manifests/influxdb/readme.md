@@ -6,7 +6,9 @@ The official helm chart as found [here] is woefully out of date, it will install
 * Verifying that InfluxDB installed properly 
 * Doing an upgrade in Rancher where I simply changed the image version from 2.3.0 to 2.7.4 in the values.yaml file. 
 
-So far, I haven't encountered any issues. That being said, given that this is an unofficial use or upgrade at your own risk. 
+So far, I haven't encountered any issues. That being said, given that this is an unofficial updatate, use at your own risk. 
+
+There is a pull request to address the issue that you can follow [here](https://github.com/influxdata/helm-charts/pull/536). 
 
 #### InfluxDB Setup Instructions
 
