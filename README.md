@@ -35,7 +35,7 @@ I use **AWS S3** to back-up both Longhorn storage and Rancher.
 
 * Everything here is based on building out a high availability cluster, i.e., one with at least three server nodes and deploying three pods (when possible) for each workload. 
 * I built everything on devices running Ubuntu, which implies that everything here "should" work on any debian distro and on Linux in general. Outside of that, just know that you'll probably run into some issues. 
-* I took the approach of *"how would I build out something to support a minimally viable product for an edge deployment/project at work?"*. Meaning: cloud back-up, shared storage, secure certificates/encrypted connections, CI/CD for custom code, etc. AKA a purposely over-engineered homelab cluster. *I.e., one that might not get to the level of "production production"*, but should be close. 
+* I took the approach of *"how would I build out something to support a minimally viable product for an edge deployment/project at work?"*. Meaning: cloud back-up, shared storage, secure certificates/encrypted connections, CI/CD for custom code, etc. AKA a purposely over-engineered homelab cluster. *E.g., Grafana doesn't need to be HA when it's just me using it.* TL/DR: I tried/am trying to build something that might not get to the level of "production production"*, but should be close. 
  
 ### Acknowledgements & References: 
   

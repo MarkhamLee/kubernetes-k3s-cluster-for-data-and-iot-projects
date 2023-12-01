@@ -1,6 +1,7 @@
 ## A couple of preparation steps before getting started with encryption
-* Setup a custom router, any used computer will do, but ideally you'd get something with dual NICs. I used a small form factor PC with Dual NICs (Trigkey G5 w/ Intel N100) and  it works great. 
-* Make sure you know how to create local domains (or host overrides) on your local network 
+* Setup a custom router using a firewall package like [pfSense](https://www.pfsense.org/) or [OPNsense](https://opnsense.org/), ideally you'd install this on a computer with at least two LAN ports (e.g., a firewall appliance) but any machine that can run Linux should do. I run mine on a Trigkey G5 N100 and it's worked flawlessly. 
+* Make sure you know how to create local domains (or host overrides) on your local network
+    * In pfSense it's under services --> resolver 
 * Create a CloudFlare account and setup a publicly available domain if you want to go the full encryption route 
 
 

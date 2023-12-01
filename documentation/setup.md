@@ -1,6 +1,3 @@
-
-
-
 ## Basic setup with Ansible 
 
 * Honestly, just use [Techno Tim's playbook for the basic setup](https://www.youtube.com/watch?v=CbkEWcUZ7zM&t=316s), you'll save yourself a LOT of headaches, plus learning ansible will payoff later on. 
@@ -25,10 +22,10 @@
 * You may or may not get an netaddr error, so you go ahead and install that into your virtual environment. 
 * Now install the requirements.txt file that came with the repo into your virtual environment
 * **Optional Steps:**
-    * You'll need some additional server arguments to get things setup to fully use monitoring, see them below. I got these from [Tim's Video on setting up the kube-prometheus-stack](https://www.youtube.com/watch?v=fzny5uUaAeY&t=119s), using these server arguments when you first get things setup will just make things easier whether you follow Tim's instructions or just use the kube-prometheus add-on that's already in Ranche to deploy the monitoring stack. 
+    * You'll need some additional server arguments to get things setup to fully use monitoring, see them below. I got these from [Tim's Video on setting up the kube-prometheus-stack](https://www.youtube.com/watch?v=fzny5uUaAeY&t=119s), using these server arguments when you first get things setup will just make things easier whether you follow Tim's instructions or just use the kube-prometheus add-on that's already in Rancher to deploy the monitoring stack. 
 
-    ```
-    extra_server_args: >-
+```
+extra_server_args: >-
   {{ extra_args }}
   {{ '--node-taint node-role.kubernetes.io/master=true:NoSchedule' if k3s_master_taint else '' }}
   --tls-san {{ apiserver_endpoint }}
@@ -38,13 +35,15 @@
   --kube-proxy-arg metrics-bind-address=0.0.0.0
   --kube-scheduler-arg bind-address=0.0.0.0
   --etcd-expose-metrics true
-  --kubelet-arg containerd=/run/k3s/containerd/containerd.sock 
+  --kubelet-arg containerd=/run/k3s/containerd/containerd.sock
     
-    ```
-    
+```
+    Make sure you get the copy and paste perfect, right down to indentations, irritating things can happen otherwise. 
+
 ##### Preparing your hardware 
 * Make sure you turn off swap on all your devices
 * Turn off the Ubuntu firewall or at least open all the relevant ports for K3s 
+    * I turned it off as I already have a firewall for my home network in place 
 * Install openssh so the machines can talk to each other 
 * Install venv for python virtual environments
 * Set up all your devices for passwordless SSH between them by exchange SSH keys and quadruple check this before you run the playbook. 

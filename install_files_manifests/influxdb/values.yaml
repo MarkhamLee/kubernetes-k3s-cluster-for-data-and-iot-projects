@@ -1,0 +1,62 @@
+adminUser:
+  bucket: default
+  organization: acoolhomelab
+  password: ''
+  retention_policy: 0s
+  token: ''
+  user: admin
+affinity: {}
+env: {}
+fullnameOverride: 'influxdb'
+image:
+  pullPolicy: IfNotPresent
+  repository: influxdb
+  tag: 2.3.0-alpine
+ingress:
+  annotations: {}
+  enabled: true
+  hostname: influxdb.local.example.com
+  class: traefik
+  path: /
+  tls: false
+initScripts:
+  enabled: false
+  scripts:
+    init.sh: >+
+      #!/bin/bash
+
+      influx apply --force yes -u
+      https://raw.githubusercontent.com/influxdata/community-templates/master/influxdb2_operational_monitoring/influxdb2_operational_monitoring.yml
+
+livenessProbe: {}
+nameOverride: ''
+nodeSelector: {}
+replicas: 1 # this doesn't work on the open source version 
+pdb:
+  create: true
+  minAvailable: 1 # doesn't impact anything, you'd need the enterprise version
+persistence:
+  accessMode: ReadWriteMany
+  enabled: true
+  mountPath: /var/lib/influxdb2
+  size: 50Gi
+  subPath: ''
+podAnnotations: {}
+podLabels: {}
+readinessProbe: {}
+resources: {}
+securityContext: {}
+service:
+  annotations: {}
+  labels: {}
+  port: 80
+  portName: http
+  targetPort: 8086
+  type: ClusterIP
+serviceAccount:
+  annotations: {}
+  create: true
+  name: null
+startupProbe:
+  enabled: false
+tolerations: []
