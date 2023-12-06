@@ -8,7 +8,9 @@ The official helm chart as found [here] is woefully out of date, it will install
 
 So far, I haven't encountered any issues. That being said, given that this is an unofficial updatate, use at your own risk. 
 
-There is a pull request to address the issue that you can follow [here](https://github.com/influxdata/helm-charts/pull/536). 
+There is a pull request to address the issue that you can follow [here](https://github.com/influxdata/helm-charts/pull/536).
+
+**Update 12-06-23:** the pull request has been approved and merged, so you shouldn't encounter any issues with the chart at this point. But, I would make it a point when installing charts to check the image versions vs what the most up to date version on this and any other chart. 
 
 #### InfluxDB Setup Instructions
 
