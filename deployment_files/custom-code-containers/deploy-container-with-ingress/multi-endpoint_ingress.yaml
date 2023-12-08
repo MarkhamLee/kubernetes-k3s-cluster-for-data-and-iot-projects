@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: facenet-ingress
+  namespace: operations
+spec:
+  rules:
+    - host: facenet.local.example.com
+      http:
+        paths: # note creating a path for each of your container's endpoints
+          - backend:
+              service:
+                name: facenet
+                port:
+                  number: 80
+            path: /cached_data
+            pathType: Prefix
+          - backend:
+              service:
+                name: facenet
+                port:
+                  number: 80
+            path: /ping
+            pathType: Prefix
+          - backend:
+              service:
+                name: facenet
+                port:
+                  number: 80
+            path: /identity
+            pathType: Prefix
+  tls:
+  - hosts:
+    - local.example.com 
+    secretName: your-secret-name-tls

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: facenet
+  namespace: operations
+spec:
+  selector:
+    matchLabels:
+      app: facenet
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: facenet
+    spec:
+      containers:
+        - name: facenet-pytorch-wrapper
+          image: markhamlee/facerec:latest
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 6000 #this would be the port that is exposed in your Dockerfile
+          resources:
+            limits:
+              cpu: 500m
+              memory: 8123Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+      imagePullSecrets: 
+        - name: private-docker-repo
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: facenet
+  namespace: operations
+spec:
+  ports:
+  - port: 80
+    targetPort: 6000
+    name: http
+  selector:
+    app: facenet
