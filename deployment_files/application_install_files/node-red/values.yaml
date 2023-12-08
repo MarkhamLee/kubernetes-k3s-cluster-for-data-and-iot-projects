@@ -1,0 +1,119 @@
+affinity: {}
+clusterRoleRules:
+  enabled: false
+  rules: []
+createClusterRole: false
+deploymentAnnotations: {}
+deploymentStrategy: ''
+env: []
+envFrom: []
+extraSidecars: []
+extraVolumeMounts: null
+extraVolumes: null
+fullnameOverride: ''
+image:
+  pullPolicy: IfNotPresent
+  registry: docker.io
+  repository: nodered/node-red
+  tag: ''
+imagePullSecrets: ''
+ingress:
+  annotations: {}
+  className: 'traefik'
+  enabled: true
+  hosts:
+    - host: nodered.local.example.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+initContainers: []
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+metrics:
+  enabled: false
+  path: /metrics
+  serviceMonitor:
+    additionalLabels: {}
+    basicAuth: {}
+    enabled: false
+    interval: 30s
+    metricRelabelings: []
+    namespace: ''
+    relabelings: []
+    selector: {}
+nameOverride: ''
+nodeSelector: {}
+npmrc:
+  content: |
+    # Custom npmrc config
+  enabled: false
+  registry: https://registry.npmjs.org
+persistence:
+  accessMode: ReadWriteMany
+  enabled: true
+  keepPVC: true
+  size: 5Gi
+podAnnotations: {}
+podLabels: {}
+podSecurityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+resources:
+  limits:
+    cpu: 500m
+    memory: 5123Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+replicaCount: 1
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  privileged: false
+  readOnlyRootFilesystem: true
+  runAsGroup: 10003
+  runAsNonRoot: true
+  runAsUser: 10003
+  seccompProfile:
+    type: RuntimeDefault
+service:
+  annotations: {}
+  port: 1880
+  type: ClusterIP
+serviceAccount:
+  annotations: {}
+  create: true
+  name: ''
+settings: {}
+sidecar:
+  enabled: false
+  env:
+    label: node-red-settings
+    label_value: '1'
+    method: watch
+    password: ''
+    passwordFromExistingSecret: {}
+    script: flow_refresh.py
+    sleep_time_sidecar: 5s
+    username: ''
+  extraEnv: []
+  extraNodeModules: []
+  image:
+    pullPolicy: IfNotPresent
+    registry: quay.io
+    repository: kiwigrid/k8s-sidecar
+    tag: 1.25.2
+  resources: {}
+  securityContext: {}
+  volumeMounts: []
+terminationGracePeriodSeconds: 30
+tolerations: []
