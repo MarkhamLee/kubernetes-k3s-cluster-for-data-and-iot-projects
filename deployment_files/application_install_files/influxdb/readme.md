@@ -12,7 +12,6 @@
 
 That's pretty much it
 
-
 #### CRITICAL NOTE 
 
 The official helm chart as found [here] is woefully out of date, it will install InfluxDB 2.3.0 as opposed to the current version of 2.7.4. This causes a problem where Grafana (version 10.2.2) can connect to InfluxDB BUT cannot see any measurements. In order to correct this, the values.yaml file in this directory has been updated to pull the image for 2.7.4. I tested this change by: 
