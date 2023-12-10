@@ -5,7 +5,8 @@
     * /ping - a health endpoint
     * /cached_data - facial recognition endpoint
     * /identity - another facial recognition endpoint 
-    * I used Postman and pairs of photos to test everything. Latency was quite a bit higher than it was when I tested this container on these same machines before I installed K3s, not sure if it's the over head from K3s or if I need to allocate more system resources. *I strongly suspect it's the latter, but that's an experiment for another day* 
+    * I used Postman and pairs of photos to test everything. 
+    * Given that this is a machine learning container you'll need to assign more CPU resources than usual, otherwise it will run fairly slow. I assigned 1000m for CPU to ensure that at least one core was reserved, doing this gave similar performance to what I saw when I tested this container on these devices prior to building the cluster. 
 * Presuming you've set everything up right with regards to wildcard certs, your connections will be secure by way of being a subdomain of your secured primary one. That being said, I added certs to this deployment anwyay.
 * The files:
     * multi-endpoint_container.yaml will deploy the container and create a ClusterIP service for it. Make a few changes to customize for your environment and you're good to go. Be sure to test all your endpoints before you add the ingress. One important change is to make sure you're using the same port exposed in your Docker file as the one designated as container port. 
