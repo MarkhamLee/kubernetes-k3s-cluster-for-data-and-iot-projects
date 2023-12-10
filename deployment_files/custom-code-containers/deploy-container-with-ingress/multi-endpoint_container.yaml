@@ -21,11 +21,11 @@ spec:
           - containerPort: 6000 #this would be the port that is exposed in your Dockerfile
           resources:
             limits:
-              cpu: 500m
-              memory: 8123Mi
+              cpu: 6000m
+              memory: 8000Mi
             requests:
-              cpu: 100m
-              memory: 128Mi
+              cpu: 1000m # reserves at least one core to deliver near stand-alone/outside of k3s performance
+              memory: 4000Mi
       imagePullSecrets: 
         - name: private-docker-repo
       restartPolicy: Always
