@@ -58,8 +58,8 @@ def write_data(data: object):
 
     param_dict = {
         "host": os.environ.get('DB_HOST'),
-        "database": os.environ.get('cat_db'),
-        "port": int(os.environ.get('POSTGRES_SANDBOX_PORT')),
+        "database": os.environ.get('DATABASE'),
+        "port": int(os.environ.get('POSTGRES_PORT')),
         "user": os.environ.get('POSTGRES_USER'),
         "password": os.environ.get('POSTGRES_PASSWORD')
 
