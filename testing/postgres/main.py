@@ -23,13 +23,12 @@ def get_cat_data():
     fact_list = []
     count = 0
 
-    while count < 1:
+    while count < 5:
         url = 'https://catfact.ninja/fact'
         headers = {}
 
         data = requests.get(url=url, headers=headers)
         data = data.json()
-        print(data)
 
         fact = data['fact']
 
@@ -104,6 +103,7 @@ def main():
             logging.debug(f'db write error {error_payload}')
 
         count += 1
+        time.sleep(900)
 
 
 if __name__ == '__main__':
