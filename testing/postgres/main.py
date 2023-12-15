@@ -13,7 +13,7 @@ import pandas as pd
 from postgres_client import PostgresUtilities  # noqa: E402
 
 # create logger for logging errors, exceptions and the like
-logging.basicConfig(filename='hardwareDataLinuxCPU.log', level=logging.DEBUG,
+logging.basicConfig(filename='cat_test.log', level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s %(name)s %(threadName)s\
                         : %(message)s')
 
@@ -23,12 +23,13 @@ def get_cat_data():
     fact_list = []
     count = 0
 
-    while count < 5:
+    while count < 1:
         url = 'https://catfact.ninja/fact'
         headers = {}
 
         data = requests.get(url=url, headers=headers)
         data = data.json()
+        print(data)
 
         fact = data['fact']
 
@@ -51,29 +52,25 @@ def create_dataframe(data: list) -> object:
 def write_data(data: object):
 
     # Postgres DB connection data
-    POSTGRES_DB = os.environ.get('postgres_test_db')
-    POSTGRES_HOST = os.environ.get('sandbox_server')
-    POSTGRES_USER = os.environ.get('postgres_user')
-    POSTGRES_PORT = os.environ.get('postgres_port')
-    POSTGRES_SECRET = os.environ.get('postgres_secret')
     POSTGRES_TABLE = os.environ.get('cat_table')
 
     # instantiate Postgres writing class
     postgres_utilities = PostgresUtilities()
 
-    connection_params = {
-        "host": POSTGRES_HOST,
-        "database": POSTGRES_DB,
-        "port": POSTGRES_PORT,
-        "user": POSTGRES_USER,
-        "password": POSTGRES_SECRET
+    param_dict = {
+        "host": os.environ.get('DB_HOST'),
+        "database": os.environ.get('cat_db'),
+        "port": int(os.environ.get('POSTGRES_SANDBOX_PORT')),
+        "user": os.environ.get('POSTGRES_USER'),
+        "password": os.environ.get('POSTGRES_PASSWORD')
+
     }
 
     # get dataframe columns for managing data quality
     columns = list(data.columns)
 
     # get connection client
-    connection = postgres_utilities.postgres_client(connection_params)
+    connection = postgres_utilities.postgres_client(param_dict)
 
     # prepare payload
     buffer = postgres_utilities.prepare_payload(data, columns)
@@ -107,7 +104,6 @@ def main():
             logging.debug(f'db write error {error_payload}')
 
         count += 1
-        time.sleep(1800)
 
 
 if __name__ == '__main__':
