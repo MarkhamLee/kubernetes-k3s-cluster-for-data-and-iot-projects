@@ -9,6 +9,10 @@ The right combination of parameters can vary wildly between applications and get
     * Eclipse-Mosquitto [DONE]
     * Grafana [DONE]
     * InfluxDB [DONE]
+    * Longhorn install instructions [DONE]
+    * Mosquitto [DONE]
     * Node-Red [DONE]
-    * PostgreSQL
+    * Rancher [DONE]
+    * PostgreSQL 
+    * Zigbee2MQTT [DONE]
 
