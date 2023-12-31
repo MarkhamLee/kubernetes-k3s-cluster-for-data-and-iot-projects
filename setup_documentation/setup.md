@@ -54,9 +54,28 @@ extra_server_args: >-
 * If you get a jinja error noting a filter isn't available, you're using an older version of ansible and that's likely from your Linux distro intalling an older one - see the instructions for updating Ansible version above  
 * If the script runs and won't connect, doublecheck your server arguments, I'd copy and paste the original ones from the repo and see if those work... don't ask how I know. 
 
+##### Adding and removing hardware 
+* Adding hardware is easy, just add setup the device like you did for the initial ones in your cluster and then add its IP address to the hosts.ini file and then re-run the playbook. 
+* Removing hardware, requires the following steps:
+    * Create a duplicate of the directory that has your ansible playbook. The goal is to have a playbook that's just for adding nodes and one that's just for removing them. Adding and removing from the same playbook, can easily go sideways. 
+    * Next create a copy of the hosts.ini and call it "clean.ini" 
+    * Remove ALL ip addresses from the hosts.ini file. This will ensure that the reset operations you run from your remove nodes directory can't accidentally take down your entire cluster. 
+    * Go into Rancher, click the hamburger menu --> explore cluster --> cluster name and then click nodes on the main menu OR you can click cluster in the side menu adn then nodes. 
+    * Click the checkbox next to the node you want to remove, and an option called "drain node" will appear:
+    ![Standard Settings](images/removing_nodes.png)
+    * Clicking drain will remove all containers, pods, deployments, etc., from the node and schedule them elsewhere (if possible).
+    * Once the drain process is complete, click delete 
+    * Now go back to your playbook directory that's ONLY for removing nodes and add that nodes IP address in the appropriate place of your clean.ini file. 
+    * Run the reset playbook, **make sure the only IP addresses in that file are for the nodes you want to remove**. This last step is important, if you don't do this, the next time the device comes online it will just be re-added to the cluster. 
+
+##### Updating Hardware 
+* Similar to removing the node, you just select "Cordon" instead of drain and then restart the device to apply updates, shut down and upgrade the hardware, etc. 
+*  To test the durability of the cluster I've randomly restarted individual nodes, turned them off, etc., and then back on and the system handles it just fine. One thing I've noticed is that the number of deployed resources spikes when that piece of hardware returns. 
+
+
 
 #### Post Setup 
-* To add a node just update your hosts file in the Ansibler repo with the IP address for the new node, the setup process will ignore the existing nodes and just setup the new ones. I would experiment with building things up, resetting and building again, adding nodes, removing them, etc., and getting really comfortable with those processes before moving on to building out cluster with all the features and apps you want/need. 
+* To add a node just update your hosts file in the Ansible repo with the IP address for the new node, the setup process will ignore the existing nodes and just setup the new ones. I would experiment with building things up, resetting and building again, adding nodes, removing them, etc., and getting really comfortable with those processes before moving on to building out cluster with all the features and apps you want/need. 
 
 
 ## Things I wish I picked up sooner    
