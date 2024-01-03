@@ -73,9 +73,11 @@ extra_server_args: >-
 *  To test the durability of the cluster I've randomly restarted individual nodes, turned them off, etc., and then back on and the system handles it just fine. One thing I've noticed is that the number of deployed resources spikes when that piece of hardware returns. 
 
 
-
 #### Post Setup 
-* To add a node just update your hosts file in the Ansible repo with the IP address for the new node, the setup process will ignore the existing nodes and just setup the new ones. I would experiment with building things up, resetting and building again, adding nodes, removing them, etc., and getting really comfortable with those processes before moving on to building out cluster with all the features and apps you want/need. 
+* I would experiment with building things up, resetting and building again, adding nodes, removing them, etc., and getting really comfortable with those processes before moving on to building out cluster with all the features and apps you want/need. 
+* **Deploying Custom Code:** Experiment/play around with deployiing custom containers, legit containers that actually do something, don't bother experimenting with hello world or basic containers that don't represent what you want to deploy on your homelab or at work. Even if all you do is build a basic container to pull data from the cat or joke API and then send it to a slack alert, or write them to Postgres, the issues you run into will teach you a lot. So, build something legit, experiment with  moving it around to various nodes, get comfortable with defining variables and/or secrets in things like config maps, opaque secrets and the like, run into issues, fix them, repeat. 
+    * Note: if you're not super familiar with Docker, taking a step back and getting comfortable with building containers, pushing them to a repo and deploying them via something like Portainer is a great way to practice and/or test before moving on to Kubernetes. 
+* **Deploying Third Party Apps:** deploying things via the Rancher UI "seems" convenient and in many cases will work just fine, additionally, doing this way can be helpful in terms of knowing how to configure things. BUT, a lot of things just deploy better from the command line. Also, sometimes the charts in Rancher are out of date (e.g., Zigbee2mqtt), which can cause other issues. TL/DR: on numerous occassions I had issues getting things to deploy via using the repos in Rancher, went to deploying it from the command line and things worked just fine. 
 
 
 ## Things I wish I picked up sooner    
