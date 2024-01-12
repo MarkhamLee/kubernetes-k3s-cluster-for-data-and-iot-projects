@@ -7,15 +7,10 @@
 
 import requests
 import os
-import logging
 import time
 import pandas as pd
 from postgres_client import PostgresUtilities  # noqa: E402
-
-# create logger for logging errors, exceptions and the like
-logging.basicConfig(filename='cat_test.log', level=logging.DEBUG,
-                    format='%(asctime)s %(levelname)s %(name)s %(threadName)s\
-                        : %(message)s')
+from logging_util import logger
 
 
 def get_cat_data():
@@ -89,6 +84,8 @@ def main():
 
     while count < 40:
 
+        logger.info('getting fact facts')
+
         # get data
         cat_data = get_cat_data()
 
@@ -100,10 +97,15 @@ def main():
 
         if response != 0:
             error_payload = {"error_response": response}
-            logging.debug(f'db write error {error_payload}')
+            logger.debug(f'db write error {error_payload}')
+        else:
+            logger.info('data written to Postgres successfully')
 
         count += 1
+        logger.info('cat fact loop complete, sleeping...')
         time.sleep(900)
+
+    logger.info('Postgres w/ Cat Facts testing complete')
 
 
 if __name__ == '__main__':

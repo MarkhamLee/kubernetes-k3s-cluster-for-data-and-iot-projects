@@ -4,7 +4,8 @@
 # utilities for writing data to PostgreSQL
 
 import psycopg2
-from io import StringIO  # noqa: E402
+from io import StringIO
+from logging_util import logger
 
 
 class PostgresUtilities():
@@ -19,8 +20,10 @@ class PostgresUtilities():
 
         try:
             conn = psycopg2.connect(**params)
+            logger.info('PostgreSQL connection successful')
 
         except (Exception, psycopg2.DatabaseError) as error:
+            logger.debug(f'connection to Postgres failed with error: {error}')
             return error
 
         return conn
@@ -73,4 +76,5 @@ class PostgresUtilities():
         except (Exception, psycopg2.DatabaseError) as error:
             connection.rollback()
             cursor.close()
+            logger.info(f'Postgres write unsucessful with error: {error}')
             return error
