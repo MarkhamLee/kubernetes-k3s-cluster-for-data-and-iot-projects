@@ -2,8 +2,10 @@
 # productivity-music-stocks-weather-IoT-dashboard
 # https://github.com/MarkhamLee/productivity-music-stocks-weather-IoT-dashboard
 # A test script that retrieves 5 cat facts from the cat facts API and then
-# writes them to PostgreSQL. Just an easy way to test writing to Postgres
-# without having to worry about authentication or rate limits.
+# writes them to PostgreSQL, and then goes to sleep and then repeats
+# the process 40 times to ensure there aren't any issues writing to Postgres.
+# Just an easy way to test a a simple ETL pipeline + writing to Postgres
+# without having to worry about rate limits and such.
 
 import requests
 import os
@@ -93,16 +95,18 @@ def main():
         df = create_dataframe(cat_data)
 
         # write data to Postgres
-        response = write_data(df)
-
-        if response != 0:
-            error_payload = {"error_response": response}
-            logger.debug(f'db write error {error_payload}')
-        else:
-            logger.info('data written to Postgres successfully')
+        response = write_data(df)  # noqa: F841
 
         count += 1
-        logger.info('cat fact loop complete, sleeping...')
+
+        if response == 0:
+            logger.info('cat fact loop complete, sleeping...')
+
+        else:
+            logger.debug(f'Postgres write failed due to error: {response},\
+                         halting tests')
+            exit()
+
         time.sleep(900)
 
     logger.info('Postgres w/ Cat Facts testing complete')

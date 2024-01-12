@@ -17,7 +17,6 @@ class PostgresUtilities():
     def postgres_client(params: dict) -> object:
 
         # connect to DB
-
         try:
             conn = psycopg2.connect(**params)
             logger.info('PostgreSQL connection successful')
@@ -71,10 +70,11 @@ class PostgresUtilities():
             cursor.copy_from(buffer, table, sep="\t")
             connection.commit()
             cursor.close()
+            logger.info('Postgres write successful')
             return 0
 
         except (Exception, psycopg2.DatabaseError) as error:
             connection.rollback()
             cursor.close()
-            logger.info(f'Postgres write unsucessful with error: {error}')
+            logger.debug(f'Postgres write unsucessful with error: {error}')
             return error
