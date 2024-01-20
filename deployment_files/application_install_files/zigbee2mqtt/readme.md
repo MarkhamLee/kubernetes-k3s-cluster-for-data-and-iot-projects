@@ -18,7 +18,7 @@ This folder contains the YAML files I used to deploy Zigbee2MQTT on my Kubernete
 * I added environmental variables for secrets
     * Note: you should configure your MQTT secrets in the Kubernetes space you're deploying 
 * I added a node name for the node that has the USB dongle attached. 
-* I added resource limits so linting doesn't scream at you + just a good practice. 
+* I added resource limits so VS Code linting doesn't scream at you + it's just a good practice. 
 
 Other than that, if you follow the setup instructions for making sure you have serial dialout setup and use a USB extension cable, you should be fine.
 
