@@ -1,6 +1,6 @@
 ## Basic setup with Ansible 
 
-* Honestly, just use [Techno Tim's playbook for the basic setup](https://www.youtube.com/watch?v=CbkEWcUZ7zM&t=316s), you'll save yourself a LOT of headaches, plus learning ansible will payoff later on. 
+I would just use [Techno Tim's playbook for the basic setup](https://www.youtube.com/watch?v=CbkEWcUZ7zM&t=316s), you'll save yourself a LOT of headaches, plus learning ansible will payoff later on. 
 
 #### A couple of tricks to make it go smoother after you've cloned Tim's repo but BEFORE you run any commands: 
 
@@ -44,7 +44,7 @@ extra_server_args: >-
 * Make sure you turn off swap on all your devices
 * Turn off the Ubuntu firewall or at least open all the relevant ports for K3s 
     * I turned it off as I already have a firewall for my home network in place 
-* Install openssh so the machines can talk to each other 
+* Install openssh so the machines can talk to each other. 
 * Install venv for python virtual environments
 * Set up all your devices for passwordless SSH between them by exchange SSH keys and quadruple check this before you run the playbook. 
 * On the device you're going to run the playbook from set that one up for passwordless SSH with itself. I know it sounds goofy, but it can hang otherwise as Ansible connects to the host via SSH. FTR it will often just connect and run fine, but if it doesn't.. 
@@ -75,7 +75,7 @@ extra_server_args: >-
 
 #### Post Setup 
 * I would experiment with building things up, resetting and building again, adding nodes, removing them, etc., and getting really comfortable with those processes before moving on to building out cluster with all the features and apps you want/need. 
-* **Deploying Custom Code:** Experiment/play around with deployiing custom containers, legit containers that actually do something, don't bother experimenting with hello world or basic containers that don't represent what you want to deploy on your homelab or at work. Even if all you do is build a basic container to pull data from the cat or joke API and then send it to a slack alert, or write them to Postgres, the issues you run into will teach you a lot. So, build something legit, experiment with  moving it around to various nodes, get comfortable with defining variables and/or secrets in things like config maps, opaque secrets and the like, run into issues, fix them, repeat. 
+* **Deploying Custom Code:** Experiment/play around with deployiing custom containers, legit containers that actually do something, don't bother experimenting with hello world or basic containers that don't represent what you'd deploy on your homelab or at work. Even if all you do is build a basic container that pulls data from the cat or joke API and then sends it to a slack alert, or writes it to Postgres, the issues you run into will teach you a lot. So, build something legit, experiment with  moving it around to various nodes, get comfortable with defining variables and/or secrets in things like config maps, opaque secrets and the like, run into issues, fix them, repeat. 
     * Note: if you're not super familiar with Docker, taking a step back and getting comfortable with building containers, pushing them to a repo and deploying them via something like Portainer is a great way to practice and/or test before moving on to Kubernetes. 
 * **Deploying Third Party Apps:** deploying things via the Rancher UI "seems" convenient and in many cases will work just fine, additionally, doing this way can be helpful in terms of knowing how to configure things. BUT, a lot of things just deploy better from the command line. Also, sometimes the charts in Rancher are out of date (e.g., Zigbee2mqtt), which can cause other issues. TL/DR: on numerous occassions I had issues getting things to deploy via using the repos in Rancher, went to deploying it from the command line and things worked just fine. 
 

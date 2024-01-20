@@ -21,11 +21,16 @@ TL/DR: getting Kubernetes setup properly can be difficult (especially for first 
 
 #### My Cluster 
 * **Hardware:** 
-    * **Server/control plane nodes:** three "Intel NUC like" **Beelink SER5s running Ryzen 5 5560u processors (6c/12t), 64 GB of RAM and 2 TB of storage**. I got them for around $225.00/each on sale from Amazon (down from around $300). With Geekbench 6 scores around 7k (in my testing), I think they comapre quite favorably to 12th gen Intel NUC i3s and arguably even i5s from a price to performance perspective, especially when you consider those units cost 2 - 2.5x as much.  The fans also run quieter than the ones in my 12th Gen Intel NUC, albeit at the cost of higher temperatures. 
-    * **Agent/worker nodes:** 2 x Raspberry Pi 4B 8GB and 1 x Orange Pi 3B 8GB that are deployed around my home for monitoring climate, communicating with smart devices and other pending IoT related functions. I've set a "no schedule" taint on all of them as they're only being used to interact with hardware like Zigbee hubs, air quality sensors & other IoT devices, and to avoid any issues stemming from their limited system resources. 
-        * Note: I did try adding a 4GB Raspberry 4B but it was causing problems with the Prometheus monitoring stack due to lack of RAM. This is on my list of things to resolve, as being able to support low power edge devices for IoT applications is on my core goals for this cluster. 
-    * The next planned hardware addition is likely a Rockchip 3588 device to experiment with running ML workloads on its NPU. 
-* I use **Rancher** to manage the cluster, deploy apps, etc., I use the **Kube-Prometheus-Stack** to monitor the cluster.
+    * **Server/control plane nodes:** three "Intel NUC like" **Beelink SER5s running Ryzen 5 5560u processors (6c/12t), 64 GB of RAM and 2 TB of storage**. I got them for around $225.00/each on sale from Amazon (down from around $300). With Geekbench 6 scores around 7k (in my testing), you can think of them as getting about 80% of the performance of an 11th gen desktop i5 while using a fraction of the power. The fans also run quieter than the ones in my 12th Gen Intel NUC, albeit at the cost of higher temperatures. 
+    * **Agent/worker nodes:** 3 x Raspberry Pi 4B 8GB and that are deployed around my home for monitoring climate, communicating with smart devices and other pending IoT related functions. I've set a "no schedule" taint on all of them as they're only being used to interact with hardware like Zigbee hubs, air quality sensors & other IoT devices, and to avoid any issues stemming from their limited system resources. 
+        * I did try adding a 4GB Raspberry 4B but it was causing problems with the Prometheus monitoring stack due to lack of RAM. This is on my list of things to resolve, as being able to support low power edge devices for IoT applications is one of my core goals for this cluster. 
+    * The next planned hardware additions are:
+        * A Rockchip 3588 device so I can experiment with leveraging its NPU (Six TOPS) for machine learning workloads 
+        * 2x x86 worker nodes, as I'd like to move away from the three primary nodes server as control nodes while also running workloads 
+        * Dedicated storage nodes 
+* I use the **Grafana-Loki stack** for log aggregation
+* I use **Rancher** to manage the cluster, do quick and dirty deployments (especially for testing containers) etc., I use the **Kube-Prometheus-Stack** to monitor the cluster.
+* I "mostly" use Kubectl to deploy things from the command line
 * I use **Longhorn** to aggregate the hard drives on each device into a shared pool of storage, Longhorn reserves about 2/3rds of the total storage on each device for shared storage. 
 * I use **AWS S3** to back-up both Longhorn storage and Rancher. 
 * I use **Letsencrypt.org certs + Cloudflare and a publically available domain name** to secure the cluster and ensure all connections are encrypted/secure. I.e., avoid any browser errors from using self-signed certs. 
@@ -39,7 +44,7 @@ TL/DR: getting Kubernetes setup properly can be difficult (especially for first 
 * Add arm64 nodes as part of experimenting with a multi-architecture cluster[DONE - Limited Scope]
     * Raspberry Pi 4B and Orange Pi 3B single board computers that are only being used to collect data from USB based devices and sensors, general purpose ARM nodes are pending. Those will likely be Orange pi 5+ or similar devices equipped with a Rockchip 3588 System on a Chip(SOC)
 * Add two nodes that are solely dedicated to storage. 
-* Experiment with [Project Akri](https://github.com/project-akri/akri), it allows you to add the USB devices attached to your various nodes as resources available to your entire cluster. I think this project holds some interesting possibilities for home automation projects and the like, in addition to edge deployments in agricultural or industrial spaces that leverage edge devices and sensors to monitor various processes. I.e., stronger redundancy, centralizing the control software for those sensors, etc. 
+* Experiment with [Project Akri](https://github.com/project-akri/akri), it allows you to add the USB devices attached to your various nodes as resources available to your entire cluster. I think this project holds some interesting possibilities for home automation projects and the like, in addition to edge deployments in agricultural or industrial spaces that leverage edge devices and sensors to monitor various processes. I.e., your USB devices just become network devices and the software for them isn't tied to a specific piece of hardware. 
 * Either move the motherboards in the Beelinks into a shared enclosure of some sort and/or upgrade the fans in order to better control temperatures. 
 * Add automation for both setup and day to day management, i.e. handle the day DevOps/MLOps/Sys Admin tasks using some combination of Ansible, Flux and/or Terraform. 
 
