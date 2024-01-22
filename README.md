@@ -22,12 +22,8 @@ TL/DR: getting Kubernetes setup properly can be difficult (especially for first 
 #### My Cluster 
 * **Hardware:** 
     * **Server/control plane nodes:** three "Intel NUC like" **Beelink SER5s running Ryzen 5 5560u processors (6c/12t), 64 GB of RAM and 2 TB of storage**. I got them for around $225.00/each on sale from Amazon (down from around $300). With Geekbench 6 scores around 7k (in my testing), you can think of them as getting about 80% of the performance of an 11th gen desktop i5 while using a fraction of the power. The fans also run quieter than the ones in my 12th Gen Intel NUC, albeit at the cost of higher temperatures. 
-    * **Agent/worker nodes:** 3 x Raspberry Pi 4B 8GB and that are deployed around my home for monitoring climate, communicating with smart devices and other pending IoT related functions. I've set a "no schedule" taint on all of them as they're only being used to interact with hardware like Zigbee hubs, air quality sensors & other IoT devices, and to avoid any issues stemming from their limited system resources. 
-        * I did try adding a 4GB Raspberry 4B but it was causing problems with the Prometheus monitoring stack due to lack of RAM. This is on my list of things to resolve, as being able to support low power edge devices for IoT applications is one of my core goals for this cluster. 
-    * The next planned hardware additions are:
-        * A Rockchip 3588 device so I can experiment with leveraging its NPU (Six TOPS) for machine learning workloads 
-        * 2x x86 worker nodes, as I'd like to move away from the three primary nodes server as control nodes while also running workloads 
-        * Dedicated storage nodes 
+    * **Agent - Specialized Nodes:** 3 x Raspberry Pi 4B 8GB and that are deployed around my home for monitoring climate, communicating with smart devices and other pending IoT related functions as "sensor_nodes. These nodes all have a "NoSchedule" taint on them and Key Kubernetes components like Loki, Longhorn and Prometheus have a corresponding toleration, so that key Kubernetes components are deployed on these nodes but general workloads are excluded. 
+        * I did try adding a 4GB Raspberry 4B but it was causing problems with the Prometheus monitoring stack due to lack of RAM. This is on my list of things to resolve, as being able to support low power edge devices for IoT applications is one of my core goals for this cluster.  
 * I use the **Grafana-Loki stack** for log aggregation
 * I use **Rancher** to manage the cluster, do quick and dirty deployments (especially for testing containers) etc., I use the **Kube-Prometheus-Stack** to monitor the cluster.
 * I "mostly" use Kubectl to deploy things from the command line
@@ -42,7 +38,7 @@ TL/DR: getting Kubernetes setup properly can be difficult (especially for first 
 * Find an alternative to the Kube-Prometheus stack for monitoring the cluster. As currently deployed it eats up a lot of system resources compared to what it does (I had to increase the RAM limit to 8 GB to keep it from crashing), and I think it's clearly veered into the uncertainty principle of having too much influence on that which it is observing. 
 * Add dedicated agent nodes, as currently each node is functioning as a server and an agent
 * Add arm64 nodes as part of experimenting with a multi-architecture cluster[DONE - Limited Scope]
-    * Raspberry Pi 4B and Orange Pi 3B single board computers that are only being used to collect data from USB based devices and sensors, general purpose ARM nodes are pending. Those will likely be Orange pi 5+ or similar devices equipped with a Rockchip 3588 System on a Chip(SOC)
+    * Raspberry Pi 4B ~~and Orange Pi 3B~~ single board computers that are only being used to collect data from USB based devices and sensors, general purpose ARM nodes are pending. Those will likely be Orange pi 5+ or similar devices equipped with a Rockchip 3588 System on a Chip(SOC)
 * Add two nodes that are solely dedicated to storage. 
 * Experiment with [Project Akri](https://github.com/project-akri/akri), it allows you to add the USB devices attached to your various nodes as resources available to your entire cluster. I think this project holds some interesting possibilities for home automation projects and the like, in addition to edge deployments in agricultural or industrial spaces that leverage edge devices and sensors to monitor various processes. I.e., your USB devices just become network devices and the software for them isn't tied to a specific piece of hardware. 
 * Either move the motherboards in the Beelinks into a shared enclosure of some sort and/or upgrade the fans in order to better control temperatures. 
