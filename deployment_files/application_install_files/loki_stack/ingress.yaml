@@ -1,0 +1,24 @@
+# Ingress for the Grafana instance contained within the Loki Stack
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: loki-grafana-ingress
+  namespace: loki-stack
+  annotations: 
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - host: loki-grafana.local.example.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: loki-grafana
+                port:
+                  number: 80
+            path: /
+            pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - local.example.com 
+    secretName: loki-local-example-com-tls
