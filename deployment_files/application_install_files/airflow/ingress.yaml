@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: airflow-ingress
+  namespace: airflow
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - host: airflow.local.example.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: airflow
+                port:
+                  number: 8080
+            path: /
+            pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - local.example.com 
+    secretName: airflow-local-example-com-tls
