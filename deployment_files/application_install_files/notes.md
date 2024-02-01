@@ -5,7 +5,7 @@ The right combination of parameters can vary wildly between applications and get
 ### What's included here (Work in Progress)
 * Installation instructions to setup the following on a high-availability k3s setup, using letsencrypt.org secure certificates, persistent storage using longhorn and any other application specific setup tasks. E.g., connecting a repo to Airflow 
 
-    * Airflow 
+    * Airflow [DONE] - Detailed install instructions pending 
     * Eclipse-Mosquitto [DONE]
     * Grafana [DONE]
     * InfluxDB [DONE]
