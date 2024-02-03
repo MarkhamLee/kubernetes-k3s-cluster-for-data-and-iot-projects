@@ -55,7 +55,7 @@ git:
     command: []
     extraEnvVars: []
     extraEnvVarsCM: ''
-    extraEnvVarsSecret: ''
+    extraEnvVarsSecret: '<name of your personal access token secret>'
     extraVolumeMounts: []
     resources: {}
   dags:
@@ -64,13 +64,11 @@ git:
       - branch: main
         name: repo_name
         path: /dags
-        repository: <your repo url>
-    extraSecrets:
-      airflow-ssh-secret: 
-      # note: you need to provide the name of your secret AND the name of key as below
-        data:
-          gitsshKey: 'your key name'
-    sshKeySecret: githubsecret # or whatever you named your secret
+        # Personal access tokens seem to work better with this helm chart (for me anyway)
+        # Just go to your GitHub: settings --> Developer Settings --> Fine Grained Personal Access Tokens
+        # name of the secret in the EnvVarsSecret and secret's key below 
+        # Note: only necessary if you're synching a private repo and/or want to avoid "free account" rate limits
+        repository: https://<your_github_username>:${key for your secret}@github.com/username/your_repo.git
   image:
     digest: ''
     pullPolicy: IfNotPresent
@@ -91,7 +89,7 @@ git:
     command: []
     extraEnvVars: []
     extraEnvVarsCM: ''
-    extraEnvVarsSecret: ''
+    extraEnvVarsSecret: '<name of your personal access token secret>'
     extraVolumeMounts: []
     interval: 300
     resources: {}
