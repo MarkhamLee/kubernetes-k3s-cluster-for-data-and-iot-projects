@@ -18,7 +18,7 @@ spec:
       labels:
         app: zigbee2mqtt
     spec:    
-      nodeName: orangepi3b
+      nodeName: node0
       containers:
         - name: zigbee2mqtt
           image: koenkk/zigbee2mqtt:latest
@@ -35,6 +35,12 @@ spec:
               value: America/Los_Angeles
             - name: "ZIGBEE2MQTT_DATA"
               value: "/data"
+            - name: ZIGBEE2MQTT_CONFIG_BASE_TOPIC
+              valueFrom:
+                configMapKeyRef:
+                  key: ZIGBEE2MQTT_BASE_TOPIC
+                  name: mqtt-data
+                  optional: false
             - name: ZIGBEE2MQTT_CONFIG_MQTT_SERVER
               valueFrom:
                 configMapKeyRef:
@@ -47,6 +53,7 @@ spec:
                   key: ZIGBEE_ADDRESS
                   name: mqtt-data
                   optional: false
+            - name: ZIGBEE2MQTT
             - name: ZIGBEE2MQTT_CONFIG_MQTT_USER
               valueFrom:
                 secretKeyRef:
