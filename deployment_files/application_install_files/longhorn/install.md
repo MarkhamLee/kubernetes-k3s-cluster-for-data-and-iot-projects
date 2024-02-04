@@ -57,8 +57,7 @@ kubectl patch storageclass name-of-storage-class -p '{"metadata": {"annotations"
 
 You can read more about managing storage classes [here](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/).
 
-
-#### Extras - Setting up Backup 
+#### Setting up S3 backups 
 
 * Short-version: configuring Longhorn to backup to S3 is fairly simple IF you're familiar with AWS, it's basically S3 URI + IAM Role + Keys:
     * Create the IAM role, add it to a group with a policy to access your specific buckets or S3 
@@ -70,3 +69,24 @@ You can read more about managing storage classes [here](https://kubernetes.io/do
     * Go to each volume in longhorn and setup a back up 
 * The long-version: just follow this [blog post from Dan Foulkes](https://blog.foulkes.cloud/devops/picluster/longhorn/aws/s3/2022/12/29/pi-cluster-longhorn-aws-s3-backup.html) 
 
+Once you have S3 configured you'll need to change a small setting that's only for disaster recovery volumes, it's a small but critical thing because if you leave the setting as is Longhorn will ping S3 **constantly** and you could easily find yourself racking up more charges for S3 actions than you do for storage. Case in point, for the month of January I was charged $0.15 for storage and $5.39 for requests. 
+
+![nfs screenshot](../images/s3_screenshot.png) 
+
+I discovered this by accident because I honestly don't pay that much attention to my AWS bill, but decided to go over it because I need to deploy an object store and was evaluting using AWS S3 or just buying another node to deploy MinIO on. 
+
+You can read more about this issue in a GitHub issue [here](https://github.com/longhorn/longhorn/issues/1547)
+
+To solve it just go to settings and change the Backupstore Poll Interval to 0 and the incessant S3 pings should stop. 
+
+![nfs screenshot](../images/backup_poll_setting.png) 
+
+Change that 300 to 0 and you should save some money. 
+
+
+### Additional Tips & Tricks
+* Periodically go to the Longhorn UI and validate that you've set up backups for all your volumes. It's easy to forget to do this after you deploy new workloads, create new volume claims, etc. 
+
+* Setup alerts and periodically check how much storage is being used by each service 
+
+* Some services (like Zigbee2MQTT) are constantly receiving or transmitting data and logging practically everything, check how your services log data to make sure you're not about to run out of space in your volume claim. Running out of space can cause your container/service to crash, and you'll need to manually increase the storage size in Longhorn before the deployment can spin up again. I.e., being proactive about storage use can save you a lot o headaches. 
