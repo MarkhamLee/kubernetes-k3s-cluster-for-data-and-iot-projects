@@ -1,0 +1,6 @@
+influxdb-client==1.38.0
+psutil
+entrypoints
+Flask
+requests
+gunicorn
