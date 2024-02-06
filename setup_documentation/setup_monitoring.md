@@ -87,4 +87,7 @@ Once you've made the changes to replicas for alert manager and resources for Pro
 Doing this will give you ~three dozen dashboards that you can use to monitor various aspects of your cluster. You'll also be able to drill down into individual namespaces and apps to see their resource utilization, performance, etc. 
 * There are also a lot of tutorials online around setting up the Kube-Prometheus stack that you could use, but they all accomplish pretty much the same thing. I recommend this one from [Techno Tim.]((https://www.youtube.com/watch?v=fzny5uUaAeY&t=119s)). That being said, if you're using Rancher you can just follow the directions above and you should be fine. 
 
+### Final Thoughts
 
+* Setting RAM requests to 4GB and the limit at 8GB seemed like overkill when I first built the cluster, but as I use Prometheus for more and more things related to alerts, logging, monitoring specific apps, etc., I'm starting to think it's just unavoidable given how much data the solution is pulling together. I.e., the more I work with the cluster, the less I'm interested in a monitoring solution that "does less".
+* The above being said, I'm still interested in possibly building a cluster with lower powered machines using less than 4 GB of RAM for potential edge/IoT sensor use cases, so in those cases I may just limit monitoring to container logs for each workload + using something like Psutil to monitor the hardware if I can't find a lightweight Prometheus alternative.
