@@ -31,7 +31,6 @@ auth:
 
 For everything else it's fairly straight forward to change or tweak to your liking. 
 
-
-I'd also recommend installing PgAdmin to manage your Postgres instance. 
+I'd also recommend installing PgAdmin to manage your Postgres instance, *instructions pending*
 
 
