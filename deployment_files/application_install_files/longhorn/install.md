@@ -1,4 +1,8 @@
-### Installing longhorn for shared storage 
+##  Installing longhorn for shared storage 
+
+## CRITICAL NOTE 2/09/24: 
+
+Upgrading to the newest Ubuntu kernel will cause issues for any deployment that uses ReadWriteMany for its persistent volumes, the error will be along the lines of "NFS protocol not supported". If this happens, you'll likely have to roll back to an older Kernel. I ran into this issue with 6.5 for Ubuntu, but it went away when I rolled back to 6.2. You can read more [here](https://longhorn.io/kb/troubleshooting-rwx-volume-fails-to-attached-caused-by-protocol-not-supported/). The big lesson here is having a test cluster where you try things like upgrading your OS and/or various applications and seeing if anything goes sideways is a very good idea. 
 
 * The big advantage here is that longhorn more or less aggregates about 2/3rds of the storage available to each pod into a shared pool of storage that all the pods can use. A must have if you're going to truly run a high availability setup. 
 
