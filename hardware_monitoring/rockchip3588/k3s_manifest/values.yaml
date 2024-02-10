@@ -1,21 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: orangepi_five_plus_monitoring
+  name: orangepi5-plus-node0-monitoring
   namespace: operations
 spec:
   selector:
     matchLabels:
-      app: orangepi_five_plus_monitoring
+      app: orangepi5-plus-node0-monitoring
   replicas: 1
   template:
     metadata:
       labels:
-        app: orangepi_five_plus_monitoring
+        app: orangepi5-plus-node0-monitoring
     spec:
+      nodeName: markham-skyforge2
       containers:
-        - name: orangepi_five_plus_node0
-          image: <your image repo here>
+        - name: 'orangepi-five-plus-node-zero'
+          image: 'markhamlee/rc3588_monitoring'
           imagePullPolicy: Always
           resources:
             limits:
@@ -25,7 +26,7 @@ spec:
               cpu: 100m
               memory: 128Mi
           env:
-            - name: INFLUX_KEY
+            - name: TOKEN
               valueFrom:
                 secretKeyRef:
                   key: PROD_INFLUX_KEY
@@ -45,11 +46,11 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: HARDWARE_BUCKET
-                  name: key-etl-variables
+                  name: key-ops-variables
             - name: TABLE
               value: opi5_node0
             - name: INTERVAL
               value: '2'
       imagePullSecrets: 
-        - name: docker-creds
-    restartPolicy: Always
+        - name: private-docker-repo
+      restartPolicy: Always
