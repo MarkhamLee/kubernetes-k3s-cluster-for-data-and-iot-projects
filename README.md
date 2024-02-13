@@ -38,6 +38,7 @@ TL/DR: getting Kubernetes setup properly can be difficult (especially for first 
 
 #### Future Items 
 * Currently deploying, testing integrating **Argo CD** for managing CI/CD pipelines 
+* Automated, graceful cluster shutdown in response to a power outage, i.e., when the UPS is activated, graceful shutdown to avoid some of the nasty storage issues that from abrubt shutdowns. 
 * Add dedicated agent nodes, as currently each node is functioning as a server and an agent/worker
 * Add general purpose low power ARM64 agent/worker nodes, Orange pi 5+ or similar devices equipped with a Rockchip 3588 System on a Chip(SOC) [Currently Testing]
 * Add two nodes that are solely dedicated to storage
