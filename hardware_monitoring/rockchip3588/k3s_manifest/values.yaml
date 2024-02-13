@@ -13,17 +13,18 @@ spec:
       labels:
         app: orangepi5-plus-node0-monitoring
     spec:
-      nodeName: markham-skyforge2
+      nodeName: orangepi5plus-node0
       containers:
         - name: 'orangepi-five-plus-node-zero'
-          image: 'markhamlee/rc3588_monitoring'
+          image: 'markhamlee/rc3588_monitoring' 
           imagePullPolicy: Always
           resources:
             limits:
-              cpu: 200m
+              # raised cpu limit as I was getting CPU throttling alerts despite CPU util not going above 5%
+              cpu: 400m
               memory: 256Mi
             requests:
-              cpu: 100m
+              cpu: 200m
               memory: 128Mi
           env:
             - name: TOKEN
