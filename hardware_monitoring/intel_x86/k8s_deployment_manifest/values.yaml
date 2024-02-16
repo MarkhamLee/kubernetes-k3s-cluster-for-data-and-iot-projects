@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: intel-x86-node0
+  namespace: operations
+spec:
+  selector:
+    matchLabels:
+      app: intel-x86-node0
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: intel-x86-node0
+    spec:
+      nodeName: node0
+      containers:
+        - name: 'intel-node'
+          image: 'markhamlee/k3s-intel-node:latest' 
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 300m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+          env:
+            - name: TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: PROD_INFLUX_KEY
+                  name: influxdb-secret
+                  optional: false 
+            - name: ORG
+              valueFrom:
+                configMapKeyRef:
+                  key: INFLUX_ORG
+                  name: key-ops-variables
+            - name: URL
+              valueFrom:
+                configMapKeyRef:
+                  key: INFLUX_URL
+                  name: key-ops-variables
+            - name: BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  key: HARDWARE_BUCKET
+                  name: key-ops-variables
+            - name: TABLE
+              value: k3s-production-node-tbd
+            - name: INTERVAL
+              value: '2'
+      imagePullSecrets: 
+        - name: private-docker-repo
+      restartPolicy: Always
