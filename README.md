@@ -12,7 +12,7 @@ This repo contains documentation, links to tutorials, notes, installation instru
 
 ### Recent Updates
 
-* **02/16/2024:** added Github Actions files/configurations so that whenver new code is pushed to Github, the Docker images will be rebuilt and then pushed to GitHub. Next step is to automate redeploying the services running on k3s in response to container updates.
+* **02/16/2024:** added Github Actions files/configurations so that whenver new code is pushed to Github, the Docker images will be rebuilt and then pushed to GitHub. When appropriate containers are built for both amd64/x86 and arm64 so they're able to run any any node in the cluster. Next step is to automate redeploying the services running on k3s in response to container updates.
 * **02/10/2024:** added an Orange Pi 5+ (boots Ubuntu from NVME) as a worker node, currently using it run several IoT and ETL related workloads.
 
 
