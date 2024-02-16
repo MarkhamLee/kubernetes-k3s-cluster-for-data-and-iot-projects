@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-# Markham Lee (C) 2023
-# Hardware Monitor for Linux & Windows:
-# https://github.com/MarkhamLee/HardwareMonitoring
-# This script is specific to the Orange Pi 5 Plus with
-# the Rockchip 3588 System on Chip (SOC) Running Joshua Riek's
-# Ubuntu Distro for RockChip Devices:
+# Markham Lee (C) 2023 - 2024
+# K3s-Data-Platform-IoT
+# https://github.com/MarkhamLee/kubernetes-k3s-data-platform-IoT
+# This script "should work" on any device running a Rockchip 3588
+# System on Chip (SOC). But it was specifically built and tested on
+# an Orange Pi 5 Plus Running Joshua Riek's Ubuntu Distro for
+# RockChip 3588 Devices:
 # https://github.com/Joshua-Riek/ubuntu-rockchip
 
 

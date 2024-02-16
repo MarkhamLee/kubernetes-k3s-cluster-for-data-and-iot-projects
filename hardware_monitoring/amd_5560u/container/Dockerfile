@@ -1,4 +1,4 @@
-FROM python:3.11-slim as build
+FROM python:3.12.2-slim as build
 
 RUN apt-get update -y && apt-get install -y gcc  python3-dev
 

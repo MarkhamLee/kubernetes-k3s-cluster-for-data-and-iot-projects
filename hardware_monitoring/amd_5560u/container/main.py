@@ -12,13 +12,19 @@ import time
 import gc
 import logging
 import os
+from sys import stdout
 from amd_5560u import AMD5560Data
 from influxdb_client import Point
 
-# create logger for logging errors, exceptions and the like
-logging.basicConfig(filename='hardwareDataLinuxCPU.log', level=logging.DEBUG,
-                    format='%(asctime)s %(levelname)s %(name)s %(threadName)s\
-                        : %(message)s')
+# set up/configure logging with stdout so it can be picked up by K8s
+logger = logging.getLogger('amd_telemetry_logger')
+logger.setLevel(logging.DEBUG)
+
+handler = logging.StreamHandler(stdout)
+handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(filename)s - %(message)s')  # noqa: E501
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 def monitor(client: object, get_data: object, BUCKET: str, ORG: str,

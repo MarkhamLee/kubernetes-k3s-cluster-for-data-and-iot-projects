@@ -1,8 +1,8 @@
-# cliente for connecting to InfluxDB API
+# Client for connecting to InfluxDB API
 # Pass the key, bucket and token and it will return an object
-# for use in writing to InfluxDB.
-# note: when using this client, don't convert the payload that's appended
-# to the base to json. A standard data = {"key": "value"} Python dict
+# for writing to InfluxDB. Note: when using this client, don't
+# convert the payload that's appended to the base to json, otherwise you
+# will DB write errors. The standard data = {"key": "value"} Python dict
 # is fine.
 
 import logging
@@ -11,7 +11,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS # noqa E402
 from sys import stdout
 
 # set up/configure logging with stdout so it can be picked up by K8s
-logger = logging.getLogger('rockchip_telemetry_logger')
+logger = logging.getLogger('utilities_logger')
 logger.setLevel(logging.DEBUG)
 
 handler = logging.StreamHandler(stdout)
