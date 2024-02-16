@@ -1,17 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: amd5560u-monitoring_node0
+  name: amd5560u-monitoring-node0
   namespace: operations
 spec:
   selector:
     matchLabels:
-      app: amd5560u-monitoring_node0
+      app: amd5560u-monitoring-node0
   replicas: 1
   template:
     metadata:
       labels:
-        app: amd5560u-monitoring_node0
+        app: amd5560u-monitoring-node0
     spec:
       nodeName: node0
       containers:
