@@ -1,11 +1,11 @@
-name: amd5560u_monitoring_image_build
+name: rockchip3588_monitoring_image_build
 
 on:
   push:
     branches:
       - "main"
     paths:
-      - "hardware_monitoring/amd_5560u/container/*"
+      - "hardware_monitoring/rockchip3588/container/*"
 
 jobs:
   docker:
@@ -25,8 +25,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./hardware_monitoring/amd_5560u/container/
-          file: ./hardware_monitoring/amd_5560u/container/Dockerfile
-          platforms: linux/amd64
+          context: ./hardware_monitoring/rockchip3588/container/
+          file: ./hardware_monitoring/rockchip3588/container/Dockerfile
+          platforms: linux/arm64
           push: true
-          tags: markhamlee/amd5560monitoring:latest
+          tags: markhamlee/rc3588_monitoring:latest
