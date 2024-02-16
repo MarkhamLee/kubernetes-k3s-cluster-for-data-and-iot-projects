@@ -48,7 +48,7 @@ def create_dataframe(data: list) -> object:
 def write_data(data: object):
 
     # Postgres DB connection data
-    POSTGRES_TABLE = os.environ.get('cat_table')
+    POSTGRES_TABLE = os.environ.get('CAT_TABLE')
 
     # instantiate Postgres writing class
     postgres_utilities = PostgresUtilities()

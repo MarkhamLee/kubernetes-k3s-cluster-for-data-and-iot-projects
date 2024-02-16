@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-cat-facts-test
+  namespace: etl-pipelines
+spec:
+  selector:
+    matchLabels: 
+      app: postgres-cat-facts-test
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres-cat-facts-test
+    spec:
+      containers:
+        - name: cat-facts
+          image: markhamlee/catfacts_postgres:latest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 400m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: true
+            privileged: true
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+          env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_USER
+                name: postgres-secrets
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_PASSWORD
+                name: postgres-secrets
+          - name: ALERT_WEBHOOK
+            valueFrom:
+              secretKeyRef:
+                key: WEBHOOK_ETL_ALERTS
+                name: slack-webhook-pipeline-failures
+          - name: DATABASE
+            valueFrom:
+              configMapKeyRef:
+                key: POSTGRES_TEST_DB
+                name: test-etl-variables
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: POSTGRES_DB_HOST
+                name: etl-variables
+          - name: POSTGRES_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: POSTGRES_PORT
+                name: etl-variables
+          - name: CAT_TABLE
+            valueFrom:
+              configMapKeyRef:
+                key: CAT_TABLE
+                name: test-etl-variables
+      imagePullSecrets: 
+        - name: docker-creds
+    restartPolicy: Always
