@@ -30,4 +30,3 @@ python-kasa==0.5.4
 finnhub-python
 slack_sdk
 psycopg2-binary
-pyarrow
