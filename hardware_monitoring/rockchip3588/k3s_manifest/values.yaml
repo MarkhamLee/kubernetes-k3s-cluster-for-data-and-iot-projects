@@ -27,7 +27,7 @@ spec:
               cpu: 200m
               memory: 128Mi
           env:
-            - name: TOKEN
+            - name: TOKEN 
               valueFrom:
                 secretKeyRef:
                   key: PROD_INFLUX_KEY
