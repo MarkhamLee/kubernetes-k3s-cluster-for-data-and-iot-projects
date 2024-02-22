@@ -7,7 +7,7 @@ Some helpful information on deploying containers/workloads you build yourself to
 
 You'll need to do a few things prior to getting started:
 * Create a namespace to deploy your containers in 
-* A repo that you're storing your Docker images in. I store mine on Dockerhub, but feel free to use whatever suits you.  
+* A repo that you're storing your Docker images in. I store mine on Docker Hub, but feel free to use whatever suits you.  
 * If you're using a container repo that requires you to login/a private repo:
     * Go into Rancher 
     * Select your cluster 
