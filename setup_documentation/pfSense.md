@@ -20,9 +20,9 @@ Once this is setup you'll get alerts for pretty much any issue that occurs with 
 * Issues with installed packages or their patches 
 * Pretty much anything that would generate an alert
 
-IF you want to go beyond that, you'll need to: 
- 1) setup logging/monitoring via something like Telegraf or Prometheus
- 2) configure specific alerts within a tool like Grafana or Prometheus alert manager. 
+IF you want to go beyond that, say alerts that are triggered when a certain amount of activity goes above a threshold you'll need to: 
+ 1) Setup logging/monitoring via something like Telegraf or Prometheus
+ 2) Configure specific alerts within a tool like Grafana or Prometheus alert manager. 
 
 
 ### Adding Secure Certifications via LetsEncrypt.org & Cloudflare
@@ -44,11 +44,11 @@ Note(s):
 6) Click the add button to add a new certificate, and here is where things can be get a little tricky, in particular under Domain SAN list:
     * Click Add
     * In the box to the right of "Enabled" put the domain you're going to secure on your **HOME** network, meaning: local.yourdomain.com with your domain being the domain we registered with Cloudflare in the first step, then enter your Cloudflare email address, and the API token I asked you make note of 
-    * Next, add a second entry that's identical to the one above, only it should be *.local.yourdomain.com. This is necessary to create "wildcard" certificates so that you can create domains like pfsense.local.markhamslab.com to point to your pfSense UI and the browser will see that it's properly secured, ditto for other services you deploy on your home network. 
+    * Next, add a second entry that's identical to the one above, only it should be *.local.yourdomain.com. This is necessary to create "wildcard" certificates so that you can create domains like pfsense.local.example.com to point to your pfSense UI and the browser will see that it's properly secured, ditto for other services you deploy on your home network. 
 7) Click save, don't click the "Issue/Renew" button, we'll come back to that later. Instead, go to 
 general settings and configure things as you wish. 
 8) Go to services --> DNS resolver
-9) scroll down the bottom of the page to the "Host Overrides" section. You'll want to create a local domain address for your pfSense firewall. E.g., pfsense.local.yourdomain.com
+9) Scroll down the bottom of the page to the "Host Overrides" section. You'll want to create a local domain address for your pfSense firewall. E.g., pfsense.local.yourdomain.com
     * host = what you'd enter before local.yourdomain.com
     * Domain = local.yourdomain.com 
     * IP address is the IP you're using to access pfSense 

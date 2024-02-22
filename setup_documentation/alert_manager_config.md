@@ -4,16 +4,16 @@ Alert monitor is included as part of the Kube-Prometheus stack, but there are a 
 
 #### Pre-requisite(s): 
 
-1) configure a Slack webhook to receive alerts (I use Slack as it's the easiest to setup). Just Google "Slack API", their documentation is great and easy to follow so you shouldn't have any issues. TL/DR: you're going to create a Slack channel to receive the alerts and then a webhook that allows you to ping that channel. 
-2) Create a secret containing the webhook in each and every namepace you want to receive alerts for. Tip: create the first secret and then click hamburger menu and select "clone" to copy it over to the other namespaces.
+1) Configure a Slack webhook to receive alerts (I use Slack as it's the easiest to setup). Just Google "Slack API", their documentation is great and easy to follow so you shouldn't have any issues. TL/DR: you're going to create a Slack channel to receive the alerts and then a webhook that allows you to ping that channel. 
+2) Create a secret containing the webhook in each and every namepace you want to receive alerts for. Tip: create the first secret and then click the hamburger menu and select "clone" to copy it over to the other namespaces.
 
 #### Setting up alerts
 
-1) The firs step is to create an alert config Go into the left hand menu: Monitoring --> Alerting --> AlertmanagerConfigs. Ignore Routes & Receivers, it's been deprecated. You'll see a screen like the below, click "Create"
+1) The first step is to create an alert config: go into the left hand menu: Monitoring --> Alerting --> AlertmanagerConfigs. Ignore Routes & Receivers, it's been deprecated. You'll see a screen like the below, click "Create"
 
 ![Alert-Manager-Configs](images/alert-manager-configs.png)
 
-2) Input the name of the config and click create. For some odd reason you can't figure the receiver and route until you create the config, would be great if you could do it all at once. 
+2) Input the name of the config and click create. For some odd reason you can't configure the receiver and route until you create the config, would be great if you could do it all at once. 
 
 ![Create Config](images/create_config.png)
 
@@ -24,15 +24,15 @@ Alert monitor is included as part of the Kube-Prometheus stack, but there are a 
 
 ![Create Receiver](images/create_receiver.png)
 
-5) On the next page under Target add a name for the receiver, use the drop down to select the name of the secret with your Slack Webhook(s) and then select the key for the webhook. Additionally, you can also chose to click "Enabled send resolve alerts", so you can get an alert when a problem is resolved. Once you're satisified with how the receiver is configured click "Create" in the bottom left hand corner, which will take you back to the "AlertmanagerConfig" page. Note: if you click "Route" on this page you won't be able to edit the route, we'll address that next. 
+5) On the next page under Target add a name for the receiver, use the drop down to select the name of the secret with your Slack Webhook(s) and then select the key for the webhook. Additionally, you can also choose to click "Enabled send resolve alerts", so you can get an alert when a problem is resolved. Once you're satisified with how the receiver is configured click "Create" in the bottom left hand corner, which will take you back to the "AlertmanagerConfig" page. Note: if you click "Route" on this page you won't be able to edit the route, we'll address that next. 
 
 ![Create Receiver](images/configuring_receiver.png) 
 
-6) Click the hamburger menu in the top right hand corner and select "Edit Config", which will take you back the AlertmanagerConfig page. This is odd, but expected, click "Route" and you can now edit the Route. At minimum you have to select the receiver you created in step five. You can also 
+6) Click the hamburger menu in the top right hand corner and select "Edit Config", which will take you back the AlertmanagerConfig page. This is odd, but expected, click "Route" and you can now edit the Route. At minimum you have to select the receiver you created in step five. 
 
 ![Setup Route](images/setup-alert-route.png) 
 
-You can also add labels so that your alerts for related issues are grouped together, think: a node goes down and several services generate alerts, you don't each alert but it would be good if you can see all the affected services.
+You can also add labels so that your alerts for related issues are grouped together, think: a node goes down and several services generate alerts, you don't neccesarily want to see each alert but it would be good if you can see all the affected services.
 
 Once you have your alerts setup click monitoring in the left hand side menu, and then click the "PrometheusRules" icon on the right hand side of your screen, this will show you all the rules that are pre-configured. 
 
@@ -40,4 +40,4 @@ Once you have your alerts setup click monitoring in the left hand side menu, and
 
 One more item, in the right portion of the screen when you're using Rancher there will be a drop down that says "Only User Namespaces", select system and cluster resources from it so you can create the Slack webhook secret for those namespaces and then configure alerts. 
 
-Once the alerts are configured, test them out, by, well, intentionally causing problems (I unplugged a node that wasnt' currently running anything) and see what generates alerts and what doesn't. Note: that most of alerts don't fire right away, as the system generally waits to ensrue that the issue is worth pinging you over/will resolve itself. From there you can gather information to edit your alerting configuration, add alerts, rules, etc. For the record I bake Slack alerts into my custom containers, so I'm mostly using this functionality for dedicating hardware problems or service wide issues. E.g., PostgreSQL stops working.
+Once the alerts are configured, test them out, by, well, intentionally causing problems (I unplugged a node that wasn't currently running anything) and see what generates alerts and what doesn't. Note: that most of alerts don't fire right away, as the system generally waits to ensure that the issue is worth pinging you over/will resolve itself. From there you can gather information to edit your alerting configuration, add alerts, rules, etc. For the record I bake Slack alerts into my custom containers, so I'm mostly using this functionality for dedicating hardware problems or service wide issues. E.g., PostgreSQL stops working, nodes go offline, etc.

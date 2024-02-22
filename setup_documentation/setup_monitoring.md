@@ -2,7 +2,7 @@
 
 ### Caveat: Kube-Prometheus is very resource intensive
 
-The Kube-Prometheus stack is rather resource intensive, so if you're running nodes with less than 8 GB of ram you're likely to run into issues. The issue isn't so much how much RAM is being used (which is often small as far as Prometheus is concerned), but the node's available resources vs the minimum request size required for the Prometheus to work (more on that below). Meaning 4GB Raspberry Pi or similar devices won't work as the minumum request size is about 4 GB, so you'll you need at devices that have at least 8 GB otherwise the RAM request size will exceed the node's resources. That being said, the 4 GB node will still work IF you have other nodes with sufficient resources, but you're going to get a lot of error alerts. 
+The Kube-Prometheus stack is rather resource intensive, so if you're running nodes with less than 8 GB of ram you're likely to run into issues. The issue isn't so much how much RAM is being used (which is often small as far as Prometheus is concerned), but the node's available resources vs the minimum request size required for the Prometheus to work (more on that below). Meaning 4GB Raspberry Pi or similar devices won't work as the minumum request size is about 4 GB, so you'll you need at devices that have at least 8 GB, otherwise the RAM request size will exceed the node's resources. That being said, the 4 GB node will still work IF you have other nodes with sufficient resources, but you're going to get a lot of error alerts. 
 
 *TL/DR your nodes need at least 8 GB or RAM and it should really be 16 GB, Prometheus won't use anywhere near that much, but if it's not available you'll run into issues.*
 
