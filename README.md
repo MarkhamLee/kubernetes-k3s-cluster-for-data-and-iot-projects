@@ -21,13 +21,14 @@ This repo contains custom code, deployment manifests (3rd party and custom conta
 * **Hardware:** 
     * **Server/control plane nodes:** three "Intel NUC like" **Beelink SER5s running Ryzen 5 5560u processors (6c/12t), 64 GB of RAM and 2 TB of storage**. I got them for around $225.00/each on sale from Amazon (down from around $300). With Geekbench 6 scores around 7k (in my testing), you can think of them as getting about 80% of the performance of an 11th gen desktop i5 while using a fraction of the power. The fans also run quieter than the ones in my 12th Gen Intel NUC, albeit at the cost of higher temperatures. 
     * **Agent - Specialized Nodes:** 
-        * 1 x Orange Pi 5+ (soon to be three) functioning as general purpose arm64 worker nodes. While the pricing and performance is similar to many x86 N95/N100 mini-computers, they have more cores and faster storage (PCIe x3 vs x1-2) and can be purchased with more RAM (max of 32GB), plus use less power and are considerably smaller. The Orange Pi 5+ is one of the nodes running my MQTT broker, in addition to several IoT related containers for monitoring smart devices and probably 1/2 of my ETL workloads and the CPU usage is usually under 5% with occassional spikes to 10-15%. 
+        * 1 x Orange Pi 5+ (soon to be three) functioning as general purpose arm64 worker nodes. While the pricing and performance is similar to many x86 N95/N100 mini-computers, they have more cores and faster storage (PCIe x3 vs x1-2 for most N95/N11 mini PCs) and can be purchased with more RAM (max of 32GB), plus use less power and are considerably smaller. The Orange Pi 5+ is one of the nodes running my MQTT broker, in addition to several IoT related containers for monitoring smart devices and probably 1/2 of my ETL workloads and the CPU usage is usually under 5% with occassional spikes to 10-15%. 
         * 2 x Raspberry Pi 4B 8GB used for collecting climate data around my house, I had originaly put *"no schedule"* taints on these devices, but given how little resources the sensors used and the fact that nearly all of my containers/workloads are multi-architecture, I removed it so they can serve as general worker nodes as well. I'm planning on shifting all climate data collection to ESP32s and Raspberry Pi Picos, so I will move these nodes over to a test cluster in the next month or so. 
         * A Raspberry Pi 4B 8GB (with an NVME hat) that I use for testing containers running code for GPIO devices that will be eventually make their way to the other Raspberry Pis. Despite the likely move to running GPIO based workloads on ESP32s, I will probably keep this device as part of the main cluster.
-    * **Power Management**
+    * **Power Management:** 
         * **CyberPower UPS device**, currently the monitoring is very limited as it can only send telemetry data to one computer via USB, and that data can only be checked/monitored via terminal. An item on "the list" is to build the capability to collect the data, write it to InfluxDB and then share the "graceful shutdown" signal from the USB with all the nodes in the cluster. 
         * **Kasa Smart Plugs:** monitored via the [Python Kasa library](https://github.com/python-kasa/python-kasa), this allows me to track how much power all of my *"Homelab Devices"*.
         * **Zigbee Based Smart Plugs:** these devices serve a dual purpose: as not only do they provide real time power consumption data, but they also serve as Zigbee routers that augment my mesh network for Zigbee devices.
+        * 
     * **Future state(s):** dedicated storage nodes that will just run Longhorn and MinIO 
     * All of the nodes are running Ubuntu 22.04, the Orange Pi 5+ is running a community [Ubuntu 22.04 distro](https://github.com/Joshua-Riek/ubuntu-rockchip) made especially for Rockchip 3588 devices.  
 
@@ -43,7 +44,7 @@ This repo contains custom code, deployment manifests (3rd party and custom conta
         * **Monitor Power Consumption:** pull power consumption data from Kasa brand smart plugs for display in a Grafana dashboard.
         * **Hardware Telemetry**: monitor each of the node's operating temperatures, in addition to providing data on CPU and RAM utilization as the data provided within K3s is often higher/based on the maximum compute resources the currently running pods *"could"* use.
     * **Infrastrcture as Code:** where possible, deployment manifests, configurations, etc., are stored within this repo as yaml files for easy redeployment/building new clusters. Note: it's common for these configs to be tested/used for several weeks before I check them in. I.e., I don't check these in until I'm sure it works/the repo often lags what's currently deployed by a couple of weeks. Additionally, detailed install and configure instructions are provided as well, so as to fill in any gaps between what's possible via a manifest or config file and what you have to do via the UI or command line.
-    
+
 * **Software:**
     * I use **Rancher** to manage the cluster, as a front-end to Longhorn and Prometheus monitoring and to do quick and dirty deployments where appropriate.
     * I use **Longhorn** to aggregate the hard drives on each of the control nodes into a shared pool of storage that the entire cluster can use. Longhorn reserves about 2/3rds of the total storage on each device for shared storage. 
@@ -57,8 +58,6 @@ This repo contains custom code, deployment manifests (3rd party and custom conta
     * I use **Letsencrypt.org certs + Cloudflare and a publically available domain name** to secure the cluster and ensure all connections are encrypted/secure. I.e., avoid any browser errors from using self-signed certs. I use **Certs-Manager** to manage the secure certificates.
     * I use **Traefik** for the ingress and **metallb** for the load balancer 
     * I'm running a custom router with **pfSense** as the firewall software, aside from the obvious I also use this to create custom local domains for each service. Think: grafana.local.example.com. I also use Letsencrypt.org certificates to encrypt the connection for the web UI. pfSense is also configured to send alerts via Slack and to make firewall data available via Prometheus and Telegraf. [Setup instructions pending for data export] 
-
-
 
 ### Recent Updates
 
