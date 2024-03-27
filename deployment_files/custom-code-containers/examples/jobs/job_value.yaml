@@ -1,0 +1,84 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: yield-curve-load-2024
+  annotations:
+    batch.kubernetes.io/job-tracking: ''
+  namespace: etl-pipelines
+spec:
+  backoffLimit: 2
+  completionMode: NonIndexed
+  template:
+    metadata:
+      labels:
+        job-name: yield-curve-load-2024
+      namespace: etl-pipelines
+    spec:
+      nodeSelector:
+        node_type: arm64_worker
+      containers:
+        - env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_USER
+                  name: postgres-secrets
+                  optional: false
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: postgres-secrets
+                  optional: false
+            - name: ALERT_WEBHOOK
+              valueFrom:
+                secretKeyRef:
+                  key: WEBHOOK_ETL_ALERTS
+                  name: slack-webhook-pipeline-failures
+                  optional: false
+            - name: DASHBOARD_DB
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_DASHBOARD_DB
+                  name: key-etl-variables
+                  optional: false
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_DB_HOST
+                  name: key-etl-variables
+                  optional: false
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: POSTGRES_PORT
+                  name: key-etl-variables
+                  optional: false
+            - name: YIELD_CURVE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: YIELD_CURVE_2024
+                  name: key-etl-variables
+                  optional: false
+            - name: RAW_YIELD_CURVE_TABLE
+              valueFrom:
+                configMapKeyRef:
+                  key: RAW_YIELD_CURVE_TABLE
+                  name: key-etl-variables
+                  optional: false
+          image: markhamlee/yieldcurve_load:latest
+          imagePullPolicy: Always
+          name: container-0
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: false
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+        - name: docker-creds
+      restartPolicy: Never
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
