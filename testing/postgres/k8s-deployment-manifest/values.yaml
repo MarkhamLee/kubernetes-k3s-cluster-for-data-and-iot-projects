@@ -1,20 +1,21 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: Job
 metadata:
-  name: postgres-cat-facts-test
+  name: postgres-cat-facts-test-v2
+  annotations:
+    batch.kubernetes.io/job-tracking: ''
   namespace: etl-pipelines
 spec:
-  selector:
-    matchLabels: 
-      app: postgres-cat-facts-test
-  replicas: 1
+  backoffLimit: 1
+  completionMode: NonIndexed
   template:
     metadata:
       labels:
-        app: postgres-cat-facts-test
+        job-name: postgres-cat-facts-test-v2
+      namespace: etl-pipelines
     spec:
       containers:
-        - name: cat-facts
+        - name: cat-facts-test
           image: markhamlee/catfacts_postgres:latest
           imagePullPolicy: Always
           resources:
@@ -54,12 +55,12 @@ spec:
             valueFrom:
               configMapKeyRef:
                 key: POSTGRES_DB_HOST
-                name: etl-variables
+                name: key-etl-variables
           - name: POSTGRES_PORT
             valueFrom:
               configMapKeyRef:
                 key: POSTGRES_PORT
-                name: etl-variables
+                name: key-etl-variables
           - name: CAT_TABLE
             valueFrom:
               configMapKeyRef:
@@ -67,4 +68,7 @@ spec:
                 name: test-etl-variables
       imagePullSecrets: 
         - name: docker-creds
-    restartPolicy: Always
+      restartPolicy: Never
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
