@@ -6,8 +6,8 @@ Some helpful information on deploying containers/workloads you build yourself to
 ### Preparation 
 
 You'll need to do a few things prior to getting started:
-* Create a namespace to deploy your containers in 
-* A repo that you're storing your Docker images in. I store mine on Docker Hub, but feel free to use whatever suits you.  
+* Create a namespace to deploy your containers into 
+* Create a repo for storing your Docker images. I store mine on Docker Hub, but feel free to use whatever suits you.  
 * If you're using a container repo that requires you to login/a private repo:
     * Go into Rancher 
     * Select your cluster 
@@ -29,7 +29,7 @@ You don't "technically" have to create YAML files to deploy your containers, the
 2) Go to Rancher 
 3) Select deployments in the left hand menu 
 4) Select "Create" in the upper right hand of the screen 
-5) Select the option that best corresponds to how you want to deploy your code. E.g., Deployment for a stateless application, CronJob for things you want to run on a schedule. StatefulSet for things that need to persist data. 
+5) Select the option that best corresponds to how you want to deploy your code. E.g., *"Deployment"* for a stateless application, *"CronJob"* for things you want to run on a schedule, *"StatefulSet"* for things that need to persist data. 
 6) Configure everything as you need it and click create. Note that you can create several containers in one deployment if you need it. *Note:* Make sure, you're designating the container port as the one exposed in the Dockerfile, easy thing to miss. 
 7) Validate that all your endpoints work. Be sure to use the IP specifically denoted as the ClusterIP, the IP you'll see when you first click into the deployment in Rancher is the pod IP, NOT the ClusterIP. You'll be able to test things using the ClusterIP if you're using a machine within the cluster. You can get the ClusterIP from Rancher under services in the left hand menu. 
 
@@ -51,5 +51,5 @@ You don't "technically" have to create YAML files to deploy your containers, the
 Now test alll your endpoints 
 
 
-#### The harder/Infrastucture as Code Way 
+#### The Infrastucture as Code Way 
 * Examples are in the folders 
