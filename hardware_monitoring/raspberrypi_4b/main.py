@@ -24,7 +24,7 @@ from hw_monitoring_libraries.hw_monitoring\
 def monitor(client: object, getData: object, topic: str):
 
     DEVICE_ID = os.environ['DEVICE_ID']
-    INTERVAL = os.environ['INTERVAL']
+    INTERVAL = int(os.environ['INTERVAL'])
 
     logger.info('Starting HW monitoring...')
 
@@ -66,9 +66,11 @@ def main():
 
     # instantiate RPI4B data retrieval class
     get_data = Rpi4bData()
+    logger.info('Data class instantiated')
 
     # instantiate hardware monitoring class
     monitor_utilities = MonitoringUtilities()
+    logger.info('Monitoring utilities class instantiated')
 
     # operating parameters
     TOPIC = os.environ['TOPIC']
