@@ -18,7 +18,7 @@ from hw_monitoring_libraries.logging_util import logger  # noqa: E402
 
 class MonitoringUtilities():
 
-    def __init__():
+    def __init__(self):
 
         pass
 
