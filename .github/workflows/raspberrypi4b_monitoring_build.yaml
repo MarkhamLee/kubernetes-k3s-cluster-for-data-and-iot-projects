@@ -6,6 +6,7 @@ on:
       - "main"
     paths:
       - "hardware_monitoring/raspberrypi_4b/*"
+      - "hardware_monitoring/hw_monitoring_libraries/*"
 
 jobs:
   docker:
