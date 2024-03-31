@@ -6,7 +6,7 @@ COPY ./hw_monitoring_libraries ./hw_monitoring_libraries
 
 WORKDIR /hw_telemetry
 
-COPY raspberrypi_4b /
+COPY ./raspberrypi_4b ./
 
 RUN pip install -r /hw_telemetry/requirements.txt
 
