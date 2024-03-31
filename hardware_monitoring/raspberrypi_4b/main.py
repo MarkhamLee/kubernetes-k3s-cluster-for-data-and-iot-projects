@@ -26,6 +26,8 @@ def monitor(client: object, getData: object, topic: str):
     DEVICE_ID = os.environ['DEVICE_ID']
     INTERVAL = os.environ['INTERVAL']
 
+    logger.info('Starting HW monitoring...')
+
     while True:
 
         # get CPU utilization
