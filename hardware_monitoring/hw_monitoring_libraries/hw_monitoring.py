@@ -7,12 +7,13 @@ import os
 import sys
 import uuid
 import influxdb_client # noqa E402
-from logging_util import logger  # noqa: E402
 from influxdb_client.client.write_api import SYNCHRONOUS
 from paho.mqtt import client as mqtt
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
+
+from hw_monitoring_libraries.logging_util import logger  # noqa: E402
 
 
 class MonitoringUtilities():
