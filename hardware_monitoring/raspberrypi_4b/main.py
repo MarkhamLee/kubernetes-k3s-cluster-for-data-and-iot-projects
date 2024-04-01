@@ -1,11 +1,11 @@
-#!/usr/bin/env python
-# Markham Lee (C) 2023
-# https://github.com/MarkhamLee/productivity-music-stocks-weather-IoT-dashboard
-# Primary script for a container that provide hardware monitoring for a
-# Raspberry Pi 4B, tracking CPU: temps, utilization and clock speed, GPU temps
-# and RAM use. The Data transmitted via MQTT so that in a future iteration MQTT
-# messages can be used for remote management of the device in response to
-# issues.
+# Markham Lee (C) 2023 - 2024
+# kubernetes-k3s-data-and-IoT-platform
+# https://github.com/MarkhamLee/kubernetes-k3s-data-and-IoT-Platform
+# Script for monitoring a Raspberry Pi 4B, pulling CPU utilization,
+# temps and clock speed and RAM utilization data. The Data is transmitted
+# via MQTT because it a) uses less power than API requests b) the
+# communication is two way, which will be used to light up future device
+# mgt capabilities in the future.
 import gc
 import json
 import os
@@ -21,6 +21,7 @@ from hw_monitoring_libraries.hw_monitoring\
     import MonitoringUtilities  # noqa: E402
 
 
+# method that runs monitoring loop
 def monitor(client: object, getData: object, topic: str):
 
     DEVICE_ID = os.environ['DEVICE_ID']

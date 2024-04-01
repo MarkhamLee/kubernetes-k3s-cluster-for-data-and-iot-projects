@@ -1,8 +1,10 @@
-# Markham Lee (C) 2023
-# https://github.com/MarkhamLee/productivity-music-stocks-weather-IoT-dashboard
-# methods for retrieving data from a Raspberry Pis CPU, GPU sensors, et al,
-# plus utility scripts for MQTT: MQTT client and generating unique client
-# IDs
+# Markham Lee (C) 2023 - 2024
+# kubernetes-k3s-data-and-IoT-platform
+# https://github.com/MarkhamLee/kubernetes-k3s-data-and-IoT-Platform
+# Utility methods for monitoring hardware/nodes within the K3s cluster;
+# primarily used for extended/supplemental monitoring beyond what's
+# possible via the typical K8s HW monitoring tools. E.g., monitoring
+# GPU temps for single board computers.
 import os
 import sys
 import uuid
@@ -22,6 +24,7 @@ class MonitoringUtilities():
 
         pass
 
+    # generate InfluxDB write client
     @staticmethod
     def influx_client(token: str, org: str, url: str) -> object:
 
@@ -34,6 +37,7 @@ class MonitoringUtilities():
 
         return write_api
 
+    # generate unique client IDs for connecting to the MQTT broker
     @staticmethod
     def getClientID():
 
@@ -41,6 +45,7 @@ class MonitoringUtilities():
 
         return clientID
 
+    # Generate MQTT client
     @staticmethod
     def mqttClient(clientID: str, username: str, pwd: str,
                    host: str, port: int):

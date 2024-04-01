@@ -1,8 +1,8 @@
-# Markham Lee (C) 2023
-# https://github.com/MarkhamLee/productivity-music-stocks-weather-IoT-dashboard
-# methods for retrieving data from a Raspberry Pis CPU, GPU sensors, et al,
-# plus utility scripts for MQTT: MQTT client and generating unique client
-# IDs
+# Markham Lee (C) 2023 - 2024
+# kubernetes-k3s-data-and-IoT-Platform
+# https://github.com/MarkhamLee/kubernetes-k3s-data-and-IoT-Platform
+# Utility methods for pulling hardware monitoring data from a
+# Raspberry Pi 4B.
 import psutil
 
 
