@@ -1,6 +1,6 @@
 # temp stage
 
-FROM python:alpine as builder
+FROM python:3.12.2-slim as builder
 
 WORKDIR /app
 
@@ -11,8 +11,8 @@ COPY /raspberrypi_4b/requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
 
 
-# final stage 
-FROM python:alpine
+# final stage - 
+FROM python:3.12.2-slim
 
 COPY ./hw_monitoring_libraries ./hw_monitoring_libraries
 

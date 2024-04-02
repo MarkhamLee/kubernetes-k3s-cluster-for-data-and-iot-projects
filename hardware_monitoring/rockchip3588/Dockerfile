@@ -1,6 +1,6 @@
 # temp stage 
 
-FROM python:3.12.2-slim as build
+FROM python:3.12.2-slim as builder
 
 WORKDIR /app
 
