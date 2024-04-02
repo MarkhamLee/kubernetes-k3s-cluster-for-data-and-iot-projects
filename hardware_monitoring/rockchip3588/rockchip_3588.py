@@ -5,7 +5,6 @@
 # communicate  with the MQTT broker.
 # building this as a utility script so specific data can be grabbed,
 # rather than having a single fuunction with all the data calls in it
-
 import psutil
 import json
 

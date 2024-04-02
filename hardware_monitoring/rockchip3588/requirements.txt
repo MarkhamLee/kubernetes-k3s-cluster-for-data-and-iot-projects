@@ -1,5 +1,0 @@
-entrypoints
-executing
-clr==1.0.3
-psutil==5.9.5
-influxdb-client

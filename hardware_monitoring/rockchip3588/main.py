@@ -38,6 +38,8 @@ def monitor(client: object, bucket, table, interval):
 
     while True:
 
+        logger.info("Starting HW data logging...")
+
         try:
             # get CPU utilization
             cpuUtil = rockchip_data.getCPUData()
