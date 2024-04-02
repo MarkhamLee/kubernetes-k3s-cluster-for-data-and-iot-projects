@@ -41,9 +41,10 @@ def monitor(client: object, bucket: str, interval: int, base_payload: dict):
     # instantiate hardware data class
     rockchip_data = RockChipData()
 
-    while True:
+    DEVICE_ID = os.environ['DEVICE_ID']
+    logger.info(f'Starting HW monitoring for {DEVICE_ID}')
 
-        logger.info("Starting HW data logging...")
+    while True:
 
         try:
             # get CPU utilization
