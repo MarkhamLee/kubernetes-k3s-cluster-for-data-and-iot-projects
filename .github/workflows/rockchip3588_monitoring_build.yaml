@@ -30,4 +30,4 @@ jobs:
           file: ./hardware_monitoring/rockchip3588/Dockerfile
           platforms: linux/arm64
           push: true
-          tags: markhamlee/orangepi5_monitoring:latest
+          tags: markhamlee/rc3588_monitoring:latest
