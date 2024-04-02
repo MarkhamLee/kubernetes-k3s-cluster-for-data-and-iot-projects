@@ -22,7 +22,7 @@ from hw_monitoring_libraries.hw_monitoring\
 
 
 # method that runs monitoring loop
-def monitor(client: object, getData: object, topic: str):
+def monitor(client: object, get_data: object, topic: str):
 
     DEVICE_ID = os.environ['DEVICE_ID']
     INTERVAL = int(os.environ['INTERVAL'])
@@ -32,22 +32,22 @@ def monitor(client: object, getData: object, topic: str):
     while True:
 
         # get CPU utilization
-        cpuUtil = getData.getCPUData()
+        cpu_util = get_data.get_cpu_data()
 
         # get current RAM use
-        ramUse = getData.getRamData()
+        ram_use = get_data.get_ram_data()
 
         # get current freq and core count
-        cpuFreq, coreCount = getData.getFreq()
+        cpu_freq, core_count = get_data.get_freq()
 
         # get CPU temperature
-        cpuTemp = getData.get_rpi4b_temps()
+        cpu_temp = get_data.get_rpi4b_temps()
 
         payload = {
-            "cpuTemp": cpuTemp,
-            "cpuFreq": cpuFreq,
-            "cpuUse": cpuUtil,
-            "ramUse": ramUse
+            "cpuTemp": cpu_temp,
+            "cpuFreq": cpu_freq,
+            "cpuUse": cpu_util,
+            "ramUse": ram_use
         }
 
         payload = json.dumps(payload)
@@ -58,7 +58,7 @@ def monitor(client: object, getData: object, topic: str):
 
             logger.debug(f'MQTT publishing failure for hardware monitoring on: {DEVICE_ID}, return code: {status}')  # noqa: E501
 
-        del payload, cpuUtil, ramUse, cpuFreq, cpuTemp, status, result
+        del payload, cpu_util, ram_use, cpu_freq, cpu_temp, status, result
         gc.collect()
         time.sleep(INTERVAL)
 

@@ -20,7 +20,7 @@ class RockChipData():
     # for instances where we want to get data per core, we can pass the
     # function that retrieves that data to this one and then build the
     # "per core" payload
-    def buildPayload(self, inputFunction, index=0):
+    def build_payload(self, inputFunction, index=0):
 
         temp_dict = {}
 
@@ -37,7 +37,7 @@ class RockChipData():
         return payload
 
     # getting temps per core
-    def getTemps(self, index=0):
+    def get_temps(self, index=0):
 
         if self.core_count > 1:
 
@@ -53,14 +53,14 @@ class RockChipData():
         return temp_payload
 
     # returns CPU package temp
-    def coreTemp(self):
+    def core_temp(self):
 
         core_temp = psutil.sensors_temperatures()['coretemp'][0].current
 
         return core_temp
 
     # get average clock speed for all cores
-    def getFreq(self, all_cpu=False):
+    def get_freq(self, all_cpu=False):
 
         all_freq = psutil.cpu_freq(percpu=all_cpu)[0]
         all_freq = round(all_freq, 1)
@@ -68,14 +68,14 @@ class RockChipData():
         return all_freq, self.core_count
 
     # get frequency per core
-    def freqPerCore(self, all_cpu=True):
+    def freq_per_core(self, all_cpu=True):
 
         per_core_freq = self.buildPayload(psutil.cpu_freq(percpu=all_cpu))
 
         return per_core_freq
 
     # CPU load
-    def getCPUData(self):
+    def get_cpu_data(self):
 
         cpu_util = (psutil.cpu_percent(interval=1))
         cpu_util = round(cpu_util, 1)
@@ -83,7 +83,7 @@ class RockChipData():
         return cpu_util
 
     # get current RAM used
-    def getRamData(self):
+    def get_ram_data(self):
 
         ram_use = (psutil.virtual_memory()[3]) / 1073741824
         ram_use = round(ram_use, 2)
@@ -92,7 +92,7 @@ class RockChipData():
 
     # acquiring temperature sensor data for Rockchip 3588 devices
     @staticmethod
-    def sysTemps():
+    def sys_temps():
 
         soc_temp = psutil.sensors_temperatures()['soc_thermal'][0].current
         big_core_0temp = psutil.sensors_temperatures()['bigcore0_thermal'][0].\
@@ -112,7 +112,7 @@ class RockChipData():
 
     # CPU frequencies for the various cores of a Rockchip 3588 device
     @staticmethod
-    def getRockChip3588Freqs():
+    def get_rockchip_3588_freqs():
 
         freq = psutil.cpu_freq(percpu=True)
         little_core = freq[0].current

@@ -47,42 +47,43 @@ def monitor(client: object, bucket: str, interval: int, base_payload: dict):
 
         try:
             # get CPU utilization
-            cpuUtil = rockchip_data.getCPUData()
+            cpu_util = rockchip_data.get_cpu_data()
 
             # get current RAM use
-            ramUse = rockchip_data.getRamData()
+            ram_use = rockchip_data.get_ram_data()
 
             # get per CPU frequencies (bigCore0, bigCore1, littleCore)
-            littleCoreFreq, bigCore0Freq, bigCore1Freq = rockchip_data.\
-                getRockChip3588Freqs()
+            little_core_freq, big_core0_freq, big_core1_freq = rockchip_data.\
+                get_rockchip_3588_freqs()
 
             # get system temperatures
-            socTemp, bigCore0Temp, bigCore1Temp, littleCoreTemp, centerTemp, \
-                gpuTemp, npuTemp, nvmeTemp = rockchip_data.sysTemps()
+            soc_temp, big_core0_temp, big_core1_temp, little_core_temp, \
+                center_temp, gpu_temp, npu_temp, \
+                nvme_temp = rockchip_data.sys_temps()
 
             payload = {
-                "SOC": socTemp,
-                "bigCore0": bigCore0Temp,
-                "bigCore1": bigCore1Temp,
-                "littleCore": littleCoreTemp,
-                "Center": centerTemp,
-                "GPU": gpuTemp,
-                "NPU": npuTemp,
-                "NVME": nvmeTemp,
-                "littleCoreFreq": littleCoreFreq,
-                "bigCore0Freq": bigCore0Freq,
-                "bigCore1Freq": bigCore1Freq,
-                "cpuUse": cpuUtil,
-                "ramUse": ramUse
+                "SOC": soc_temp,
+                "bigCore0": big_core0_temp,
+                "bigCore1": big_core1_temp,
+                "littleCore": little_core_temp,
+                "Center": center_temp,
+                "GPU": gpu_temp,
+                "NPU": npu_temp,
+                "NVME": nvme_temp,
+                "littleCoreFreq": little_core_freq,
+                "bigCore0Freq": big_core0_freq,
+                "bigCore1Freq": big_core1_freq,
+                "cpuUse": cpu_util,
+                "ramUse": ram_use
             }
 
             # write data to InfluxDB
             influxdb_write.write_influx_data(client, base_payload,
                                              payload, bucket)
 
-            del payload, socTemp, bigCore0Temp, bigCore1Temp, \
-                littleCoreTemp, centerTemp, gpuTemp, npuTemp, nvmeTemp,
-            littleCoreFreq, bigCore0Freq, bigCore1Freq, cpuUtil, ramUse
+            del payload, soc_temp, big_core0_temp, big_core1_temp, \
+                little_core_temp, center_temp, gpu_temp, npu_temp, nvme_temp,
+            little_core_freq, big_core0_freq, big_core1_freq, cpu_util, ram_use
             gc.collect()
 
         except Exception as e:

@@ -15,7 +15,7 @@ class Rpi4bData():
         self.coreCount = psutil.cpu_count(logical=False)
 
     # get average clock speed for all cores
-    def getFreq(self, all_cpu=False):
+    def get_freq(self, all_cpu=False):
 
         allFreq = psutil.cpu_freq(percpu=all_cpu)[0]
         allFreq = round(allFreq, 1)
@@ -23,7 +23,7 @@ class Rpi4bData():
         return allFreq, self.coreCount
 
     # CPU load/utilization
-    def getCPUData(self):
+    def get_cpu_data(self):
 
         cpuUtil = (psutil.cpu_percent(interval=1))
         cpuUtil = round(cpuUtil, 1)
@@ -31,7 +31,7 @@ class Rpi4bData():
         return cpuUtil
 
     # get current RAM used
-    def getRamData(self):
+    def get_ram_data(self):
 
         ramUse = (psutil.virtual_memory()[3]) / 1073741824
         ramUse = round(ramUse, 2)
