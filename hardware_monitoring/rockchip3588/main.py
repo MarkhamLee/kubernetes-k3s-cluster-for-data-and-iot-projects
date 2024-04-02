@@ -2,7 +2,7 @@
 # kubernetes-k3s-data-and-IoT-platform
 # https://github.com/MarkhamLee/kubernetes-k3s-data-and-IoT-platform
 # HW monitoring Script for an Orange Pi 5+, meant to extend the
-# monitoring capabilities in K8s, tracking: CPU, NVME and GPU temps
+# monitoring capabilities in K8s, namely: tracking CPU, NVME and GPU temps
 #  & utilization data. This script "should work" on any device running
 # a Rockchip 3588 System on Chip (SOC). But it was specifically built and
 # tested on an Orange Pi 5 Plus Running Joshua Riek's Ubuntu Distro for
@@ -23,7 +23,7 @@ from hw_monitoring_libraries.influx_client import InfluxClient  # noqa: E402
 influxdb_write = InfluxClient()
 
 
-def monitor(client: object, bucket, table, interval):
+def get_base_payload(table):
 
     # base payload
     base_payload = {
@@ -32,6 +32,11 @@ def monitor(client: object, bucket, table, interval):
                 "k3s_prod": "hardware_telemetry",
         }
     }
+
+    return base_payload
+
+
+def monitor(client: object, bucket: str, interval: int, base_payload: dict):
 
     # instantiate hardware data class
     rockchip_data = RockChipData()
@@ -101,7 +106,10 @@ def main():
     # get client
     client = influxdb_write.influx_client(TOKEN, ORG, URL)
 
-    monitor(client, BUCKET, TABLE, INTERVAL)
+    # get base payload
+    payload = get_base_payload(TABLE)
+
+    monitor(client, BUCKET, INTERVAL, payload)
 
 
 if __name__ == '__main__':
