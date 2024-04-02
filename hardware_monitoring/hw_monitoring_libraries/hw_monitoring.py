@@ -8,8 +8,6 @@
 import os
 import sys
 import uuid
-import influxdb_client # noqa E402
-from influxdb_client.client.write_api import SYNCHRONOUS
 from paho.mqtt import client as mqtt
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,19 +21,6 @@ class MonitoringUtilities():
     def __init__(self):
 
         pass
-
-    # generate InfluxDB write client
-    @staticmethod
-    def influx_client(token: str, org: str, url: str) -> object:
-
-        # create client
-        write_client = influxdb_client.InfluxDBClient(url=url,
-                                                      token=token, org=org)
-        write_api = write_client.write_api(write_options=SYNCHRONOUS)
-
-        logger.info('InfluxDB Client Created')
-
-        return write_api
 
     # generate unique client IDs for connecting to the MQTT broker
     @staticmethod
