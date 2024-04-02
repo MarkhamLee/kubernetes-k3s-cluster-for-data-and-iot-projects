@@ -1,31 +1,23 @@
-#!/usr/bin/env python
 # Markham Lee (C) 2023 - 2024
-# K3s-Data-Platform-IoT
-# https://github.com/MarkhamLee/kubernetes-k3s-data-platform-IoT
-# This script "should work" on any device running a Rockchip 3588
-# System on Chip (SOC). But it was specifically built and tested on
-# an Orange Pi 5 Plus Running Joshua Riek's Ubuntu Distro for
-# RockChip 3588 Devices:
-# https://github.com/Joshua-Riek/ubuntu-rockchip
-
-
-import time
+# kubernetes-k3s-data-and-IoT-platform
+# https://github.com/MarkhamLee/kubernetes-k3s-data-and-IoT-platform
+# HW monitoring Script for an Orange Pi 5+, meant to extend the
+# monitoring capabilities in K8s, tracking: CPU, NVME and GPU temps
+#  & utilization data. This script "should work" on any device running
+# a Rockchip 3588 System on Chip (SOC). But it was specifically built and
+# tested on an Orange Pi 5 Plus Running Joshua Riek's Ubuntu Distro for
+# RockChip 3588 Devices: https://github.com/Joshua-Riek/ubuntu-rockchip
 import gc
 import os
-import logging
-from sys import stdout
+import sys
+import time
 from rockchip_3588 import RockChipData
-from influx_client import InfluxClient
 
-# set up/configure logging with stdout so it can be picked up by K8s
-logger = logging.getLogger('rockchip_telemetry_logger')
-logger.setLevel(logging.DEBUG)
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(parent_dir)
 
-handler = logging.StreamHandler(stdout)
-handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(filename)s - %(message)s')  # noqa: E501
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+from hw_monitoring_libraries.logging_util import logger  # noqa: E402
+from hw_monitoring_libraries.influx_client import InfluxClient  # noqa: E402
 
 # instantiate InfluxDB class
 influxdb_write = InfluxClient()
