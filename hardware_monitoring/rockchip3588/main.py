@@ -1,12 +1,12 @@
 # Markham Lee (C) 2023 - 2024
 # kubernetes-k3s-data-and-IoT-platform
 # https://github.com/MarkhamLee/kubernetes-k3s-data-and-IoT-platform
-# HW monitoring Script for an Orange Pi 5+, meant to extend the
-# monitoring capabilities in K8s, namely: tracking CPU, NVME and GPU temps
-#  & utilization data. This script "should work" on any device running
-# a Rockchip 3588 System on Chip (SOC). But it was specifically built and
-# tested on an Orange Pi 5 Plus Running Joshua Riek's Ubuntu Distro for
-# RockChip 3588 Devices: https://github.com/Joshua-Riek/ubuntu-rockchip
+# HW monitoring Script for an Orange Pi 5+, meant to extend the monitoring
+# capabilities in K8s, namely: tracking CPU, NVME and GPU temps & utilization
+# data. This script "should work" on any device running a Rockchip 3588 System
+# on Chip (SOC). But it was specifically built and tested on an
+# Orange Pi 5 Plus Running Joshua Riek's Ubuntu Distro for RockChip 3588
+# Devices: https://github.com/Joshua-Riek/ubuntu-rockchip
 import gc
 import os
 import sys
