@@ -46,7 +46,7 @@ def monitor(client: object, get_data: object, BUCKET: str, ORG: str,
         nvme_temp, cpu_temp, amd_gpu_temp = get_data.amd_linux_data()
 
         # get base_payload
-        base_payload = get_base_payload()
+        base_payload = get_base_payload(TABLE)
 
         payload = {
             "nvme_temp": nvme_temp,
