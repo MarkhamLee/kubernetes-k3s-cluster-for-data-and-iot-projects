@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./hardware_monitoring/
-          file: ./hardware_monitoring/rockchip3588/container/Dockerfile
+          file: ./hardware_monitoring/rockchip3588/Dockerfile
           platforms: linux/arm64
           push: true
           tags: markhamlee/rc3588_monitoring:latest
