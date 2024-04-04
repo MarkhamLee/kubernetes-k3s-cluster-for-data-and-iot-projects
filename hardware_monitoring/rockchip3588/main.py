@@ -10,7 +10,7 @@
 import gc
 import os
 import sys
-import time
+from time import sleep
 from rockchip_3588 import RockChipData
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,7 +36,7 @@ def get_base_payload(table):
     return base_payload
 
 
-def monitor(client: object, bucket: str, interval: int, base_payload: dict):
+def monitor(client: object, BUCKET: str, INTERVAL: int, base_payload: dict):
 
     # instantiate hardware data class
     rockchip_data = RockChipData()
@@ -80,7 +80,7 @@ def monitor(client: object, bucket: str, interval: int, base_payload: dict):
 
             # write data to InfluxDB
             influxdb_write.write_influx_data(client, base_payload,
-                                             payload, bucket)
+                                             payload, BUCKET)
 
             del payload, soc_temp, big_core0_temp, big_core1_temp, \
                 little_core_temp, center_temp, gpu_temp, npu_temp, nvme_temp,
@@ -93,7 +93,7 @@ def monitor(client: object, bucket: str, interval: int, base_payload: dict):
             # malfunctioning alert manager will pick it up as a
             # node error/problem.
 
-        time.sleep(interval)
+        sleep(INTERVAL)
 
 
 def main():
@@ -109,9 +109,9 @@ def main():
     client = influxdb_write.influx_client(TOKEN, ORG, URL)
 
     # get base payload
-    payload = get_base_payload(TABLE)
+    base_payload = get_base_payload(TABLE)
 
-    monitor(client, BUCKET, INTERVAL, payload)
+    monitor(client, BUCKET, INTERVAL, base_payload)
 
 
 if __name__ == '__main__':

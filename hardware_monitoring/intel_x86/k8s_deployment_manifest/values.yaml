@@ -51,6 +51,8 @@ spec:
               value: k3s-production-node-tbd
             - name: INTERVAL
               value: '2'
+            - name: DEVICE_ID
+              value: intelx86_node0
       imagePullSecrets: 
         - name: private-docker-repo
       restartPolicy: Always
