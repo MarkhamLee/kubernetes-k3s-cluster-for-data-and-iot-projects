@@ -1,10 +1,10 @@
 # temp stage 
 
-FROM python:alpine as builder
+FROM python:slim-bookworm  as builder
 
 WORKDIR /app
 
-RUN apk update -y && apk add -y gcc  python3-dev
+RUN RUN apt-get update -y && apt-get install -y gcc  python3-dev
 
 COPY /hw_monitoring_libraries/requirements.txt .
 
@@ -12,7 +12,7 @@ RUN pip3 wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.
 
 
 # final stage
-FROM python:alpine
+FROM python:slim-bookworm
 
 COPY ./hw_monitoring_libraries ./hw_monitoring_libraries
 
