@@ -1,6 +1,6 @@
 # temp stage 
 
-FROM python:3.12.2-slim as builder
+FROM python:alpine as builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ RUN pip3 wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.
 
 
 # final stage
-FROM python:3.12-slim
+FROM python:alpine
 
 COPY ./hw_monitoring_libraries ./hw_monitoring_libraries
 
