@@ -4,7 +4,7 @@ FROM python:alpine as builder
 
 WORKDIR /app
 
-RUN apt-get update -y && apt-get install -y gcc  python3-dev
+RUN apk update -y && apk add -y gcc  python3-dev
 
 COPY /hw_monitoring_libraries/requirements.txt .
 
