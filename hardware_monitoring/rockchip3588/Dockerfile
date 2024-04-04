@@ -1,10 +1,10 @@
 # temp stage 
 
-FROM python:slim-bookworm  as builder
+FROM python:slim-bookworm as builder
 
 WORKDIR /app
 
-RUN RUN apt-get update -y && apt-get install -y gcc  python3-dev
+RUN apt-get update -y && apt-get install -y gcc  python3-dev
 
 COPY /hw_monitoring_libraries/requirements.txt .
 
