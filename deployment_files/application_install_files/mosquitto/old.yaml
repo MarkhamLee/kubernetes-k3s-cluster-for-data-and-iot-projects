@@ -1,0 +1,69 @@
+affinity: {}
+authentication:
+  passwordEntries: ''
+  passwordFilePath: /etc/mosquitto/passwordfile
+authorization:
+  aclfilePath: /etc/mosquitto/aclfile
+  acls: ''
+config: |
+  persistence true
+  persistence_location /mosquitto/data/
+  log_dest stdout
+  listener 1883
+  listener 9090
+  protocol websockets
+existingConfigMap: ''
+extraVolumeMounts: []
+extraVolumes: []
+fullnameOverride: ''
+image:
+  pullPolicy: IfNotPresent
+  repository: eclipse-mosquitto
+  tag: 2.0.18
+imagePullSecrets: []
+monitoring:
+  podMonitor:
+    enabled: false
+  sidecar:
+    enabled: false
+    image:
+      pullPolicy: IfNotPresent
+      repository: nolte/mosquitto-exporter
+      tag: v0.6.3
+    port: 9234
+    resources:
+      limits:
+        cpu: 300m
+        memory: 128Mi
+      requests:
+        cpu: 150m
+        memory: 64Mi
+nameOverride: ''
+nodeSelector: {}
+persistence:
+  accessMode: ReadWriteMany
+  enabled: true
+  existingClaim: ''
+  mountPath: /mosquitto/data
+  size: 5Gi
+  subPath: ''
+podSecurityContext: {}
+ports:
+  mqtt:
+    port: 1883
+    protocol: TCP
+  websocket:
+    port: 9090
+    protocol: TCP
+replicaCount: 3
+resources: {}
+securityContext: {}
+service:
+  annotations: {}
+  externalTrafficPolicy: null
+  type: LoadBalancer
+serviceAccount:
+  create: true
+  name: null
+strategyType: Recreate
+tolerations: []
