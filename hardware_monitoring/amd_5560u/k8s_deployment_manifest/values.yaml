@@ -51,6 +51,8 @@ spec:
               value: k3s-production-node0
             - name: INTERVAL
               value: '2'
+            - name: DEVICE_ID
+              value: AMD5560u_node0
       imagePullSecrets: 
         - name: private-docker-repo
       restartPolicy: Always

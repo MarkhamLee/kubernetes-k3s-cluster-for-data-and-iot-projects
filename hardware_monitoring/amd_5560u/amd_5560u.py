@@ -3,16 +3,8 @@
 # https://github.com/MarkhamLee/k3s-data-platform-IoT
 # script to retrieve CPU related data on an AMD x86 machine
 # and then write to InfluxDB
-
+import json
 import psutil
-import logging
-import influxdb_client # noqa E402
-from influxdb_client.client.write_api import SYNCHRONOUS
-
-# create logger for logging errors, exceptions and the like
-logging.basicConfig(filename='hardwareDataLinuxCPU.log', level=logging.DEBUG,
-                    format='%(asctime)s %(levelname)s %(name)s %(threadName)s\
-                        : %(message)s')
 
 
 class AMD5560Data():
@@ -23,8 +15,24 @@ class AMD5560Data():
         # get things like current speed for all CPU cores
         self.core_count = psutil.cpu_count(logical=False)
 
+    def build_payload(self, inputFunction, index=0):
+
+        temp_dict = {}
+
+        while self.core_count > index:
+
+            data = inputFunction[index].current
+            data = round(data, 1)
+            key = (f'core {index}')
+            temp_dict[key] = data
+            index += 1
+
+        payload = json.dumps(temp_dict)
+
+        return payload
+
     # get average clock speed for all cores
-    def getFreq(self, all_cpu=False):
+    def get_freq(self, all_cpu=False):
 
         all_freq = psutil.cpu_freq(percpu=all_cpu)[0]
         all_freq = round(all_freq, 1)
@@ -33,7 +41,7 @@ class AMD5560Data():
 
     # get frequency per core
     @staticmethod
-    def freqPerCore(self, all_cpu=True):
+    def freq_per_core(self, all_cpu=True):
 
         per_core_freq = self.buildPayload(psutil.cpu_freq(percpu=all_cpu))
 
@@ -41,7 +49,7 @@ class AMD5560Data():
 
     # CPU load
     @staticmethod
-    def getCPUData():
+    def get_cpu_data():
 
         cpu_util = (psutil.cpu_percent(interval=1))
         cpu_util = round(cpu_util, 1)
@@ -50,7 +58,7 @@ class AMD5560Data():
 
     # get current RAM used
     @staticmethod
-    def getRamData():
+    def get_ram_data():
 
         ram_use = (psutil.virtual_memory()[3]) / 1073741824
         ram_use = round(ram_use, 2)
@@ -65,13 +73,3 @@ class AMD5560Data():
         amdgpu_temp = psutil.sensors_temperatures()['amdgpu'][0].current
 
         return nvme_temp, cpu_temp, amdgpu_temp
-
-    @staticmethod
-    def influx_client(token: str, org: str, url: str) -> object:
-
-        # create client
-        write_client = influxdb_client.InfluxDBClient(url=url,
-                                                      token=token, org=org)
-        write_api = write_client.write_api(write_options=SYNCHRONOUS)
-
-        return write_api

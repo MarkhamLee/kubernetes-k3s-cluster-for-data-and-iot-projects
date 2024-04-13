@@ -5,8 +5,9 @@ on:
     branches:
       - "main"
     paths:
-      - "hardware_monitoring/intel_x86/container/*"
-
+      - "hardware_monitoring/intel_x86/*"
+      - "hardware_monitoring/hw_monitoring_libraries/*"
+      
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -25,8 +26,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./hardware_monitoring/intel_x86/container/
-          file: ./hardware_monitoring/intel_x86/container/Dockerfile
+          context: ./hardware_monitoring/
+          file: ./hardware_monitoring/intel_x86/Dockerfile
           platforms: linux/amd64
           push: true
           tags: markhamlee/intelx86_monitoring:latest

@@ -5,7 +5,8 @@ on:
     branches:
       - "main"
     paths:
-      - "hardware_monitoring/rockchip3588/container/*"
+      - "hardware_monitoring/rockchip3588/*"
+      - "hardware_monitoring/hw_monitoring_libraries/*"
 
 jobs:
   docker:
@@ -25,8 +26,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./hardware_monitoring/rockchip3588/container/
-          file: ./hardware_monitoring/rockchip3588/container/Dockerfile
+          context: ./hardware_monitoring/
+          file: ./hardware_monitoring/rockchip3588/Dockerfile
           platforms: linux/arm64
           push: true
           tags: markhamlee/rc3588_monitoring:latest

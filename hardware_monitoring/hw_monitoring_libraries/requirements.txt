@@ -1,5 +1,7 @@
+paho-mqtt==1.6.1
 entrypoints
 executing
+uuid
 clr==1.0.3
 psutil==5.9.5
-influxdb-client
+influxdb-client==1.38.0

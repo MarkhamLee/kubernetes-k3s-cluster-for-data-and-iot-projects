@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: raspberrypi-4b-monitoring-node0
+  namespace: operations
+spec:
+  selector:
+    matchLabels:
+      app: raspberrypi-4b-monitoring-node0
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: raspberrypi-4b-monitoring-node0
+    spec:
+      nodeName: rpinode0
+      containers:
+        - name: 'rpinode0-monitoring'
+          image: 'markhamlee/rpi4b_monitoring:latest' 
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 400m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+          env:
+            - name: MQTT_USER
+              valueFrom:
+                secretKeyRef:
+                  key: MQTT_USER
+                  name: mqtt-creds
+                  optional: false
+            - name: MQTT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: MQTT_SECRET
+                  name: mqtt-creds
+                  optional: false
+            - name: MQTT_BROKER
+              valueFrom:
+                configMapKeyRef:
+                  key: MQTT_BROKER
+                  name: mqtt-config-data
+                  optional: false
+            - name: MQTT_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: MQTT_PORT
+                  name: mqtt-config-data
+                  optional: false
+            - name: TOPIC
+              valueFrom:
+                configMapKeyRef:
+                  key: RPINODE0_TOPIC
+                  name: mqtt-config-data
+                  optional: false
+            - name: INTERVAL
+              value: '2'
+            - name: DEVICE_ID
+              value: rpinode0
+      imagePullSecrets: 
+        - name: private-docker-repo
+      restartPolicy: Always

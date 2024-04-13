@@ -1,12 +1,13 @@
-name: amd5560u_monitoring_image_build
+name: raspberrypi4b_monitoring_image_build
 
 on:
   push:
     branches:
       - "main"
     paths:
-      - "hardware_monitoring/amd_5560u/*"
+      - "hardware_monitoring/raspberrypi_4b/*"
       - "hardware_monitoring/hw_monitoring_libraries/*"
+
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -26,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./hardware_monitoring/
-          file: ./hardware_monitoring/amd_5560u/Dockerfile
-          platforms: linux/amd64
+          file: ./hardware_monitoring/raspberrypi_4b/Dockerfile
+          platforms: linux/arm64
           push: true
-          tags: markhamlee/amd5560monitoring:latest
+          tags: markhamlee/rpi4b_monitoring:latest
