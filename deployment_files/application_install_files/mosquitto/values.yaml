@@ -6,9 +6,7 @@ metadata:
     meta.helm.sh/release-namespace: eclipse-mosquitto
   labels:
     app.kubernetes.io/instance: mosquitto
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: mosquitto
-    helm.sh/chart: mosquitto-2.4.1
     node_type: arm64_worker
   name: mosquitto
   namespace: eclipse-mosquitto
