@@ -25,10 +25,11 @@ TL/DR: I tried/am trying to build something that is as close to production quali
 #### Recent Updates
 
 * **04/17/2024:** numerous updates across CICD, documentation and monitoring:
-    * Screenshot of primary dashboard used for monitoring cluster and its associated hardware 
+    * Added Argo CD CICD manifests for Eclipse-Mosquitto & HW Monitoring
     * Updated all hardware monitoring containers to use multi-stage image builds (smaller and more secure), plus general refactoring the for HW monitoring containers.
     * Updated GitHub actions configs for all monitoring containers
     * Updated deployment manifest for Eclipse-Mosquitto MQTT broker
+    * Screenshot of primary dashboard used for monitoring cluster and its associated hardware 
      
 ![Cluster Architecture Diagram](images/k3s_cluster_architecture_mkI.png)
 

@@ -1,0 +1,10 @@
+project: 3rd-party-apps
+source:
+  repoURL: 'https://github.com/MarkhamLee/k3s-iac-data-iot-platform.git'
+  path: eclipse_mosquitto/
+  targetRevision: HEAD
+destination:
+  server: 'https://kubernetes.default.svc'
+  namespace: eclipse-mosquitto
+syncPolicy:
+  automated: {}
