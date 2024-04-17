@@ -14,14 +14,14 @@ RUN pip3 wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.
 # final stage
 FROM python:slim-bookworm
 
-COPY ./hw_monitoring_libraries ./hw_monitoring_libraries
-
-WORKDIR /hw_telemetry
-
 COPY --from=builder /app/wheels /wheels
 COPY --from=builder /app/requirements.txt .
 
 RUN pip3 install --no-cache /wheels/*
+
+COPY ./hw_monitoring_libraries ./hw_monitoring_libraries
+
+WORKDIR /hw_telemetry
 
 COPY ./rockchip3588 ./
 
