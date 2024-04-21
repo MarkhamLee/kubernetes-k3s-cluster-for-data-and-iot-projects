@@ -26,7 +26,7 @@ This is used to monitor all of my "homelab" devices with respect to CPU & RAM ut
 * Cost is calculated base on average kilowatt hours X average cost of electricity in Seattle + 10%.
 * My Gaming PC was "asleep" when this screenshot was taken, so just the cost to have it at idle + the tiny bit of power the PC case temperature sensors I have running on a Raspberry Pi Pico microcontroller uses. 
 
-![HW Monitor #1](images/hw_mon1.png)
+![HW Monitor #1](images/hw_mon1_v2.png)
 
 
-![HW Monitor #2](images/hw_mon2.png)
+![HW Monitor #2](images/hw_mon2_v2.png)
