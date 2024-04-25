@@ -20,6 +20,9 @@ from hw_monitoring_libraries.logging_util import logger  # noqa: E402
 from hw_monitoring_libraries.hw_monitoring\
     import MonitoringUtilities  # noqa: E402
 
+# instantiate hardware monitoring class
+monitor_utilities = MonitoringUtilities()
+
 UPS_ID = os.environ['UPS_ID']
 
 
@@ -29,6 +32,8 @@ def ups_monitoring(CMD: str, TOPIC: str, client: object):
     INTERVAL = int(os.environ['UPS_INTERVAL'])
 
     logger.info(f'Starting monitoring for {UPS_ID}')
+    excessive_load_count = 0
+    load_threshold = 900/INTERVAL
 
     while True:
 
@@ -57,6 +62,20 @@ def ups_monitoring(CMD: str, TOPIC: str, client: object):
                 "device_model": test_dict['device.model']
             }
 
+            # check load status, send alert if it's to high
+            # TODO: add a series of alerts based on the values above
+            # Note: running on battery already generates alerts via the
+            # Firewall.
+            if float(test_dict['ups.load']) > 50:
+                excessive_load_count += 1
+
+            if excessive_load_count > load_threshold:
+                SLACK_WEBHOOK = os.environ['SLACK_HW_ALERTS']
+                message = (f'Power load has exceeded 50% on {UPS_ID} for more than 15 minutes')  # noqa: E501
+                logger.info(message)
+                monitor_utilities.send_slack_webhook(SLACK_WEBHOOK, message)
+                excessive_load_count = 0  # reset the timer
+
             # build json payload
             payload = json.dumps(payload)
 
@@ -71,17 +90,17 @@ def ups_monitoring(CMD: str, TOPIC: str, client: object):
 
         except Exception as e:
             logger.debug(f'Failed to read data from UPS: {UPS_ID} with error: {e}')  # noqa: E501
-            # TODO: add Slack alert for when UPS goes down, low priority right
-            # now as the Firewall will send an alert if the UPS goes down
+            # TODO: add Slack alert for when UPS goes down, low priority for
+            # now as the firewall catches this, but will be needed once more
+            # UPS devices are added.
             sleep(600)
 
         sleep(INTERVAL)
 
 
-def build_query():
+def build_ups_query():
 
     UPS_IP = os.environ['UPS_IP']
-
     CMD = "upsc " + UPS_ID + "@" + UPS_IP
 
     return CMD
@@ -89,8 +108,6 @@ def build_query():
 
 def main():
 
-    # instantiate hardware monitoring class
-    monitor_utilities = MonitoringUtilities()
     logger.info('Monitoring utilities class instantiated')
 
     # operating parameters
@@ -102,7 +119,7 @@ def main():
     MQTT_SECRET = os.environ['MQTT_SECRET']
     MQTT_PORT = int(os.environ['MQTT_PORT'])
 
-    CMD = build_query()
+    CMD = build_ups_query()
 
     # get unique client ID
     clientID = monitor_utilities.getClientID()

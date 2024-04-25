@@ -6,6 +6,7 @@
 # possible via the typical K8s HW monitoring tools. E.g., monitoring
 # GPU temps for single board computers.
 import os
+import requests
 import sys
 import uuid
 from paho.mqtt import client as mqtt
@@ -55,3 +56,32 @@ class MonitoringUtilities():
         client.loop_start()
 
         return client, code
+
+    @staticmethod
+    def send_slack_webhook(url: str, message: str):
+
+        headers = {
+            'Content-type': 'application/json'
+
+        }
+
+        payload = {
+            "text": message
+        }
+
+        response = requests.post(url, headers=headers, json=payload)
+        logger.debug(f'Slack pipeline failure alert published succesfully with code: {response.status_code}')  # noqa: E501
+
+        return MonitoringUtilities.\
+            evaluate_slack_response(response.status_code, 'webhook')
+
+    @staticmethod
+    def evaluate_slack_response(code: int, type: str):
+
+        if code == 200:
+            logger.info(f'Publishing of alert to Slack {type} was successful')
+
+        else:
+            logger.debug(f'Publishing of alert to Slack {type} failed, with error code {code}')  # noqa: E501
+
+        return code
