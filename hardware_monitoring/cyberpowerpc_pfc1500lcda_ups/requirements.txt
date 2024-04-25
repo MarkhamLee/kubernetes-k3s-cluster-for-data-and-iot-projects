@@ -1,0 +1,5 @@
+paho-mqtt==1.6.1
+entrypoints
+executing
+uuid
+clr==1.0.3
