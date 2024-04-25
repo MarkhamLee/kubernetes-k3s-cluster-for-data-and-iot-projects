@@ -3,9 +3,7 @@ FROM python:slim-bookworm as builder
 
 WORKDIR /app
 
-RUN apt-get update -y && apt-get install -y gcc  python3-dev
-
-RUN apt-get -y install nut-client
+RUN apt-get update -y && apt-get install -y gcc python3-dev
 
 COPY /cyberpowerpc_pfc1500lcda_ups/requirements.txt .
 
@@ -19,6 +17,8 @@ COPY --from=builder /app/wheels /wheels
 COPY --from=builder /app/requirements.txt .
 
 RUN pip install --no-cache /wheels/*
+
+RUN apt-get update -y && apt-get install -y nut-client
 
 COPY ./hw_monitoring_libraries ./hw_monitoring_libraries
 
