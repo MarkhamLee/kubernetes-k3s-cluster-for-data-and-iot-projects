@@ -3,3 +3,4 @@ entrypoints
 executing
 uuid
 clr==1.0.3
+requests

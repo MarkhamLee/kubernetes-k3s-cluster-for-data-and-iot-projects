@@ -30,13 +30,13 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: MQTT_USER
-                  name: mqtt-creds
+                  name: mqtt-prod-secret
                   optional: false
             - name: MQTT_SECRET
               valueFrom:
                 secretKeyRef:
                   key: MQTT_SECRET
-                  name: mqtt-creds
+                  name: mqtt-prod-secret
                   optional: false
             - name: MQTT_BROKER
               valueFrom:

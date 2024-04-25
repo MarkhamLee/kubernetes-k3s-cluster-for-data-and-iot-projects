@@ -14,8 +14,8 @@ spec:
         app: ups1-cyberpowerpc-pfc1500
     spec:
       containers:
-        - name: 'monitoring_ups1'
-          image: 'markhamlee/cyberpowerpfc1500lcd' 
+        - name: 'monitoring-ups1'
+          image: 'markhamlee/cyberpowerpfc1500lcd:latest' 
           imagePullPolicy: Always
           resources:
             limits:
@@ -64,7 +64,7 @@ spec:
             - name: UPS_IP
               valueFrom:
                 configMapKeyRef:
-                  key: UPS_IP
+                  key: NUT_SERVER_ONE_IP
                   name: ups-data
                   optional: false
             - name: SLACK_HW_ALERTS
