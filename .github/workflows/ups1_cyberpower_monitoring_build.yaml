@@ -5,7 +5,7 @@ on:
     branches:
       - "main"
     paths:
-      - "hardware_monitoring/ups_monitoring_cyberpowerpfc1500lcd/*"
+      - "hardware_monitoring/cyberpowerpc_pfc1500lcda_ups/*"
       - "hardware_monitoring/hw_monitoring_libraries/*"
 
 jobs:
@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./hardware_monitoring/
-          file: ./hardware_monitoring/ups_monitoring_ups1/Dockerfile
+          file: ./hardware_monitoring/cyberpowerpc_pfc1500lcda_ups/Dockerfile
           platforms: linux/arm64,linux/amd64
           push: true
           tags: markhamlee/cyberpowerpfc1500lcd:latest
