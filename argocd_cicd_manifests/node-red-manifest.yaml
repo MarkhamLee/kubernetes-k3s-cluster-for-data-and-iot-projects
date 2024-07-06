@@ -9,7 +9,7 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: node-red
-  project: 3rd-party-apps
+  project: apps
   source:
     path: node_red/
     repoURL: https://github.com/MarkhamLee/k3s-iac-data-iot-platform.git

@@ -9,7 +9,7 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: cert-manager
-  project: 3rd-party-apps
+  project: apps
   source:
     path: cert_manager/
     repoURL: https://github.com/MarkhamLee/k3s-iac-data-iot-platform.git
