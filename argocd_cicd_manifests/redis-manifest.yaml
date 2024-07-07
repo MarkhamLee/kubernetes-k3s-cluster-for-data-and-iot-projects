@@ -1,0 +1,18 @@
+# and then override values via a values.yaml chart in the same repo.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis
+  namespace: argocd
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: redis
+  project: apps
+  source:
+    path: redis/
+    repoURL: https://github.com/MarkhamLee/k3s-iac-data-iot-platform.git
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+      - values.yaml
