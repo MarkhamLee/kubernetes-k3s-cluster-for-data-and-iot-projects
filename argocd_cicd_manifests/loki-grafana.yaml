@@ -2,17 +2,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argo-workflows
+  name: loki
   namespace: argocd
 spec:
   destination:
     server: https://kubernetes.default.svc
-    namespace: argo
+    namespace: loki-stack
   project: apps
   source:
-    path: argo
+    path: loki-grafana
     repoURL: https://github.com/MarkhamLee/k3s-iac-data-iot-platform.git
     targetRevision: HEAD
     helm:
+      releaseName: loki
       valueFiles:
       - values.yaml

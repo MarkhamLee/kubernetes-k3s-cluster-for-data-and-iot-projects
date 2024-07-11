@@ -1,16 +1,15 @@
-# and then override values via a values.yaml chart in the same repo.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argo-workflows
+  name: traefik
   namespace: argocd
 spec:
   destination:
     server: https://kubernetes.default.svc
-    namespace: argo
+    namespace: traefik
   project: apps
   source:
-    path: argo
+    path: traefik/
     repoURL: https://github.com/MarkhamLee/k3s-iac-data-iot-platform.git
     targetRevision: HEAD
     helm:
