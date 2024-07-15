@@ -60,7 +60,7 @@ general settings and configure things as you wish.
     2) Under SLS/TLS certificate select the one you just created
     3) Under "Alternate Hostnames" type in the local domain you created in step 9
 15) Go to System --> Certificates and then the certificates tab, you should see your new cert and under the "In Use" column you should see "webConfigurator, DNS Resolver". If some reason you don't, doublecheck the prior step. 
-    * Note: you should also see the self-signed cert created when you first step pfSense, I just deleted it once I had Acme setup. 
+    * Note: you should also see the self-signed cert created when you first setup pfSense, I just deleted it once I had Acme setup. 
 16) Once things look good, go to Services --> Acme --> Certificates to generate a production cert. Just click "Add" and make sure to select: "encryption-key-lets-encrypt-prodution" under "Acme Account" and then fill things out as as you did in step #6. 
 17) Go to the System --> Advanced and selet the production cert 
 18) reboot 
@@ -73,5 +73,5 @@ When things are setup right, you should see the following when you access your r
 ![Secure Browser Connection](images/secure_connection.png)
 
 
-Also - if you change your firewall's domain or add additional ones for internal hosting, you'll probably have to reboot your router for things to show up correctly in your browser.
+Also - if you change your firewall's domain or add additional ones for internal hosting, you'll probably have to reboot your router for things to show up correctly in your browser. Even if you have certs configured to renew themselves, they won't always reload and you'll need to reboot to get the cert to load. I.e., don't be surprised if auto-reneweals work for months and then one day you get cert expiration errors when trying to access your router, if that happens, just reboot. 
 
