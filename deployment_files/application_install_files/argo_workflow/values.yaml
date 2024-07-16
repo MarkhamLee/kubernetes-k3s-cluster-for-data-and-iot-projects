@@ -147,7 +147,7 @@ argo-workflows:
       # # enable archiving of old workflows
       # archive: false
       postgresql:
-        host: 10.43.1.207
+        host: url/host IP for your Postgres instance
         port: 5432
         database: argo_workflows
         tableName: argo_workflows_data
@@ -628,7 +628,7 @@ argo-workflows:
       ## Hostnames must be provided if Ingress is enabled.
       ## Secrets must be manually created in the namespace
       hosts:
-        - argo.local.markhamslab.com
+        - argo.local.example.com
         # - argoworkflows.example.com
 
       # -- List of ingress paths
