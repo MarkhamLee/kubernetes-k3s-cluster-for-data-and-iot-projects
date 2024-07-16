@@ -1,84 +1,28 @@
-# Airflow Setup Files
+## Airflow Setup Files
 
 This folder contains everything you'll need to get an Airflow instance up and running on a Kubernetes cluster, but with the caveat that I used this configuration on a local cluster and that when deploying into a cloud environment there will likely be some additional items you'll need to account for. That being said, the major building blocks are here so any changes you have to make "should" be small, but again Kubernetes + Airflow can be, tricky until it isn't. 
 
-The "official" Airflow helm chart came with a values.yaml file that was well over 1000 lines AND included items that were deprecated, multiple methods to enter the same data, etc., SO I went with the Bitnami chart that was already available in Rancher, deployed Airflow from the command line and then made tweaks and changes to get things how I wanted them. Once that was accomplished I downloaded the values.yaml file for future reference/use. 
+For several months I was using the Bitnami Helm chart, but the deployment started to become rather unstable and the worker pod would sometimes crash. I was able to fix this by doing the following:
+* Moving to the Helm Chart that was direct from Bitnami rather than the one included in Rancher's chart catalog
+* Using external Postgres and Redis instances, rather than the ones that can be deployed with Airflow. 
+* Turning off resource limits for the Airflow worker, it doesn't use a lot in day to day use, but when the pods spin-up it can use quite bit of compute and RAM. 
 
-You can find more details on the Bitnami Helm chart for Airflow [here](https://github.com/bitnami/charts/blob/main/bitnami/airflow/README.md)
-
+This deployment uses the Chart.yaml umbrella chart for Helm + a values.yaml file as mentioned in the Readme. All changes are made via updating one of those files and then pushing the changes to GitHub. 
 
 #### Folder Contents
 * fernet_key_generator.py to ensure your set up is properly secured/encrypted 
-* values.yaml for use in deploying Airflow either from the command line or within a tool like Rancher 
-* The Ingress file for accessing the web UI 
-* pv.yaml and pvc.yaml are the persistent volume and persistent volume claim I created to ensure logs remaining once a pod was shutdown, make sure you apply pv.yaml and then pvc.yaml in order, i.e., create the persistent volume and then create the claim to it. 
+* Umbrella chart (Chart.yaml) and values.yaml file for use in deploying via ArgoCD or other kubernetes deployment tools. 
+* k8s_resource_examples: an ingress example I used when I was deploying via creating manifests and files for individual resources. 
 
+### Deployment Steps
+Suggested appraoch: 
 
-## Deployment Steps
-
-Before we begin, there are two main approaches and I strongly suggest the first if you haven't done this before: 
-
-1) Just to start out with the default_values.yaml file (or deploy from Rancher) and get the basic setup working. I would suggest this approach as you'll at least have a known working configuration before you change anything. Also, if you change something and the deployment fails, your first step should be to roll back the deployment to the prior one that worked and then try again. Also, I would continously save known working values.yaml files, so you have a history of things that worked. 
-2) Use my values.yaml file, but customized for your needs and/or environment. I'd suggest the first option, get something that deploys properly and then start changing settings. The items I changed (for the record) are:
-    * Added Github data for logging into Github and synching with the repo that holds my dags:
-
-    ```
-    git:
-    clone:
-        args: []
-        command: []
-        extraEnvVars: []
-        extraEnvVarsCM: ''
-        extraEnvVarsSecret: '<name of your personal access token secret>'
-        extraVolumeMounts: []
-        resources: {}
-    dags:
-        enabled: true
-        repositories:
-        - branch: main
-            name: repo_name
-            path: /dags
-            # Personal access tokens seem to work better with this helm chart (for me anyway)
-            # Just go to your GitHub: settings --> Developer Settings --> Fine Grained Personal Access Tokens
-            # name of the secret in the EnvVarsSecret and secret's key below 
-            # Note: only necessary if you're synching a private repo and/or want to avoid "free account" rate limits
-            repository: https://<your_github_username>:${key for your secret}@github.com/username/your_repo.git
-    image:
-        digest: ''
-        pullPolicy: IfNotPresent
-        pullSecrets:
-        - dockersecrets # insert what you named your Docker secrets
-        registry: docker.io
-        repository: bitnami/git
-        tag: 2.43.0-debian-11-r5
-    plugins:
-        enabled: false
-        repositories:
-        - branch: ''
-            name: ''
-            path: ''
-            repository: ''
-    sync:
-        args: []
-        command: []
-        extraEnvVars: []
-        extraEnvVarsCM: ''
-        extraEnvVarsSecret: '<name of your personal access token secret>'
-        extraVolumeMounts: []
-        interval: 300
-        resources: {}
-    ```
-
-* I also added my Docker creds so I can pull those images down: 
-
-    ```
-    image:
-        digest: ''
-        pullPolicy: IfNotPresent
-        pullSecrets:
-        - dockersecrets
-        registry: docker.io
-    ```
+* Take the standard values.yaml file from the Bitnami Helm Chart repo and update the following:
+    * Credentials for Postgres and Redis
+    * Point things to your GitHub repo for your DAGs
+    * Create secrets for Postgres, Redis, Docker and for your Fernet key and then reference them as I did in my values.yaml file
+    * Configure an ingress
+    * Use the sections that reference external Postgres and Redis, make sure that you set "enabled: false" for the internal ones. 
 
 ### Preparation Steps
 
@@ -91,11 +35,13 @@ sudo kubectl create -n airflow configmap requirements --from-file=requirements.t
 
 4) This set up revolves specifically around using the Kubernetes Pod Operator, so you'll need (obviously) to have a container registry setup, and containerized versions of your ETL scripts. 
 
-5) Be familiar with creating Kubernetes secrets and config maps. 
+5) Make sure you're familiar with creating Kubernetes secrets and config maps. 
+
+6) Standup a Postgres and Redis instance (if you don't already have one) to support this deployment. 
+ 
 
 ### Suggested Approach
 1) Get the initial setup deployed
-2) Add the ingress, persistent volume and volume claim 
 3) Set-up the Github synch and bring in some basic DAGs and just make sure everything works
 4) Once the above is sorted, then move on to changing things like executors, adding extra python dependencies, etc. 
 
