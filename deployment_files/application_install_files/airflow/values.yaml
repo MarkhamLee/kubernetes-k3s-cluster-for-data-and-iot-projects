@@ -668,7 +668,7 @@ airflow: # this value has to match the same value as the alias in Chart.yaml
     ##
     resources:
       requests:
-        cpu: 1000m
+        cpu: 2000m
         memory: 512Mi
       limits:
         cpu: 3000m
