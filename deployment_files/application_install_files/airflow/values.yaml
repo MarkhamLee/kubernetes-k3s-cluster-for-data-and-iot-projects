@@ -1979,7 +1979,7 @@ airflow: # this value has to match the same value as the alias in Chart.yaml
   ## @param redis.architecture Redis&reg; architecture. Allowed values: `standalone` or `replication`
   ##
   redis:
-    enabled: false
+    enabled: true
     auth:
       enabled: true
       ## Redis&reg; password (both master and slave). Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
@@ -1996,7 +1996,7 @@ airflow: # this value has to match the same value as the alias in Chart.yaml
       ## @param redis.master.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if master.resources is set (master.resources is recommended for production).
       ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
       ##
-      resourcesPreset: "nano"
+      resourcesPreset: "medium"
       ## @param redis.master.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
       ## Example:
       ## resources:
