@@ -50,7 +50,7 @@ def monitor(client: object, topic: str):
             "cpu_freq": cpu_freq,
             "cpu_temp": cpu_temp,
             "nvme_temp": nvme_temp,
-            "count_count": core
+            "core_count": core
         }
 
         print(payload)
