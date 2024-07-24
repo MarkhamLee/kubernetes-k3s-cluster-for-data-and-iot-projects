@@ -42,7 +42,7 @@ def monitor(client: object, topic: str):
         cpu_freq, core = device_data.get_freq()
 
         # get CPU temperature
-        cpu_temp, nvme_temp = device_data.get_temp()
+        cpu_temp, nvme_temp = device_data.get_temps()
 
         payload = {
             "cpu_utilization": cpu_util,
