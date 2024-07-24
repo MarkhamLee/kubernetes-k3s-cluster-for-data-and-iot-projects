@@ -1,3 +1,4 @@
 influxdb-client==1.38.0
 psutil
 requests
+paho-mqtt==1.6.1
