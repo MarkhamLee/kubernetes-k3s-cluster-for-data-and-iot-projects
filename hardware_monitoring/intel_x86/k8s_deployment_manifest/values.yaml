@@ -26,33 +26,40 @@ spec:
               cpu: 200m
               memory: 128Mi
           env:
-            - name: TOKEN
+            - name: MQTT_USER
               valueFrom:
                 secretKeyRef:
-                  key: PROD_INFLUX_KEY
-                  name: influxdb-secret
-                  optional: false 
-            - name: ORG
+                  key: MQTT_USER
+                  name: mqtt-prod-secret
+                  optional: false
+            - name: MQTT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: MQTT_SECRET
+                  name: mqtt-prod-secret
+                  optional: false
+            - name: MQTT_BROKER
               valueFrom:
                 configMapKeyRef:
-                  key: INFLUX_ORG
-                  name: key-ops-variables
-            - name: URL
+                  key: MQTT_BROKER
+                  name: mqtt-config-data
+                  optional: false
+            - name: MQTT_PORT
               valueFrom:
                 configMapKeyRef:
-                  key: INFLUX_URL
-                  name: key-ops-variables
-            - name: BUCKET
+                  key: MQTT_PORT
+                  name: mqtt-config-data
+                  optional: false
+            - name: TOPIC
               valueFrom:
                 configMapKeyRef:
-                  key: HARDWARE_BUCKET
-                  name: key-ops-variables
-            - name: TABLE
-              value: k3s-production-node-tbd
+                  key: X86_WORKER_NODE0_TOPIC
+                  name: mqtt-config-data
+                  optional: false
             - name: INTERVAL
               value: '2'
             - name: DEVICE_ID
-              value: intelx86_node0
+              value: intelx86-worker-node0
       imagePullSecrets: 
         - name: private-docker-repo
       restartPolicy: Always
