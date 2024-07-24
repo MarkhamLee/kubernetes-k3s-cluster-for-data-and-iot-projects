@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pgadmin
+  namespace: argocd
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pgadmin
+  project: apps
+  source:
+    path: pgadmin/
+    repoURL: https://github.com/MarkhamLee/k3s-iac-data-iot-platform.git
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+      - values.yaml
