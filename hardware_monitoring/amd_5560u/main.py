@@ -53,8 +53,6 @@ def monitor(client: object, topic: str):
             "core_count": core_count
         }
 
-        print(payload)
-
         payload = json.dumps(payload)
         result = client.publish(topic, payload)
         status = result[0]
