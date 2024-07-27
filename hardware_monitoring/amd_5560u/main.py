@@ -63,7 +63,8 @@ def monitor(client: object, topic: str):
 
             logger.debug(f'MQTT publishing failure for hardware monitoring on: {DEVICE_ID}, return code: {status}')  # noqa: E501
 
-        del payload, cpu_util, ram_use, cpu_freq, cpu_temp, status, result
+        del payload, nvme_temp, cpu_temp, amd_gpu_temp, cpu_util, \
+            cpu_freq, ram_util, core_count
         gc.collect()
         sleep(INTERVAL)
 
