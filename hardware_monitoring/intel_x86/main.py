@@ -22,8 +22,9 @@ from hw_monitoring_libraries.hw_monitoring\
 # monitoring loop
 def monitor(client: object, topic: str):
 
-    # instantiate utilities class
+    # hardware monitoring class
     device_data = Intelx86()
+    logger.info('Monitoring utilities class instantiated')
 
     DEVICE_ID = os.environ['DEVICE_ID']
     INTERVAL = int(os.environ['INTERVAL'])
@@ -68,9 +69,8 @@ def monitor(client: object, topic: str):
 
 def main():
 
-    # instantiate hardware monitoring class
+    # instantiate communication utilities class
     monitor_utilities = MonitoringUtilities()
-    logger.info('Monitoring utilities class instantiated')
 
     # operating parameters
     TOPIC = os.environ['TOPIC']
