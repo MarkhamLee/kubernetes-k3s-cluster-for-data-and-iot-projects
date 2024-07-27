@@ -27,7 +27,7 @@ def monitor(client: object, topic: str):
 
     DEVICE_ID = os.environ['DEVICE_ID']
     INTERVAL = int(os.environ['INTERVAL'])
-    
+
     logger.info(f'Starting HW monitoring for {DEVICE_ID}')
 
     while True:
@@ -95,6 +95,7 @@ def main():
 
     finally:
         client.loop_stop()
+
 
 if __name__ == '__main__':
     main()
