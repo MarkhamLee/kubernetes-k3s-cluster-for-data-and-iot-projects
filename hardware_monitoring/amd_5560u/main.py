@@ -5,8 +5,8 @@
 # Beelink SER5s that are being used for the cluster nodes.
 # Only monitoring the temps (for now), because I'm using the
 # kube-prometheus stack to monitor CPU load, disk space, RAM, etc.
-
 import gc
+import json
 import os
 import sys
 from time import sleep
@@ -16,69 +16,86 @@ parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
 
 from hw_monitoring_libraries.logging_util import logger  # noqa: E402
-from hw_monitoring_libraries.influx_client import InfluxClient  # noqa: E402
-
-# instantiate InfluxDB class
-influxdb_write = InfluxClient()
+from hw_monitoring_libraries.hw_monitoring\
+    import MonitoringUtilities  # noqa: E402
 
 
-def get_base_payload(table):
+def monitor(client: object, topic: str):
 
-    # base payload
-    base_payload = {
-        "measurement": table,
-        "tags": {
-                "k3s_prod": "hardware_telemetry",
-        }
-    }
+    # instantiate utilities class
+    device_data = AMD5560Data()
 
-    return base_payload
+    logger.info("Hardware monitoring class instantiated")
 
-
-def monitor(client: object, get_data: object, BUCKET: str, ORG: str,
-            TABLE: str, DEVICE_ID: str, INTERVAL: str):
+    DEVICE_ID = os.environ['DEVICE_ID']
+    INTERVAL = int(os.environ['INTERVAL'])
 
     logger.info(f'Starting HW monitoring for {DEVICE_ID}')
 
     while True:
 
         # get CPU, GPU and NVME temperatures
-        nvme_temp, cpu_temp, amd_gpu_temp = get_data.amd_linux_data()
+        nvme_temp, cpu_temp, amd_gpu_temp = device_data.amd_linux_temp_data()
 
-        # get base_payload
-        base_payload = get_base_payload(TABLE)
+        cpu_util = device_data.get_cpu_data()
+
+        cpu_freq, core_count = device_data.get_freq()
+
+        ram_util = device_data.get_ram_data()
 
         payload = {
             "nvme_temp": nvme_temp,
             "cpu_temp": cpu_temp,
-            "amd_gpu_temp": amd_gpu_temp
+            "amd_gpu_temp": amd_gpu_temp,
+            "cpu_util": cpu_util,
+            "cpu_freq": cpu_freq,
+            "ram_util": ram_util,
+            "core_count": core_count
         }
 
-        # write data to InfluxDB
-        influxdb_write.write_influx_data(client, base_payload, payload, BUCKET)
+        print(payload)
 
-        del nvme_temp, cpu_temp, amd_gpu_temp, payload, base_payload
+        payload = json.dumps(payload)
+        result = client.publish(topic, payload)
+        status = result[0]
+
+        if status != 0:
+
+            logger.debug(f'MQTT publishing failure for hardware monitoring on: {DEVICE_ID}, return code: {status}')  # noqa: E501
+
+        del payload, cpu_util, ram_use, cpu_freq, cpu_temp, status, result
         gc.collect()
         sleep(INTERVAL)
 
 
 def main():
 
-    DEVICE_ID = os.environ['DEVICE_ID']
-    INTERVAL = int(os.environ['INTERVAL'])
-    TOKEN = os.environ['TOKEN']
-    ORG = os.environ['ORG']
-    URL = os.environ['URL']
-    BUCKET = os.environ['BUCKET']
-    TABLE = os.environ['TABLE']
+    # instantiate communication utilities class
+    monitor_utilities = MonitoringUtilities()
 
-    # instantiate utilities class
-    device_data = AMD5560Data()
+    # operating parameters
+    TOPIC = os.environ['TOPIC']
 
-    # get client
-    client = influxdb_write.influx_client(TOKEN, ORG, URL)
+    # load environmental variables
+    MQTT_BROKER = os.environ["MQTT_BROKER"]
+    MQTT_USER = os.environ['MQTT_USER']
+    MQTT_SECRET = os.environ['MQTT_SECRET']
+    MQTT_PORT = int(os.environ['MQTT_PORT'])
 
-    monitor(client, device_data, BUCKET, ORG, TABLE, DEVICE_ID, INTERVAL)
+    # get unique client ID
+    clientID = monitor_utilities.getClientID()
+
+    # get mqtt client
+    client, code = monitor_utilities.mqttClient(clientID,
+                                                MQTT_USER, MQTT_SECRET,
+                                                MQTT_BROKER, MQTT_PORT)
+
+    # start monitoring
+    try:
+        monitor(client, TOPIC)
+
+    finally:
+        client.loop_stop()
 
 
 if __name__ == '__main__':

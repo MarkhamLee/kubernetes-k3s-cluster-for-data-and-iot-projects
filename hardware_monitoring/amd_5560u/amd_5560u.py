@@ -66,7 +66,7 @@ class AMD5560Data():
         return ram_use
 
     @staticmethod
-    def amd_linux_data():
+    def amd_linux_temp_data():
 
         nvme_temp = psutil.sensors_temperatures()['nvme'][0].current
         cpu_temp = psutil.sensors_temperatures()['k10temp'][0].current
