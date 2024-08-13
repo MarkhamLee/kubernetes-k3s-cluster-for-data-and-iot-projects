@@ -1,10 +1,23 @@
-## Overview
+## CI/CD with Argo CD
 
 Installing applications on Kubernetes can be frustrating at times between helm chart variants, 1,000 line yaml files, stumbling upon the wrong or out of date instructions, etc., and that's before you encounter post installation "gotchas" that are rarely mentioned. This folder contains installation instructions, values.yaml files, tips, tricks and "gotchas" for the applications I've deployed on my Kubernetes cluster. I've also included information on the settings, tweaks, etc., you need to change once you've got something deployed in order to keep it running.
 
-The typical deployment pattern involves an Umbrella Chart and a values.yaml placed in a GitHub repo monitored by Argo CD, when Argo CD is pointed to a the folder containing the two files it then deploys the app to the cluster once it detects a new file/file update. I took this approach so things are more "GitOps" and consistent, and because it seems to reduce the number of gotchas vs using deployment manifests or deploying things from the available charts within Rancher. This approach isn't specific to ArgoCD it can be used to directly deploy apps to the cluster; you can also use the reference Helm chart and the values.yaml file to deploy apps at the command line.
+#### Prerequisites
 
-I have examples for each app here, but maintain a separate private repo with the Chart.yaml and values.yaml files.
+These instructions presume you have enough control of your firewall/router/local network to setup domains (i.e., nodered.local.example.com) on your home network in order to support proper ingresses for each service, are using secure certs for your k8s cluster, are using something like Longhorn for distributed/cluster wide storage and have enough hardware to deploy apps as HA if you so choose.
+
+### Deployment Approach
+
+With the exception of Longhorn pretty much everything that's deployed on the cluster is managed via Argo CD
+
+![Argo CD App Tiles](images/argocd_tiles.png)
+
+Argo CD continuously compares the state of apps (whether 3rd party of things I built myself) deployed on the cluster vs deployment manifests in a GitHub repo that contains app manifests, Umbrella Charts for helm, values.yaml files, et, al. Application code is kept in a separate repo, following best practices for keeping app/deployment configs and application code separate. 
+If an app is changed on the cluster either via a CLI command or via the console/Rancher, Argo CD will "heal" the app and restore to its proper configuration. This forces good habits as I have to commit changes to GitHub before they will be reflected in the cluster, thus making rollbacks and tracking changes significantly easier. 
+
+The first step is to add/configure the app in Argo CD either via the command line (applying a manifest) or configuring it via the UI. I have UI examples in the argocd_cicd_manifests folder. Next, you need to prepare your deployment files, the typical deployment pattern involves an Umbrella Chart and a values.yaml placed in a GitHub repo monitored by Argo CD, when Argo CD is pointed to a the folder containing the two files it then deploys the app to the cluster once it detects a new file/file update. I took this approach so things are more "GitOps" and consistent, and because it seems to reduce the number of gotchas vs using deployment manifests or deploying things from the available charts within Rancher. 
+
+I have examples for each app here, but maintain a separate private repo with the Chart.yaml and values.yaml files to avoid accidental PII leakage.
 
 Example Chart.yaml file - make sure you spell chart with a capital "C", otherwise ArgoCD won't pick it up. 
 ```
@@ -23,28 +36,18 @@ dependencies:
 ```
 In the values.yaml file the alias is the top key, so all of the typical values.yaml, well values, have to be shifted to the right. 
 
-There are a few instances where I didn't use helm, and in those cases, the deployment manifest, service definitions and the like are placed in GitHub, and from there it's the usual pattern where Argo CD is pointed to the folder containing those files, where it can pick the items up and deploy the app to Kubernetes. 
+You can also deploy via your typical Kubernetes deployment manifest, service definitions, et al, in those cases I just put those files into the folder instead of the umbrella chart + values.yaml file. 
 
-### Prerequisites
+Once deployed you should see a deployment tile like the ones in the screenshot above, clicking the tile should show you something like this:
 
-These instructions presume you have enough control of your firewall/router/local network to setup domains (i.e., nodered.local.example.com) on your home network in order to support proper ingresses for each service, are using secure certs for your k8s cluster, are using something like Longhorn for distributed/cluster wide storage and have enough hardware to deploy apps as HA if you so choose.  
+![Argo CD App Tiles](images/fully_deployed.png)
 
-### Current Apps
 
-Note: I recently finished migrating everything to Argo CD, so many of the folders are in the process of being updated.
+From here if you wanted to change pod affinities, number of replicas, docker image versions, persistent volume sizes, etc., you would just make those changes to the values.yaml file and then push them to GitHub and ArgoCD will do the rest. Changes to the Helm chart version will redeploy the app as well. 
 
-* Airflow 
-* ArgoCD
-* Argo Workflow
-* Eclipse-Mosquitto
-* Grafana
-* InfluxDB
-* Loki-Stack
-* Longhorn install instructions - **Updated 02/03/24**
-* Mosquitto
-* Node-Red
-* pgAdmin
-* Rancher
-* PostgreSQL 
-* Zigbee2MQTT - **Updated 02/03/24**
+ArgoCD doesn't currently monitor the app code or docker images for changes, so you'll need to trigger redeployments for those manually, same goes for helm chart updates. 
+
+
+  
+
 
