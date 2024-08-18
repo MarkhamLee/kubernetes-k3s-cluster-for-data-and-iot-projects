@@ -36,6 +36,11 @@ dependencies:
 ```
 In the values.yaml file the alias is the top key, so all of the typical values.yaml, well values, have to be shifted to the right. 
 
+IF you're onboarding an existing app to Argo CD, make sure that self-healing and pruning isn't enabled to avoid issues where an existing resource isn't picked up by/synched with Argo CD. If this happens:
+  * If you synch the app but don't enable pruning and self-healing, values.yaml updates you make will be deployed but needed but un-synched resources won't get deleted.
+  * The issue is probably a naming one that can be fixed by changing the deployment/service annotations within Kubernetes 
+  * If the secret doesn't synch you "can" just let Argo CD delete the secret as in nearly all cases a new one will be generated, BUT take that approach at your own risk because YMMV.
+
 You can also deploy via your typical Kubernetes deployment manifest, service definitions, et al, in those cases I just put those files into the folder instead of the umbrella chart + values.yaml file. 
 
 Once deployed you should see a deployment tile like the ones in the screenshot above, clicking the tile should show you something like this:
