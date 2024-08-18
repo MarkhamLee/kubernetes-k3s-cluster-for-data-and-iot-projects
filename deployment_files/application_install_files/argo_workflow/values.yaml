@@ -147,7 +147,7 @@ argo-workflows:
       # # enable archiving of old workflows
       # archive: false
       postgresql:
-        host: url/host IP for your Postgres instance
+        host: <put host name or ip here>
         port: 5432
         database: argo_workflows
         tableName: argo_workflows_data
@@ -162,7 +162,6 @@ argo-workflows:
         #   # sslMode must be one of: disable, require, verify-ca, verify-full
         #   # you can find more information about those ssl options here: https://godoc.org/github.com/lib/pq
         sslMode: disable
-
 
     # postgresql:
     #   host: localhost
@@ -207,8 +206,6 @@ argo-workflows:
     #       configMap: my-artifact-repository # default is "artifact-repositories"
     #       key: v2-s3-artifact-repository # default can be set by the `workflows.argoproj.io/default-artifact-repository` annotation in config map.
         
-
-
     # -- Number of workflow workers
     workflowWorkers: # 32
     # -- Number of workflow TTL workers
@@ -265,6 +262,7 @@ argo-workflows:
     # -- Specify all namespaces where this workflow controller instance will manage
     # workflows. This controls where the service account and RBAC resources will
     # be created. Only valid when singleNamespace is false.
+    # specific to my cluster, customize for your own
     workflowNamespaces:
       - airflow
       - argo
@@ -329,7 +327,7 @@ argo-workflows:
     # -- Additional volumes to the controller pod
     volumes: []
     # -- The number of controller pods to run
-    replicas: 1
+    replicas: 2
     # -- The number of revisions to keep.
     revisionHistoryLimit: 10
 
@@ -340,13 +338,36 @@ argo-workflows:
       # maxUnavailable: 1
 
     # -- [Node selector]
-    nodeSelector:
-      node_type: x86_worker
+    nodeSelector: {}
     # -- [Tolerations] for use with node taints
     tolerations: []
     # -- Assign custom [affinity] rules
-    affinity: {}
-
+    # these are very specific to my hardware architecture, update to match the
+    # labels you have on your own hardware/nodes
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                  - amd64
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 50
+            preference:
+              matchExpressions:
+                - key: agent_type
+                  operator: In
+                  values:
+                  - x86_worker
+          - weight: 20
+            preference:
+              matchExpressions:
+                - key: node_type
+                  operator: In
+                  values:
+                  - x86_worker
     # -- Assign custom [TopologySpreadConstraints] rules to the workflow controller
     ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
     ## If labelSelector is left out, it will default to the labelSelector configuration of the deployment
@@ -518,7 +539,7 @@ argo-workflows:
     # -- Resource limits and requests for the server
     resources: {}
     # -- The number of server pods to run
-    replicas: 1
+    replicas: 2
     # -- The number of revisions to keep.
     revisionHistoryLimit: 10
     ## Argo Server Horizontal Pod Autoscaler
@@ -554,14 +575,37 @@ argo-workflows:
       # maxUnavailable: 1
 
     # -- [Node selector]
-    nodeSelector:
-      node_type: x86_worker
+    nodeSelector: {}
 
     # -- [Tolerations] for use with node taints
     tolerations: []
 
     # -- Assign custom [affinity] rules
-    affinity: {}
+    # customize to fit your node labels/hardware architecture
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                  - amd64
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 50
+            preference:
+              matchExpressions:
+                - key: agent_type
+                  operator: In
+                  values:
+                  - x86_worker
+          - weight: 20
+            preference:
+              matchExpressions:
+                - key: node_type
+                  operator: In
+                  values:
+                  - x86_worker
 
     # -- Assign custom [TopologySpreadConstraints] rules to the argo server
     ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
@@ -628,7 +672,7 @@ argo-workflows:
       ## Hostnames must be provided if Ingress is enabled.
       ## Secrets must be manually created in the namespace
       hosts:
-        - argo.local.example.com
+        - argo.local.markhamslab.com
         # - argoworkflows.example.com
 
       # -- List of ingress paths
