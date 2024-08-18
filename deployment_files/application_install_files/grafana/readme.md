@@ -1,10 +1,45 @@
-### Grafana Installation
+## Grafana Installation via Argo CD
 
-* You should be able to cut and paste this into the screen for editing helm values in Rancher, or just apply it at the command line. 
-* Key items for a HA setup:
-    * Under auto scaling, set your minimum to 2 or higher, do the same for replicas. Make sure these numbers match
-    * Enable persistence (save your settings and such) and then change the access mode to ReadWriteMany
-* Also be sure to setup ingress:
-    * I added "ingress class" to the chart, it didn't come with it for some reason. The values.yaml file in this folder has that added in.
-    * Update your custom domain 
-* The way I have this setup, it will generate a secret for you and you can pull it from rancher or via the instructions printed to the console. You can find the secret in Rancher at: deployment--> related resources --> secret 
+* This installation uses the umbrella chart coupled with a Helm chart and a values.yaml file to install Grafana. 
+* The values.yaml file could be used outside of Argo CD/ a typical Helm installation but you'll have to remove the top key of "grafana" and then backspace all the other values over. 
+* Key items changed in the values.yaml file
+    * Node affinity based on having nodes designated solely for control, storage (longhorn), IoT/tasks(e.g. ETLs) and general workloads: 
+        * amd64 required
+        * General workload nodes preferred
+    * Ingress is defined in the values.yaml file
+    * Replicas set at two 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
