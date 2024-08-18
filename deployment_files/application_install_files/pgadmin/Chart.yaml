@@ -1,0 +1,12 @@
+apiVersion: v2
+name: pgadmin
+description: Umbrella chart for deploying Airflow
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+dependencies:
+  - name: pgadmin4
+    version: 1.27.0
+    repository: https://helm.runix.net/
+    alias: pgadmin
+    condition: pgadmin.enabled
