@@ -1,0 +1,99 @@
+lokistack:
+  releaseName: loki-grafana
+  namespace: loki-stack
+  grafana:
+    enabled: true
+  node_selector: {}
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: kubernetes.io/arch
+              operator: In
+              values:
+                - amd64
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          preference:
+            matchExpressions:
+              - key: agent_type
+                operator: In
+                values:
+                - x86_worker
+        - weight: 20
+          preference:
+            matchExpressions:
+              - key: node_type
+                operator: In
+                values:
+                - x86_worker
+  prometheus: 
+    enabled: true
+    alertmanager:
+      presistence: 
+        enabled: true
+        persistentVolume:
+          resourceVersion: '84136124'
+          uid: c8f315f3-2599-479c-b92c-b66f0d180102
+          namespace: default
+          name: storage-loki-alertmanager-0
+          enabled: true
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 2Gi
+            storageClassName: longhorn
+            volumeMode: Filesystem
+            volumeName: pvc-c8f315f3-2599-479c-b92c-b66f0d180102
+            status:
+              accessModes:
+                - ReadWriteOnce
+              capacity:
+                storage: 2Gi
+              phase: Bound
+    server:
+      persistentVolume:
+        enabled: false
+
+  loki:
+    persistence:
+      enabled: true
+      storageClassName: longhorn
+      size: 20Gi
+    replicas: 2
+    node_selector: {}
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                  - amd64
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 50
+            preference:
+              matchExpressions:
+                - key: agent_type
+                  operator: In
+                  values:
+                  - x86_worker
+          - weight: 20
+            preference:
+              matchExpressions:
+                - key: node_type
+                  operator: In
+                  values:
+                  - x86_worker
+  persistence:
+    status:
+      accessModes:
+        - ReadWriteOnce
+      capacity:
+        storage: 2Gi
+      phase: Bound
+  

@@ -14,23 +14,36 @@ You can read more about the Loki stack [here](https://grafana.com/docs/loki/late
 
 ### Installation 
 
-1) Create a namespace, I used loki-stack, but you can use anything you'd like 
-2) Run the command below to add the helm chart 
+**First:** create a namespace, I used loki-stack, but you can use anything you'd like 
+
+Next you have two main options:
+
+#### Option #1 - Deploy via Argo CD
+
+* Use the Chart.yaml and values.yaml file in this folder to deploy the Loki-Stack via Argo CD. The values.yaml is somewhat boiler plate, but keep in mind that you'll need to update the node affinity to match the labels used by your K3s nodes, as mine are heavily customizied to my specific hardware architecture.
+* Additionally, the values.yaml file is fairly simple, so if you need more options/want to customize things more would be wise to grab the "official" values.yaml from the helm repo.
+
+
+#### Option #2 - Deploy via Helm at the Command Line
+
+1) Run the command below to add the helm chart 
 ```
 helm repo add grafana https://grafana.github.io/helm-charts
 ```
-3) Update the helm repo:
+2) Update the helm repo:
 ~~~
 helm repo udpate
 ~~~
 
-4) Run the command below for the default install (scalable version), make sure to put the name of the namespace you created after the "-n". Keep in mind this will install an instance of Grafana even if you already have it deployed on your cluster, BUT this installs an older version of Grafana that's pre-configured to connect to Loki. I.e., this installs 8.3.5 vs the current version of 10.2.2. I wasn't able to get the older version to connect to Loki, so I would just run the two different versions, because the older one has issues connecting to InfluxDB. 
+3) Run the command below for the default install (scalable version), make sure to put the name of the namespace you created after the "-n". Keep in mind this will install an instance of Grafana even if you already have it deployed on your cluster, BUT this installs an older version of Grafana that's pre-configured to connect to Loki. I.e., this installs 8.3.5 vs the current version of 10.2.2. I wasn't able to get the newer version to connect to Loki, so I would just run the two different versions, because the older one has issues connecting to InfluxDB. 
 
 ```
 helm upgrade --install loki grafana/loki-stack -n loki-stack  --set grafana.enabled=true,prometheus.enabled=true,prometheus.alertmanager.persistentVolume.enabled=false,prometheus.server.persistentVolume.enabled=false,loki.persistence.enabled=true,loki.persistence.storageClassName=longhorn,loki.persistence.size=20G
 ```
 
-Once you have this deployed you can go into Grafana and create logging dashboards by going to create dashboard --> add panel --> log browser  and then you can select the apps or containers you want to monitor. Make sure you're selecting at the highest level, e.g., apps or containers, as pods can be ephemeral and you might not have data when you update an image, redeploy something, etc. Once you select something click "show logs", and you'll either see data write away or will see a screen that looks similar to the below:
+#### Post Deployment Setup
+
+Once you have this deployed you can go into Grafana and create logging dashboards by going to create dashboard --> add panel --> log browser  and then you can select the apps or containers you want to monitor. Make sure you're selecting at the highest level, e.g., apps or containers, as pods can be ephemeral and you might not have data when you update an image, redeploy something, etc. Once you select something click "show logs", and you'll either see data right away or will see a screen that looks similar to the below:
 
 ![Loki-Grafana Numerical](../images/loki_numerical_missing.png)
 
@@ -44,4 +57,4 @@ Preferred log format expanded
 
 ![Loki-Grafana Numerical](../images/expanded_log.png)
 
-You can also configure alerts within Grafana as well but keep in mind that they're numeric driven,meaning: x value is above y threshold. 
+You can also configure alerts within Grafana as well but keep in mind that they're numeric driven, meaning: x value is above y threshold. 
