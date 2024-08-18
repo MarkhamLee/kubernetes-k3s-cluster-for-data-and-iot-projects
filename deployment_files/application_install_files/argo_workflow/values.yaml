@@ -672,7 +672,7 @@ argo-workflows:
       ## Hostnames must be provided if Ingress is enabled.
       ## Secrets must be manually created in the namespace
       hosts:
-        - argo.local.markhamslab.com
+        - argo.local.example.com
         # - argoworkflows.example.com
 
       # -- List of ingress paths

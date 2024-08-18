@@ -61,7 +61,7 @@ nodered:
     # -- Additional ingress annotations
     hosts:
       #  Ingress accepted hostnames
-      - host: nodered.local.markhamslab.com
+      - host: nodered.local.example.com
         paths:
             # -- The base path
           - path: /
@@ -77,4 +77,4 @@ nodered:
       loadBalancer:
         ingress:
           - hostname:
-              nodered.local.markhamslab.com
+              nodered.local.example.com

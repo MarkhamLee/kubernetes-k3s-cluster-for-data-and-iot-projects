@@ -120,7 +120,7 @@ pgadmin:
         port:
           number: 80
     hosts:
-      - host: pgadmin.local.markhamslab.com
+      - host: pgadmin.local.example.com
         paths:
           - path: /
             pathType: Prefix
