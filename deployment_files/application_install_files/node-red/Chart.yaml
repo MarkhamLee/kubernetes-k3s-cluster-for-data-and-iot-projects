@@ -1,0 +1,11 @@
+apiVersion: v2
+name: node-red
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+dependencies:
+- name: node-red
+  version: 0.32.1
+  repository: https://schwarzit.github.io/node-red-chart/
+  alias: nodered
+  condition: node-red.enabled
