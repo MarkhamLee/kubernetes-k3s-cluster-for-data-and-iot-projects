@@ -1,0 +1,23 @@
+apiVersion: v1
+data:
+  mosquitto.conf: |
+    persistence true
+    persistence_location /mosquitto/data/
+    log_dest stdout
+    listener 1883
+    listener 9090
+    protocol websockets
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: mosquitto
+    meta.helm.sh/release-namespace: eclipse-mosquitto
+  creationTimestamp: '2023-12-01T03:11:36Z'
+  labels:
+    app.kubernetes.io/instance: mosquitto
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: mosquitto
+    helm.sh/chart: mosquitto-2.4.1
+  name: mosquitto
+  namespace: eclipse-mosquitto
+  uid: 64e7346d-98fc-44d0-9865-c276e135b4a9
