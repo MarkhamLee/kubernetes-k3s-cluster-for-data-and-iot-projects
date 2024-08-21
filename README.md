@@ -23,31 +23,48 @@ Design wise, I took the approach of *"how would I build out something to support
 TL/DR: I tried/am trying to build something that is as close to production quality as possible. 
 
 #### Recent Updates
+* **08/20/2024:** quick a few changes over the last several months, making note of the major ones here:
+    * All apps are on-boarded to Argo CD and the manifests and approach for each are described in the deployment files folder, June 29th for the onboarding, August 18th for the documentation. 
+    * Updated hardware architecture, switched to using dedicated nodes for control, compute and storage and removed the Raspberry Pis
+    * Added pgAdmin and Redis
+    * Updated all apps to have node affinities and a labeling/server hiearchy to match:
+        * Control nodes have a no schedule taint, with appropriate tolerations added to things that are allowed to be deployed on them
+        * agent nodes are broken down as follows:
+            * All get the label "k3s_role: agent"
+            * There are three agent type labels: x86_worker, storage and x86_tasks
+            * There are node_type label of x86_worker that is added to the tasks nodes so they can "help" if the primary x86_worker nodes are over-burdened or unavailable
+            * The node affinities are set to heavily favor the most appropriate node, but other nodes can be used as well. Think: 50% weighting for agent_type: x86_worker, but the task and x86_worker nodes both have the node_type of x86_worker weighted at 20% so pods can be deployed to the tasks nodes if the first choice isn't available.
 
-* **04/17/2024:** numerous updates across CICD, documentation and monitoring:
-    * Added Argo CD CICD manifests for Eclipse-Mosquitto & HW Monitoring
-    * Updated all hardware monitoring containers to use multi-stage image builds (smaller and more secure), plus general refactoring the for HW monitoring containers.
-    * Updated GitHub actions configs for all monitoring containers
-    * Updated deployment manifest for Eclipse-Mosquitto MQTT broker
-    * Screenshot of primary dashboard used for monitoring cluster and its associated hardware 
-     
-![Cluster Architecture Diagram](images/k3s_cluster_architecture_mkI.png)
+![Cluster Architecture Diagram](images/k3s_cluster_architecture_mkII.png)
 
 ### My Cluster: High Availability, multi-architecture - amd64/x86 and arm64
 * **Hardware:** 
     * **Server/control plane nodes:** three "Intel NUC like" **Beelink SER5s running Ryzen 5 5560u processors (6c/12t), 64 GB of RAM and 2 TB of storage**. I got them for around $225.00/each on sale from Amazon (down from around $300). With Geekbench 6 scores around 7k (in my testing), you can think of them as getting about 80% of the performance of an 11th gen desktop i5 while using a fraction of the power. The fans also run quieter than the ones in my 12th Gen Intel NUC, albeit at the cost of higher temperatures.
-    * **Agent - Specialized Nodes:** 
-        * 1 x Orange Pi 5+ (soon to be three) functioning as general purpose arm64 worker nodes. While the pricing and performance is near equivalent for most Intel N95/N100 mini-computers, they have more cores and faster storage (PCIe x3 vs x1-2 for most N95/N11 mini PCs) and can be purchased with more RAM (max of 32GB vs 16 for N95/N100 devices), in addition to having a small physical footprint and using less power. The Orange Pi 5+ runs my MQTT broker, in addition to several IoT related containers for monitoring smart devices and most ETL workloads and the CPU usage is usually under 5% with occasional spikes to 10-15%.  
 
-        * 2 x Raspberry Pi 4B 8GB used for collecting climate data around my house from sensors connected via GPIO pins and/or USB. I had originally put *"no schedule"* taints on these devices but given how little resources the sensors used I instead have a “arm64_worker” label that I apply to certain deployments that I am comfortable running on these devices. Currently considering moving the GPIO based sensors to microcontrollers like the ESP32 or Raspberry Pi Pico, but I am not sure I want to give up the ease of device management, updates, etc., which are possible with devices that can be part of the cluster 
+    **Update 8/20/2024:** After noticing that the Beelinks were running in the 60s-70s and wanting to avoid some of the performance issues that can come with using your control nodes to run longhorn and general compute workloads, I decided to split up my cluster into dedicated nodes for: control, general workloads, and storage. The result has been greater stability, the control plane running in the 40-50 degrees celsius range instead of 60s-70s, and an end to some intermittent issues with Longhorn volumes not attaching, resizing, etc.
+    
+    I've also decided to remove the Raspberry Pis and replace them with dedicated devices for gathering climate data, and/or by connecting the sensors to micro-controllers; the reasons for this are as follows:
+    * Dedicated sensor devices and microcontroller based sensors rarely need much in the way of attention, don't have USB ports that go to sleep every few months, etc.  
+    * The software for ingesting the sensor data can now run on any node on the cluster, thus making things "more Kubernetes"; this combined with the above makes the climate monitoring setup significantly more robust.  
+    * I can move the under-utilized Pis to other projects
 
-        * A Raspberry Pi 4B 8GB (with an NVME hat) that I use for testing containers running code for GPIO devices that will eventually make their way to the other Raspberry Pis.
+    * **Agent Nodes:** 
+        * **x86 Worker Nodes: 3 x HP Mini G6s running Intel i5-10500:** I've become a big fan of trying to find ways to re-use parts I have sitting around gathering dust, and giving a second life to capable hardware that might otherwise end up as e-waste. I picked one up used on Amazon for about the price of the Beelinks and got a device that runs a replaceable desktop CPU, runs 15-20 degrees cooler, can support two M2 NVME drives AND an SSD and is a little faster than the Beelinks. I'm also in the process of procuring HP Flex IO devices to upgrade the networking to 2.5Gbe 
+        
+        * **Storage Nodes:** the original plan was to use two HP G5 Minis as the networking can be upgraded to 2.5Gbe, but since I had Orange Pi 5+ that wasn't being used I went with one G5 and one Orange Pi 5+ since the latter has dual 2.5Gbe. Given the G5 can support two M2s and an SSD, two G5s is a better approach, but this works for now. 
+
+        * **IoT/Task Nodes:** I picked up a Lenovo m910Q on eBay for $30.00 that didn't have a CPU, Wi-FI card, RAM or a HDD because it could run the 7th Gen Intel CPU I had in an old gaming machine with a damaged motherboard. Once I got it up and running I added it into the cluster, set the node labeling so it primarily runs IoT and ETL related workloads and it has run flawlessly. I later picked up an HP G4 (similar situation, but it had a CPU) and have it running in a similar capacity.  
+
+    **Future Plans:** 
+        * add a NAS that will primarily be used for home storage and back-up so we don't have to use cloud services, but attach it to the K3s cluster as well for back-ups for running MinIO separately from Longhorn storage.
+        * Use something like an N100 SBC or maybe even Rockchip 3588 compute modules to run cluster apps: Cert Manager, Traefik, etc.,      
+        
     * **Power Management:** 
-        * **CyberPower UPS device:** currently the monitoring is limited as it can only send telemetry data to one computer via USB, and that data can only be checked/monitored via terminal. An item on "the list" is to build the capability to collect the data, write it to InfluxDB and then share the "graceful shutdown" signal from the USB with all the nodes in the cluster.  
+        * **CyberPower UPS device:** I have a Rasberry Pi 4B (not part of the cluster) running [Network UPS Tools - NUT](https://networkupstools.org/), which allows it to monitor the state of UPS devices connected to it via USB. I then have a container running on the cluster that can query NUT to grab the latest UPS data and then write it to InfluxDB. You can take a look at the code for the monitoring container [here](https://github.com/MarkhamLee/internet-and-iot-data-platform/tree/main/IoT/cyberpowerpc_pfc1500_ups).  
         * **Kasa Smart Plugs:** monitored via the [Python Kasa library](https://github.com/python-kasa/python-kasa), this allows me to track how much power my *"Homelab Devices"* are using.
         * **Zigbee Based Smart Plugs:** these devices serve a dual purpose: as not only do they provide real time power consumption data, but they also serve as Zigbee routers that augment the Zigbee network.
     * **Future state(s):** dedicated storage nodes that will just run Longhorn and MinIO 
-    * All of the nodes are running Ubuntu 22.04, the Orange Pi 5+ is running a community [Ubuntu 22.04 distro](https://github.com/Joshua-Riek/ubuntu-rockchip) made especially for Rockchip 3588 devices.  
+    * All of the nodes are running Ubuntu 22.04, the Orange Pi 5+ is running a community built [Ubuntu 24.04 server distro](https://github.com/Joshua-Riek/ubuntu-rockchip) made especially for Rockchip 3588 devices.  
 
 * **CICD - DevOps**
  * **Argo CD: ** is used to manage all configs, deployment manifests, etc., used for general setup in addition to deploying 3rd party and custom apps on the cluster. I have a separate repo that just contains configs and manifests, whenever an update is made to those files the application is re-deployed. 
@@ -93,8 +110,6 @@ TL/DR: I tried/am trying to build something that is as close to production quali
 
 ### Future Items 
 * Automated, graceful cluster shutdown in response to a power outage, i.e., when the UPS is activated, a graceful shutdown is initiated to avoid some of the nasty storage issues that from abrupt shutdowns.  
-* Add more worker nodes (arm64 and x86) so the current x86 nodes serving as control and worker nodes, can be designated as worker nodes only. 
-* Add two (or more) nodes that are solely dedicated to storage via Longhorn and MinIO 
 * Explore options for making USB devices available over the network, so that the software for a USB device or sensor can just run on the cluster and isn't tied to a specific piece of hardware:  
 
     * [Project Akri](https://github.com/project-akri/akri), it allows you to add the USB devices attached to your various nodes as network resources available to your entire cluster 
