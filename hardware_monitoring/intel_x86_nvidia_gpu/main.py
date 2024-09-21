@@ -68,7 +68,7 @@ def monitor(client: object, topic: str):
             "gpu_clock": gpu_clock
         }
 
-        logger.info(payload)
+        # logger.info(payload)
 
         payload = json.dumps(payload)
         result = client.publish(topic, payload)
