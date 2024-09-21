@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Markham Lee (C) 2023
+# Markham Lee (C) 2023 - 2024
 # K3s Data Platform
 # https://github.com/MarkhamLee/k3s-data-platform-IoT
 # Script to monitor CPU and NVME temp, plus RAM and CPU
@@ -9,6 +9,7 @@ import json
 import os
 import sys
 from time import sleep
+from nvidia_gpu import NvidiaSensors
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
@@ -25,6 +26,10 @@ def monitor(client: object, topic: str):
     # hardware monitoring class
     device_data = Intelx86()
     logger.info('Monitoring utilities class instantiated')
+
+    # gpu monitoring class
+    gpu_data = NvidiaSensors()
+    logger.info('GPU monitoring class instantiated')
 
     DEVICE_ID = os.environ['DEVICE_ID']
     INTERVAL = int(os.environ['INTERVAL'])
@@ -45,14 +50,25 @@ def monitor(client: object, topic: str):
         # get CPU temperature
         cpu_temp, nvme_temp = device_data.get_temps()
 
+        # get GPU data
+        gpu_temp, gpu_load, gpu_vram, gpu_power, gpu_clock = gpu_data.\
+            gpu_query()
+
         payload = {
             "cpu_utilization": cpu_util,
             "ram_utilization": ram_use,
             "cpu_freq": cpu_freq,
             "cpu_temp": cpu_temp,
             "nvme_temp": nvme_temp,
-            "core_count": core
+            "core_count": core,
+            "gpu_temp": gpu_temp,
+            "gpu_load": gpu_load,
+            "gpu_vram": gpu_vram,
+            "gpu_power": gpu_power,
+            "gpu_clock": gpu_clock
         }
+
+        logger.info(payload)
 
         payload = json.dumps(payload)
         result = client.publish(topic, payload)
