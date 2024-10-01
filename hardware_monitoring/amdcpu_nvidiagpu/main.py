@@ -63,7 +63,7 @@ def monitor(client: object, get_data: object,
         }
 
         payload = json.dumps(payload)
-        logger.info(payload)
+        # logger.info(payload)
 
         result = client.publish(TOPIC, payload)
         status = result[0]
