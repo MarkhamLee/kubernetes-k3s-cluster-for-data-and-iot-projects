@@ -36,5 +36,5 @@ helm install rancher rancher-stable/rancher \
   
 ```
 6) After you get Rancher setup I would then install longhorn (see the longhorn folder) and then get backup setup. Longhorn is an installation setup in Rancher, just go to apps and see the available apps
-
+ 
 7) When the above is done, install the prometheus monitoring package within Rancher, you can find it in apps - just follow the directions and you'll be fine. 
