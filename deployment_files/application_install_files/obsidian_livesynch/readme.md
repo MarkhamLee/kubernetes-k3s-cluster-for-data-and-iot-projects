@@ -1,6 +1,6 @@
 # Deploying Obsidian on K3s
 
-This folder contains instructions for deploying the couchdb application that is used to store the data from the Obsidian self-hosted live-synch plug-in, in addition to tips and tricks around how to navigate around a few of the gotchas I ran into. 
+This folder contains instructions for deploying the couchdb application that is used to store the data from the Obsidian self-hosted live-synch plug-in, in addition to tips and tricks around how to navigate around a few of the gotchas I ran into. While this instructions could be used for a general purpose deployment of CouchDB they're specifically tailored for the Obsidian live-synch plugin, meaning, if you just need to deploy CouchDB and aren't using Obsidian self-hosted live-synch you may be able to skip some of the items below.
 
 ## Basic Setup
 
