@@ -1,31 +1,32 @@
 ## Kubernetes - K3s cluster for Data & IoT Projects
 
+This project started out as a small three node cluster I used to run a small number of 3rd party applications and the custom containers for my [data ingestion project](https://github.com/MarkhamLee/finance-productivity-iot-informational-weather-dashboard). Currently it is a nine node cluster whose primary use is enabling me to self-host a large number of apps I use in my day to day life, things ranging from note taking, office apps, dev tools, security, etc., in addition to monitoring/managing my home network, supporting the aforementioned data ingestion project and anything else I happen to be working on. TL/DR this is basically the infrastructure for my private cloud AKA "homelab" or whatever the cool kids are calling it these days.
+
 ![Cluster Architecture Diagram](images/k3s_cluster_architecture_mkIII.png)
 
-This repo contains custom code, deployment manifests (3rd party and custom containers), documentation, links to tutorials, notes, installation instructions, and other resources I used to build a high availability Kubernetes cluster using the K3s distro. While this cluster was initially built for professional development/learning purposes, my various tinkering projects, and to support my [data platform project](https://github.com/MarkhamLee/finance-productivity-iot-informational-weather-dashboard), it has become the foundation for a "personal cloud" used for a variety of personal and professional purposes. 
-
-I hoping that what I have here will be useful to others, as the initial steps on one’s Kubernetes journey are oft painful.  
+This repo contains custom code, deployment manifests (3rd party and custom containers), documentation, links to tutorials, notes, installation instructions, and other resources I used to build, maintain and manage the cluster. I'm hoping that what I have here will be useful to others, as the initial steps on one’s Kubernetes journey are oft painful.  
 
 *Note: you should use the resources here at your own risk, I guarantee nothing and am just sharing how I built out my setup/what worked for me.* 
 
 ### General approach, relevant technologies, etc. 
 
-Design wise, I took the approach of *"how would I build out something to support a minimally viable product or proof of concept for an edge computing related project at work?"*. In other words, aspects of this may seem over-engineered for home use but that is by design and to ensure that I avoid approaches/habits that won’t translate well to a professional setting. Implementation wise this means: 
+When deploying 3rd party apps or the general K3s infrastructure I try to follow each app's recommended settings for a production deployment, meaning: number of replicas, nodes, security configuration/practices, etc. I try to make sure that all custom code is built to the same level, and has enough monitoring, redundancy, etc., to ensure I don't miss problems and there is rarely any downtime. The TL/DR read here is that it's "reasonably over-engineered", and while that results in more work in the short-term, it means far, far, fewer headaches in the long-term. 
 
-* Centralized logging, i.e., centralized service to collect logs from all apps 
-* Securing service access via a mesh network style VPN, so I can manage the cluster and use the services on it when I'm not on my home network. 
+Implementation wise this means: 
+
+* Cloud & NAS back-up of all app data, management tools tools like Rancher, etc.
+* IAC - all deployment configuration, manifests, helm values.yaml, etc., etc., are all stored in thier private GitHub repo, cluster updates are made via updating the YAML in the repo, and those changes are then applied to the cluster via ArgoCD. 
+* Whether it's a disaster, hardware upgrade or just wanting a clean start, the above two bullets mean that rebuilding the cluster or building a duplicate one is relatively simple. 
 * Centralized monitoring for problems, issues, etc., via Prometheus, coupled with alerting capabilities via Prometheus Alerts Manager and Slack. Note: alerts are generated when a problem is detected and when it has been solved.
+* Metric and log data is backed-up outside the cluster to make it easier to diagnost problems in the event of a disaster.
+* Securing service access via a mesh network style VPN, so I can manage the cluster and use the services on it when I'm not on my home network, without having to open ports to the public/externally. 
 * CICD inclusive of automated container builds and deployments, centralized source of truth for all cluster configurations, etc. 
-* Cloud back-up of the cluster state and all data. 
 * Deploying apps in a high availability configuration* 
-* High availability hardware configuration, I.e., at least three control nodes 
-* Redundant hardware monitoring  
+* High availability hardware configuration
 * Shared storage via Longhorn
 * Secure certificates/encrypted connections for all services via Cloudflare and Lets Encrypt
 
 **When possible, some apps require the purchase of a license to be deployed in HA configuration and others either don’t support HA or do it poorly, so attempting to deploy HA results in a degraded user experience.*  
-
-TL/DR: I tried/am trying to build something that is as close to production quality as possible. 
 
 #### Recent Updates
 
