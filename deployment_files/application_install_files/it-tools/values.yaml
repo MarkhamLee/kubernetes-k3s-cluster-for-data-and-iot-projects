@@ -1,0 +1,81 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: it-tools
+  name: it-tools
+  namespace: it-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: it-tools
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: it-tools
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 70
+              preference:
+                matchExpressions:
+                  - key: k3s_role
+                    operator: In
+                    values:
+                    - x86_worker
+            - weight: 30
+              preference:
+                matchExpressions:
+                  - key: agent_type
+                    operator: In
+                    values:
+                    - x86_worker
+      containers:
+        - name: it-tools
+          image: ghcr.io/corentinth/it-tools:latest
+          imagePullPolicy: IfNotPresent
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: it-tools
+  name: it-tools
+  namespace: it-tools
+spec:
+  ports:
+    - name: it-tools
+      port: 10437
+      targetPort: 80
+      # targetPort: http
+      protocol: TCP
+  selector:
+    app: it-tools
+  type:
+    ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: it-tools
+  namespace: it-tools
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - host: it-tools.local.example.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: it-tools
+                port:
+                  number: 10437
+            path: /
+            pathType: Prefix
