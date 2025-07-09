@@ -1,0 +1,3 @@
+## Streamlined Prometheus
+
+I currently use the Rancher variant of the Kube Prometheus stack for cluster monitoring, and wanted a separate Prometheus instance for pulling metrics data from devices (e.g., NAS, Firewalls) external to the cluster just to keep queries, dashboards and the like separate. The solution was this highly streanmlined version of Prometheus that doesn't monitor any cluster resources, and just scrapes data from external sources. 
