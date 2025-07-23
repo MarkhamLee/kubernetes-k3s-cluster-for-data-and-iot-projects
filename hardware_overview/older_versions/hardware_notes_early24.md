@@ -2,6 +2,7 @@
 
 Overview of the cluster's hardware, tips and tricks, problems I've run into and future plans. 
 
+Last Updated March 20, 2024
 
 ### General 
 * Get as much RAM as you can, the basic setup for this cluster with just the three control nodes, Prometheus for monitoring, ingress and encryption setup/configuration(s), longhorn and Rancher was using close to 40 GB of RAM before I started deploying workloads. I.e. if you're going to follow my setup, I'd suggest maxing out on RAM. 
@@ -10,7 +11,7 @@ Overview of the cluster's hardware, tips and tricks, problems I've run into and 
     * Small portable batteries for charging phones and tablets are connected to the single board computer nodes, similar to the above I want to upgrade those units to something I can manage remotely and send me alerts if/when the power goes out. 
 * "Custom" Firewall is a Trigkey N100 device with dual 2.5Gbe running pfSense.
 
-### Device Notes & Data
+### Device Notes & Data (current as of Fall '23)
 
 #### Beelink SER5s - Ryzen 5 5560U
 * These have been problem free, I got them, opened them up, replaced the RAM and NVME drives that came with them, installed Ubuntu and it's been smooth sailing ever since.
