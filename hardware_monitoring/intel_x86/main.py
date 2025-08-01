@@ -28,6 +28,7 @@ BUCKET = os.environ['INFLUX_BUCKET']
 DEVICE_ID = os.environ['DEVICE_ID']
 HEARTBEAT_FLAG = int(os.environ['HEARTBEAT_FLAG'])
 INTERVAL = int(os.environ['INTERVAL'])
+METRIC_IP = os.environ['METRIC_IP']
 METRIC_PORT = int(os.environ['METRIC_PORT'])
 ORG = os.environ['INFLUX_ORG']
 TABLE = os.environ['INFLUX_MEASUREMENT']
@@ -47,14 +48,12 @@ base_payload = {
 # hearbeat data
 
 if HEARTBEAT_FLAG == 1:
-    logger.info('Settiing up Prometheus heartbeat metric export')
+    logger.info('Setting up Prometheus heartbeat metric export')
     METRIC_NAME = (f'{DEVICE_ID}_HEARTBEAT')
     heartbeat = Gauge(METRIC_NAME, DEVICE_ID)
 
-    IP = os.environ['METRIC_IP']
-
     logger.info('Starting metric server')
-    start_http_server(METRIC_PORT, addr=IP)
+    start_http_server(METRIC_PORT, addr=METRIC_IP)
 
 
 # monitoring loop
@@ -64,33 +63,40 @@ def monitor(client: str):
 
     while True:
 
-        # get CPU utilization
-        cpu_util = device_data.get_cpu_data()
+        try:
 
-        # get current RAM use
-        ram_use = device_data.get_ram_data()
+            # get CPU utilization
+            cpu_util = device_data.get_cpu_data()
 
-        # get avg clock speed for all cores
-        cpu_freq, core = device_data.get_freq()
+            # get current RAM use
+            ram_use = device_data.get_ram_data()
 
-        # get CPU temperature
-        cpu_temp, nvme_temp = device_data.get_temps()
+            # get avg clock speed for all cores
+            cpu_freq, core = device_data.get_freq()
 
-        payload = {
-            "cpu_utilization": cpu_util,
-            "ram_utilization": ram_use,
-            "cpu_freq": cpu_freq,
-            "cpu_temp": cpu_temp,
-            "nvme_temp": nvme_temp,
-            "core_count": core
-        }
+            # get CPU temperature
+            cpu_temp, nvme_temp = device_data.get_temps()
 
-        # write data to InfluxDB
-        influxdb_write.write_influx_data(client,
-                                         base_payload,
-                                         payload,
-                                         BUCKET)
-        heartbeat.set(1)
+            payload = {
+                "cpu_utilization": cpu_util,
+                "ram_utilization": ram_use,
+                "cpu_freq": cpu_freq,
+                "cpu_temp": cpu_temp,
+                "nvme_temp": nvme_temp,
+                "core_count": core
+            }
+
+            # write data to InfluxDB
+            influxdb_write.write_influx_data(client,
+                                             base_payload,
+                                             payload,
+                                             BUCKET)
+            if HEARTBEAT_FLAG == 1:
+                heartbeat.set(1)
+
+        except Exception as e:
+            logger.info(f'Data read loop failed with error: {e}')
+
         sleep(INTERVAL)
 
 
