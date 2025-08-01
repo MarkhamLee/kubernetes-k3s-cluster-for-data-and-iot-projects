@@ -31,6 +31,7 @@ BUCKET = os.environ['INFLUX_BUCKET']
 DEVICE_ID = os.environ['DEVICE_ID']
 HEARTBEAT_FLAG = int(os.environ['HEARTBEAT_FLAG'])
 INTERVAL = int(os.environ['INTERVAL'])
+METRIC_PORT = os.environ['METRIC_PORT']
 ORG = os.environ['INFLUX_ORG']
 TABLE = os.environ['INFLUX_MEASUREMENT']
 TOKEN = os.environ['INFLUX_TOKEN']
@@ -56,7 +57,7 @@ if HEARTBEAT_FLAG == 1:
     IP = os.environ['METRIC_IP']
 
     logger.info('Starting metric server')
-    start_http_server(5011, addr=IP)
+    start_http_server(METRIC_PORT, addr=IP)
 
 
 def monitor(client: object):
