@@ -24,9 +24,8 @@ device_data = Intelx86()
 logger.info('Monitoring utilities class instantiated')
 
 # load environmental variables
-DEVICE_ID = os.environ['DEVICE_ID']
 BUCKET = os.environ['INFLUX_BUCKET']
-DEVICE_ID = '12900H-Linux-Dev-Machine'
+DEVICE_ID = os.environ['DEVICE_ID']
 HEARTBEAT_FLAG = int(os.environ['HEARTBEAT_FLAG'])
 INTERVAL = int(os.environ['INTERVAL'])
 ORG = os.environ['INFLUX_ORG']

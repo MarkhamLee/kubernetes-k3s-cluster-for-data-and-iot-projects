@@ -1,15 +1,15 @@
-# Markham Lee (C) 2023 - 2024
+# Markham Lee (C) 2023 - 2025
 # kubernetes-k3s-data-and-IoT-platform
 # https://github.com/MarkhamLee/kubernetes-k3s-data-and-IoT-platform
 # HW monitoring Script for an Orange Pi 5+, meant to extend the monitoring
 # capabilities in K8s, namely: tracking CPU, NVME and GPU temps & utilization
-# data. This script "should work" on any device running a Rockchip 3588 System
-# on Chip (SOC). But it was specifically built and tested on an
-# Orange Pi 5 Plus Running Joshua Riek's Ubuntu Distro for RockChip 3588
-# Devices: https://github.com/Joshua-Riek/ubuntu-rockchip
-import gc
+# data. It will also send "heartbeat" data to a Prometheus scrape target,
+# if the flag has been set to "1". This script "should work" on any device
+# running a Rockchip 3588 System on Chip (SOC). But it was specifically
+# built and tested on an Orange Pi 5.
 import os
 import sys
+from prometheus_client import Gauge, start_http_server
 from time import sleep
 from rockchip_3588 import RockChipData
 
@@ -23,25 +23,44 @@ from hw_monitoring_libraries.influx_client import InfluxClient  # noqa: E402
 influxdb_write = InfluxClient()
 
 
-def get_base_payload(table):
+# instantiate hardware data class
+rockchip_data = RockChipData()
 
-    # base payload
-    base_payload = {
-        "measurement": table,
-        "tags": {
-                "k3s_prod": "hardware_telemetry",
-        }
+# load environmental variables
+BUCKET = os.environ['INFLUX_BUCKET']
+DEVICE_ID = os.environ['DEVICE_ID']
+HEARTBEAT_FLAG = int(os.environ['HEARTBEAT_FLAG'])
+INTERVAL = int(os.environ['INTERVAL'])
+ORG = os.environ['INFLUX_ORG']
+TABLE = os.environ['INFLUX_MEASUREMENT']
+TOKEN = os.environ['INFLUX_TOKEN']
+URL = os.environ['INFLUX_URL']
+
+
+logger.info('Creating base payload for writing to InfluxDB')
+base_payload = {
+    "measurement": TABLE,
+    "tags": {
+            "k3s_prod": "hardware_telemetry",
     }
+}
 
-    return base_payload
+# if Prometheus flag is setup, turn on web server for exporting
+# hearbeat data
+
+if HEARTBEAT_FLAG == 1:
+    logger.info('Settiing up Prometheus heartbeat metric export')
+    METRIC_NAME = (f'{DEVICE_ID}_HEARTBEAT')
+    heartbeat = Gauge(METRIC_NAME, DEVICE_ID)
+
+    IP = os.environ['METRIC_IP']
+
+    logger.info('Starting metric server')
+    start_http_server(5011, addr=IP)
 
 
-def monitor(client: object, BUCKET: str, INTERVAL: int, base_payload: dict):
+def monitor(client: object):
 
-    # instantiate hardware data class
-    rockchip_data = RockChipData()
-
-    DEVICE_ID = os.environ['DEVICE_ID']
     logger.info(f'Starting HW monitoring for {DEVICE_ID}')
 
     while True:
@@ -82,11 +101,6 @@ def monitor(client: object, BUCKET: str, INTERVAL: int, base_payload: dict):
             influxdb_write.write_influx_data(client, base_payload,
                                              payload, BUCKET)
 
-            del payload, soc_temp, big_core0_temp, big_core1_temp, \
-                little_core_temp, center_temp, gpu_temp, npu_temp, nvme_temp,
-            little_core_freq, big_core0_freq, big_core1_freq, cpu_util, ram_use
-            gc.collect()
-
         except Exception as e:
             logger.debug(f'failed to read data from device with error: {e}')
             # we'll just log the errors for now, if the device is truly
@@ -98,20 +112,10 @@ def monitor(client: object, BUCKET: str, INTERVAL: int, base_payload: dict):
 
 def main():
 
-    TOKEN = os.environ['TOKEN']
-    ORG = os.environ['ORG']
-    URL = os.environ['URL']
-    BUCKET = os.environ['BUCKET']
-    TABLE = os.environ['TABLE']
-    INTERVAL = int(os.environ['INTERVAL'])
-
     # get client
     client = influxdb_write.influx_client(TOKEN, ORG, URL)
 
-    # get base payload
-    base_payload = get_base_payload(TABLE)
-
-    monitor(client, BUCKET, INTERVAL, base_payload)
+    monitor(client)
 
 
 if __name__ == '__main__':

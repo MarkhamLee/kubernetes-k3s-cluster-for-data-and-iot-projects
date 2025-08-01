@@ -1,4 +1,4 @@
-influxdb-client==1.38.0
+influxdb-client==1.49.0
 psutil
 requests
 paho-mqtt==2.1.0
