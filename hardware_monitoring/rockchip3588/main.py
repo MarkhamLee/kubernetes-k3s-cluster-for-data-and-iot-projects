@@ -38,12 +38,15 @@ ORG = os.environ['INFLUX_ORG']
 TABLE = os.environ['INFLUX_MEASUREMENT']
 TOKEN = os.environ['INFLUX_TOKEN']
 URL = os.environ['INFLUX_URL']
-
+TAG_KEY = os.environ['TAG_KEY']
+TAG_VALUE = os.environ['TAG_VALUE']
 
 logger.info('Creating base payload for writing to InfluxDB')
 base_payload = {
     "measurement": TABLE,
-    "tags": {"hardware_telemetry", }
+    "tags": {
+            TAG_KEY: TAG_VALUE,
+    }
 }
 
 # if Prometheus flag is setup, turn on web server for exporting
@@ -97,8 +100,10 @@ def monitor(client: object):
             }
 
             # write data to InfluxDB
-            influxdb_write.write_influx_data(client, base_payload,
-                                             payload, BUCKET)
+            influxdb_write.write_influx_data(client,
+                                             base_payload,
+                                             payload,
+                                             BUCKET)
 
             if HEARTBEAT_FLAG == 1:
                 heartbeat.set(1)

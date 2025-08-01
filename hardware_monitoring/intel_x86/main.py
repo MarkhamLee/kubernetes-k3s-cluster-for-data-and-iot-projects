@@ -34,13 +34,15 @@ ORG = os.environ['INFLUX_ORG']
 TABLE = os.environ['INFLUX_MEASUREMENT']
 TOKEN = os.environ['INFLUX_TOKEN']
 URL = os.environ['INFLUX_URL']
+TAG_KEY = os.environ['TAG_KEY']
+TAG_VALUE = os.environ['TAG_VALUE']
 
 
 logger.info('Creating base payload for writing to InfluxDB')
 base_payload = {
     "measurement": TABLE,
     "tags": {
-            "k3s_prod": "hardware_telemetry",
+            TAG_KEY: TAG_VALUE,
     }
 }
 

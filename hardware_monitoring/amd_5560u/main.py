@@ -27,6 +27,16 @@ ORG = os.environ['INFLUX_ORG']
 TABLE = os.environ['INFLUX_MEASUREMENT']
 TOKEN = os.environ['INFLUX_TOKEN']
 URL = os.environ['INFLUX_URL']
+TAG_KEY = os.environ['TAG_KEY']
+TAG_VALUE = os.environ['TAG_VALUE']
+
+logger.info('Creating base payload for writing to InfluxDB')
+base_payload = {
+    "measurement": TABLE,
+    "tags": {
+            TAG_KEY: TAG_VALUE,
+    }
+}
 
 # instantiate InfluxDB class
 influxdb_write = InfluxClient()
@@ -35,13 +45,6 @@ influxdb_write = InfluxClient()
 device_data = AMD5560Data()
 logger.info("Hardware monitoring class instantiated")
 
-logger.info('Creating base payload for writing to InfluxDB')
-base_payload = {
-    "measurement": TABLE,
-    "tags": {
-            "k3s_prod": "hardware_telemetry",
-    }
-}
 
 # if Prometheus flag is setup, turn on web server for exporting
 # hearbeat data
