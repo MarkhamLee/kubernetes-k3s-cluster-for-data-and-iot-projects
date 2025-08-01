@@ -1,100 +1,107 @@
-# Markham Lee (C) 2023 - 2024
+# Markham Lee (C) 2023 - 2025
 # kubernetes-k3s-data-and-IoT-platform
 # https://github.com/MarkhamLee/k3s-data-platform-IoT
-# Script to monitor temperatures of the AMD 5560u on the
-# Beelink SER5s that are being used for the cluster nodes.
-# Only monitoring the temps (for now), because I'm using the
-# kube-prometheus stack to monitor CPU load, disk space, RAM, etc.
-import gc
-import json
+# Script to monitor AMD hardware, and also provide
+# (if needed) a Prometheus endpoint for collecting
 import os
 import sys
+from prometheus_client import Gauge, start_http_server
 from time import sleep
-from amd_5560u import AMD5560Data
+from amd_5560u import AMD5560Data  # TODO: move this joint library folder
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
 
 from hw_monitoring_libraries.logging_util import logger  # noqa: E402
-from hw_monitoring_libraries.hw_monitoring\
-    import MonitoringUtilities  # noqa: E402
+from hw_monitoring_libraries.influx_client import InfluxClient  # noqa: E402
+
+
+# load environmental variables
+BUCKET = os.environ['INFLUX_BUCKET']
+DEVICE_ID = os.environ['DEVICE_ID']
+HEARTBEAT_FLAG = int(os.environ['HEARTBEAT_FLAG'])
+INTERVAL = int(os.environ['INTERVAL'])
+METRIC_IP = os.environ['METRIC_IP']
+METRIC_PORT = int(os.environ['METRIC_PORT'])
+ORG = os.environ['INFLUX_ORG']
+TABLE = os.environ['INFLUX_MEASUREMENT']
+TOKEN = os.environ['INFLUX_TOKEN']
+URL = os.environ['INFLUX_URL']
+
+# instantiate InfluxDB class
+influxdb_write = InfluxClient()
+
+# instantiate device data class
+device_data = AMD5560Data()
+logger.info("Hardware monitoring class instantiated")
+
+logger.info('Creating base payload for writing to InfluxDB')
+base_payload = {
+    "measurement": TABLE,
+    "tags": {
+            "k3s_prod": "hardware_telemetry",
+    }
+}
+
+# if Prometheus flag is setup, turn on web server for exporting
+# hearbeat data
+if HEARTBEAT_FLAG == 1:
+    logger.info('Setting up Prometheus heartbeat metric export')
+    METRIC_NAME = (f'{DEVICE_ID}_HEARTBEAT')
+    heartbeat = Gauge(METRIC_NAME, DEVICE_ID)
+
+    logger.info('Starting metric server')
+    start_http_server(METRIC_PORT, addr=METRIC_IP)
 
 
 def monitor(client: object, topic: str):
-
-    # instantiate utilities class
-    device_data = AMD5560Data()
-
-    logger.info("Hardware monitoring class instantiated")
-
-    DEVICE_ID = os.environ['DEVICE_ID']
-    INTERVAL = int(os.environ['INTERVAL'])
 
     logger.info(f'Starting HW monitoring for {DEVICE_ID}')
 
     while True:
 
-        # get CPU, GPU and NVME temperatures
-        nvme_temp, cpu_temp, amd_gpu_temp = device_data.amd_linux_temp_data()
+        try:
 
-        cpu_util = device_data.get_cpu_data()
+            # get CPU, GPU and NVME temperatures
+            nvme_temp, cpu_temp, amd_gpu_temp = device_data.\
+                amd_linux_temp_data()
 
-        cpu_freq, core_count = device_data.get_freq()
+            cpu_util = device_data.get_cpu_data()
 
-        ram_util = device_data.get_ram_data()
+            cpu_freq, core_count = device_data.get_freq()
 
-        payload = {
-            "nvme_temp": nvme_temp,
-            "cpu_temp": cpu_temp,
-            "amd_gpu_temp": amd_gpu_temp,
-            "cpu_util": cpu_util,
-            "cpu_freq": cpu_freq,
-            "ram_util": ram_util,
-            "core_count": core_count
-        }
+            ram_util = device_data.get_ram_data()
 
-        payload = json.dumps(payload)
-        result = client.publish(topic, payload)
-        status = result[0]
+            payload = {
+                "nvme_temp": nvme_temp,
+                "cpu_temp": cpu_temp,
+                "amd_gpu_temp": amd_gpu_temp,
+                "cpu_util": cpu_util,
+                "cpu_freq": cpu_freq,
+                "ram_util": ram_util,
+                "core_count": core_count
+            }
 
-        if status != 0:
+            # write data to InfluxDB
+            influxdb_write.write_influx_data(client,
+                                             base_payload,
+                                             payload,
+                                             BUCKET)
+            if HEARTBEAT_FLAG == 1:
+                heartbeat.set(1)
 
-            logger.debug(f'MQTT publishing failure for hardware monitoring on: {DEVICE_ID}, return code: {status}')  # noqa: E501
+        except Exception as e:
+            logger.info(f'Data read loop failed with error: {e}')
 
-        del payload, nvme_temp, cpu_temp, amd_gpu_temp, cpu_util, \
-            cpu_freq, ram_util, core_count
-        gc.collect()
         sleep(INTERVAL)
 
 
 def main():
 
-    # instantiate communication utilities class
-    monitor_utilities = MonitoringUtilities()
+    # get client
+    client = influxdb_write.influx_client(TOKEN, ORG, URL)
 
-    # operating parameters
-    TOPIC = os.environ['TOPIC']
-
-    # load environmental variables
-    MQTT_BROKER = os.environ["MQTT_BROKER"]
-    MQTT_USER = os.environ['MQTT_USER']
-    MQTT_SECRET = os.environ['MQTT_SECRET']
-    MQTT_PORT = int(os.environ['MQTT_PORT'])
-
-    # get unique client ID
-    clientID = monitor_utilities.getClientID()
-
-    # get mqtt client
-    client, code = monitor_utilities.mqttClient(clientID,
-                                                MQTT_USER, MQTT_SECRET,
-                                                MQTT_BROKER, MQTT_PORT)
-
-    # start monitoring
-    try:
-        monitor(client, TOPIC)
-
-    finally:
-        client.loop_stop()
+    monitor(client)
 
 
 if __name__ == '__main__':

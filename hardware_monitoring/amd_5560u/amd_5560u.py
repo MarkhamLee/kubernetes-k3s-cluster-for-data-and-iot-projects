@@ -2,7 +2,6 @@
 # Hardware Monitor for Linux & Windows:
 # https://github.com/MarkhamLee/k3s-data-platform-IoT
 # script to retrieve CPU related data on an AMD x86 machine
-# and then write to InfluxDB
 import json
 import psutil
 
