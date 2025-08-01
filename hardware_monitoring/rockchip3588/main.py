@@ -31,6 +31,7 @@ BUCKET = os.environ['INFLUX_BUCKET']
 DEVICE_ID = os.environ['DEVICE_ID']
 HEARTBEAT_FLAG = int(os.environ['HEARTBEAT_FLAG'])
 INTERVAL = int(os.environ['INTERVAL'])
+METRIC_IP = os.environ['METRIC_IP']
 METRIC_PORT = int(os.environ['METRIC_PORT'])
 ORG = os.environ['INFLUX_ORG']
 TABLE = os.environ['INFLUX_MEASUREMENT']
@@ -41,9 +42,7 @@ URL = os.environ['INFLUX_URL']
 logger.info('Creating base payload for writing to InfluxDB')
 base_payload = {
     "measurement": TABLE,
-    "tags": {
-            "k3s_prod": "hardware_telemetry",
-    }
+    "tags": {"hardware_telemetry", }
 }
 
 # if Prometheus flag is setup, turn on web server for exporting
@@ -54,10 +53,8 @@ if HEARTBEAT_FLAG == 1:
     METRIC_NAME = (f'{DEVICE_ID}_HEARTBEAT')
     heartbeat = Gauge(METRIC_NAME, DEVICE_ID)
 
-    IP = os.environ['METRIC_IP']
-
     logger.info('Starting metric server')
-    start_http_server(METRIC_PORT, addr=IP)
+    start_http_server(METRIC_PORT, addr=METRIC_IP)
 
 
 def monitor(client: object):
@@ -102,11 +99,14 @@ def monitor(client: object):
             influxdb_write.write_influx_data(client, base_payload,
                                              payload, BUCKET)
 
+            if HEARTBEAT_FLAG == 1:
+                heartbeat.set(1)
+
         except Exception as e:
-            logger.debug(f'failed to read data from device with error: {e}')
+            logger.debug(f'Data read loop failed with error: {e}')
             # we'll just log the errors for now, if the device is truly
             # malfunctioning alert manager will pick it up as a
-            # node error/problem.
+            # target down error/problem.
 
         sleep(INTERVAL)
 
