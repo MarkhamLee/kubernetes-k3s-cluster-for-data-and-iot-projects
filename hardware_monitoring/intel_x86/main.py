@@ -1,33 +1,63 @@
 #!/usr/bin/env python
-# Markham Lee (C) 2023
+# Markham Lee (C) 2023 - 2025
 # K3s Data Platform
 # https://github.com/MarkhamLee/k3s-data-platform-IoT
 # Script to monitor CPU and NVME temp, plus RAM and CPU
-# utilization on the x86 based nodes.
-import gc
-import json
+# utilization on x86 hardware.
 import os
 import sys
+from prometheus_client import Gauge, start_http_server
 from time import sleep
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
 
 from hw_monitoring_libraries.logging_util import logger  # noqa: E402
-from hw_monitoring_libraries.hw_monitoring\
-    import MonitoringUtilities  # noqa: E402
 from hw_monitoring_libraries.intel_x86 import Intelx86  # noqa: E402
+from hw_monitoring_libraries.influx_client import InfluxClient  # noqa: E402
+
+# instantiate InfluxDB class
+influxdb_write = InfluxClient()
+
+# hardware monitoring class
+device_data = Intelx86()
+logger.info('Monitoring utilities class instantiated')
+
+# load environmental variables
+DEVICE_ID = os.environ['DEVICE_ID']
+BUCKET = os.environ['INFLUX_BUCKET']
+DEVICE_ID = '12900H-Linux-Dev-Machine'
+HEARTBEAT_FLAG = int(os.environ['HEARTBEAT_FLAG'])
+INTERVAL = int(os.environ['INTERVAL'])
+ORG = os.environ['INFLUX_ORG']
+TABLE = os.environ['INFLUX_MEASUREMENT']
+TOKEN = os.environ['INFLUX_TOKEN']
+URL = os.environ['INFLUX_URL']
+
+logger.info('Creating base payload for writing to InfluxDB')
+base_payload = {
+    "measurement": TABLE,
+    "tags": {
+            "k3s_prod": "hardware_telemetry",
+    }
+}
+
+# if Prometheus flag is setup, turn on web server for exporting
+# hearbeat data
+
+if HEARTBEAT_FLAG == 1:
+    logger.info('Settiing up Prometheus heartbeat metric export')
+    METRIC_NAME = (f'{DEVICE_ID}_HEARTBEAT')
+    heartbeat = Gauge(METRIC_NAME, DEVICE_ID)
+
+    IP = os.environ['METRIC_IP']
+
+    logger.info('Starting metric server')
+    start_http_server(5011, addr=IP)
 
 
 # monitoring loop
-def monitor(client: object, topic: str):
-
-    # hardware monitoring class
-    device_data = Intelx86()
-    logger.info('Monitoring utilities class instantiated')
-
-    DEVICE_ID = os.environ['DEVICE_ID']
-    INTERVAL = int(os.environ['INTERVAL'])
+def monitor(client: str):
 
     logger.info(f'Starting HW monitoring for {DEVICE_ID}')
 
@@ -54,47 +84,21 @@ def monitor(client: object, topic: str):
             "core_count": core
         }
 
-        payload = json.dumps(payload)
-        result = client.publish(topic, payload)
-        status = result[0]
-
-        if status != 0:
-
-            logger.debug(f'MQTT publishing failure for hardware monitoring on: {DEVICE_ID}, return code: {status}')  # noqa: E501
-
-        del payload, cpu_util, ram_use, cpu_freq, cpu_temp, status, result
-        gc.collect()
+        # write data to InfluxDB
+        influxdb_write.write_influx_data(client,
+                                         base_payload,
+                                         payload,
+                                         BUCKET)
+        heartbeat.set(1)
         sleep(INTERVAL)
 
 
 def main():
 
-    # instantiate communication utilities class
-    monitor_utilities = MonitoringUtilities()
+    # get client
+    client = influxdb_write.influx_client(TOKEN, ORG, URL)
 
-    # operating parameters
-    TOPIC = os.environ['TOPIC']
-
-    # load environmental variables
-    MQTT_BROKER = os.environ["MQTT_BROKER"]
-    MQTT_USER = os.environ['MQTT_USER']
-    MQTT_SECRET = os.environ['MQTT_SECRET']
-    MQTT_PORT = int(os.environ['MQTT_PORT'])
-
-    # get unique client ID
-    clientID = monitor_utilities.getClientID()
-
-    # get mqtt client
-    client, code = monitor_utilities.mqttClient(clientID,
-                                                MQTT_USER, MQTT_SECRET,
-                                                MQTT_BROKER, MQTT_PORT)
-
-    # start monitoring
-    try:
-        monitor(client, TOPIC)
-
-    finally:
-        client.loop_stop()
+    monitor(client)
 
 
 if __name__ == '__main__':
