@@ -1,12 +1,13 @@
 # Markham Lee (C) 2023 - 2025
 # kubernetes-k3s-data-and-IoT-platform
 # https://github.com/MarkhamLee/kubernetes-k3s-data-and-IoT-platform
-# HW monitoring Script for an Orange Pi 5+, meant to extend the monitoring
-# capabilities in K8s, namely: tracking CPU, NVME and GPU temps & utilization
-# data. It will also send "heartbeat" data to a Prometheus scrape target,
-# if the flag has been set to "1". This script "should work" on any device
-# running a Rockchip 3588 System on Chip (SOC). But it was specifically
-# built and tested on an Orange Pi 5.
+# HW monitoring Script for an Orange Pi 5+, customized for the chipset
+# vs the more generic and often "somewhat off" data you'd get from
+# something like Prometheus. However, there is also an option to
+# to create a Proemetheus scrape target to collect "heartbeat" data
+# This script "should work" on any device running a Rockchip 3588
+# System on Chip (SOC). But it was specifically built and tested \
+# on an Orange Pi 5+.
 import os
 import sys
 from prometheus_client import Gauge, start_http_server
