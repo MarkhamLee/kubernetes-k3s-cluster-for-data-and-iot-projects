@@ -57,7 +57,7 @@ if HEARTBEAT_FLAG == 1:
     start_http_server(METRIC_PORT, addr=METRIC_IP)
 
 
-def monitor(client: object, topic: str):
+def monitor(client: object):
 
     logger.info(f'Starting HW monitoring for {DEVICE_ID}')
 
