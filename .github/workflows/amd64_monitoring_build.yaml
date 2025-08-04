@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./hardware_monitoring/
-          file: ./hardware_monitoring/am64/Dockerfile
+          file: ./hardware_monitoring/amd64/Dockerfile
           platforms: linux/amd64
           push: true
           tags: markhamlee/linux_amd64monitoring:latest
