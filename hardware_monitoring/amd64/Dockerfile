@@ -22,6 +22,6 @@ COPY ./hw_monitoring_libraries ./hw_monitoring_libraries
 
 WORKDIR /hw_telemetry
 
-COPY ./amd_5560u ./
+COPY ./amd64 ./
 
 ENTRYPOINT ["python3", "/hw_telemetry/main.py"] 
