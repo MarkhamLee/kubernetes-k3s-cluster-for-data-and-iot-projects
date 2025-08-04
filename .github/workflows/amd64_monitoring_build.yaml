@@ -1,11 +1,11 @@
-name: amd5560u_monitoring_image_build
+name: amd64_monitoring_image_build
 
 on:
   push:
     branches:
       - "main"
     paths:
-      - "hardware_monitoring/amd_5560u/*"
+      - "hardware_monitoring/amd64/*"
       - "hardware_monitoring/hw_monitoring_libraries/*"
 jobs:
   docker:
@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./hardware_monitoring/
-          file: ./hardware_monitoring/amd_5560u/Dockerfile
+          file: ./hardware_monitoring/am64/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: markhamlee/amd5560monitoring:latest
+          tags: markhamlee/linux_amd64monitoring:latest
