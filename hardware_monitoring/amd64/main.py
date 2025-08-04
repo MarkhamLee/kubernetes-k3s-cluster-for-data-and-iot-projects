@@ -7,7 +7,7 @@ import os
 import sys
 from prometheus_client import Gauge, start_http_server
 from time import sleep
-from amd_5560u import AMD5560Data  # TODO: move this joint library folder
+from amd64_apu import AMD64Data  # TODO: move this joint library folder
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
@@ -42,7 +42,7 @@ base_payload = {
 influxdb_write = InfluxClient()
 
 # instantiate device data class
-device_data = AMD5560Data()
+device_data = AMD64Data()
 logger.info("Hardware monitoring class instantiated")
 
 

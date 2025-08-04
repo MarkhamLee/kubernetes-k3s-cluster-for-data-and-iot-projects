@@ -6,7 +6,7 @@ import json
 import psutil
 
 
-class AMD5560Data():
+class AMD64Data():
 
     def __init__(self):
 
