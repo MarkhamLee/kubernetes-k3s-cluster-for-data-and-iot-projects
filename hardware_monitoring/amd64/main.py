@@ -1,5 +1,5 @@
 # Markham Lee (C) 2023 - 2025
-# kubernetes-k3s-data-and-IoT-platform
+# Private Cloud & Self Hosting with K3s
 # https://github.com/MarkhamLee/k3s-data-platform-IoT
 # Script to monitor AMD hardware, and also provide
 # (if needed) a Prometheus endpoint for collecting
