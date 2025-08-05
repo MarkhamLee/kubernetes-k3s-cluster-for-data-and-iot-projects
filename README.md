@@ -7,6 +7,8 @@ This project started out as a small three node cluster I used to run a small num
 ![Current Apps](images/homepage_current_apps_8-4-2025.png)
 The screen above was created with the Homepage App, which you can find [here](https://github.com/gethomepage/homepage).
 
+The above doesn't have each and every app, but these are the primary ones and/or the ones that are worth while tracking via Homepage. 
+
 
 This repo contains the documentation, deployment manifests (3rd party and custom containers), tutorials, notes and custom code I used to build and maintain this cluster. I'm hoping that what I have here will be useful to others, as the initial steps on one’s Kubernetes journey are oft painful.  
 
