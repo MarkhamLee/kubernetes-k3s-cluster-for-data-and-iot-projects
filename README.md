@@ -1,14 +1,23 @@
-## Kubernetes - K3s cluster for Data & IoT Projects
+## Kubernetes Powered Private Cloud/Home Lab
 
-This project started out as a small three node cluster I used to run a small number of 3rd party applications and the custom containers for my [data ingestion project](https://github.com/MarkhamLee/finance-productivity-iot-informational-weather-dashboard). Currently it is a nine node cluster whose primary use is enabling me to self-host a large number of apps I use in my day to day life, things ranging from note taking, office apps, dev tools, security, etc., in addition to monitoring/managing my home network, supporting the aforementioned data ingestion project and anything else I happen to be working on. TL/DR this is basically the infrastructure for my private cloud AKA "homelab" or whatever the cool kids are calling it these days.
+This project started out as a small three node cluster I used to run a small number of 3rd party applications and the custom containers for my [data ingestion project](https://github.com/MarkhamLee/finance-productivity-iot-informational-weather-dashboard), strenghteing my DevOps skills and learning Kubernetes. It has since morphed into a veritable *private cloud* that hosts a wide variety of apps I used in my day to day life in addition to continuing to serve its original purpose of running containers for my various data ingestion and other projects.  
+
+**The apps I'm currently self-hosting.** 
+
+![Current Apps](images/homepage_current_apps_8-4-2025.png)
+The screen above was created with the Homepage App, which you can find [here](https://github.com/gethomepage/homepage).
+
+
+This repo contains the documentation, deployment manifests (3rd party and custom containers), tutorials, notes and custom code I used to build and maintain this cluster. I'm hoping that what I have here will be useful to others, as the initial steps on one’s Kubernetes journey are oft painful.  
+
+*Note: you should use the resources here at your own risk, I guarantee nothing and am just sharing how I built out my setup/what worked for me.* 
+
+
 
 ![Cluster Architecture Diagram](architecture_diagrams/k3s_architecture-techstack_July16-2025.png)
 
  ***Current architecture as of July 16, 2025***
 
-This repo contains custom code, deployment manifests (3rd party and custom containers), documentation, links to tutorials, notes, installation instructions, and other resources I used to build, maintain and manage the cluster. I'm hoping that what I have here will be useful to others, as the initial steps on one’s Kubernetes journey are oft painful.  
-
-*Note: you should use the resources here at your own risk, I guarantee nothing and am just sharing how I built out my setup/what worked for me.* 
 
 ### General approach, relevant technologies, etc. 
 
