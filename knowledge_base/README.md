@@ -1,11 +1,11 @@
 ## k3s Knowledge Base
 
-I'm going to move a lot of the setup and day to day management documentation here, as well as start continually adding content around all the things I've learned on my *"Kubernetes based Homelab Journey"*. I have a large number of log entries, notes and the like around k3s that I've never shared and will start putting that content here. This front page will be combination of key things before you get started content, followed by a table of contents for the rest. 
+I'm going to move a lot of the setup and day to day management documentation here, as well as start continually adding content around all the things I've learned on my *"Kubernetes based Homelab Journey"*. I have a large number of log entries, notes and the like around k3s that I've never shared and will start putting that content here. This front page have a short list of key things to consider before getting started, followed by a table of contents for the rest. 
 
 
 #### IMPORTANT Before Getting Started: seriously, read this first 
 
-**You'll need to change the interface names** on your K3s nodes so that they're ALL THE SAME, not doing this can cause issues with the load balancer and other networking. It's one of those things where it will seem like it's fine and everything is working, until things fall apart. 
+**You'll need to change the network interface names** on your K3s nodes so that they're ALL THE SAME, not doing this can cause issues with the load balancer and other networking. It's one of those things where it will seem like it's fine and everything is working, until things fall apart. A lot of the networking components will reference the same interface names for all devices, even if they're not all the same, so it's best to normalize the ethernet port names before you get started. 
 
 **Read up on cluster management tools** and make sure you understand how they’ll impact your cluster before you start the build out. The reason for is that some tools are “read only” and don’t impact your cluster, while with others you’re effectively importing your cluster into a management plane.  E.g., you can build with Ansible and import into Rancher, but once your cluster is in Rancher it’s effectively a “Rancher cluster” and you need to do as much around upgrading K3s versions, adding/removing HW, etc., in Rancher as doing those with Ansible can cause some nasty errors/problems. Conversely, you can build with Ansible and then manage with Portainer and still use Ansible to manage the HW without any problems. For the record, I love Rancher, but it’s still an important thing to keep in mind. 
 
@@ -16,7 +16,6 @@ TL/DR – Management planes modify your cluster so they can monitor and maintain
 **Take lots of notes and document everything**, especially when you figure out something difficult. 
 
 The above out of the way, see the sections below for more information. 
-
 
 
 ### Installing K3s Managment Tools

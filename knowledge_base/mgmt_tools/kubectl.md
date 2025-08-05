@@ -21,7 +21,7 @@ sudo scp /etc/rancher/k3s/k3s.yaml <user-name>@<ip-address>:~/.kube/config
 	`chmod 600 ~/.kube/config`
 
 
-5. Finally, edit the server IP address in ~/.kube/config as it's probaby a local host IP to the IP of your K3s control plane API. It could be something like 192.168.0.45:6443
+5. Finally, change the server IP address in ~/.kube/config (as it's probaby a local host IP) to the IP of your K3s control plane API, it would likely be something like 192.168.0.45:6443
 
-6) Once the above is done you can use commands like "kubectl get nodes" to check and see everything is working correctly. 
+6) Once the above is done you can use commands like "kubectl get nodes" to verify that everything is working correctly. 
 
