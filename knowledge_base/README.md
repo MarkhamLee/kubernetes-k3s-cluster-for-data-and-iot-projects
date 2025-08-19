@@ -11,17 +11,23 @@ I'm going to move a lot of the setup and day to day management documentation her
 
 TL/DR – Management planes modify your cluster so they can monitor and maintain it’s health/state, while read only tools just make the requested changes and don’t per se “know anything” about your cluster. 
 
-**To properly secure** your cluster you’ll need to have a domain name (for SSL certificates), and a firewall or router that allows you setup custom domains on your LAN. If you’re just tinkering this probably doesn’t matter but if you want to deploy things you’ll make regularly use of, properly securing things is just the way to go.
+**To properly secure** your cluster you’ll need to have a domain name (for SSL certificates), and a firewall or router that allows you setup custom domains on your LAN. If you’re just tinkering this probably doesn’t matter but if you want to deploy things you’ll make regularly use of, properly securing things is just the way to go. See the [networking section](networking/readme.md) for more.
 
 **Take lots of notes and document everything**, especially when you figure out something difficult. 
 
 The above out of the way, see the sections below for more information. 
 
 
-### Installing K3s Managment Tools
+### Available Content 
 
-* Installing [Kubectl](mgmt_tools/kubectl.md)
 
+#### Kubernetes Management tools 
+
+* Installing [Kubectl](mgmt_tools/kubectl.md) on remote machines for managing your k3s cluster from the command line 
+
+
+#### Networking 
+* [Preparing](networking/external-preparation.md) your home network to support Kubernetes 
 
 
 

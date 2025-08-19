@@ -1,0 +1,22 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: your-certificate-name-com-tls
+  namespace: your-app-namespace
+spec:
+  secretName: your-certificate-name-com-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  secretTemplate:
+    annotations:
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "argo, grafana, influxdb"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "argo, grafana, influxdb" 
+  commonName: "*.local.yourdomain.com"
+  duration: 2160h # 90 days, this is standard and can't actually be changed with Lets Encrypt
+  renewBefore: 360h # 15 days
+  dnsNames:
+  - "*.local.yourdomain.com"
