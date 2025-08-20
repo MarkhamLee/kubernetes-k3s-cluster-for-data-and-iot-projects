@@ -1,8 +1,8 @@
 ## Setting up Monitoring    
 
-### Caveat: Kube-Prometheus is very resource intensive
+**Caveat: The Kube-Prometheus-Stack is very resource intensive**
 
-The Kube-Prometheus stack is rather resource intensive, so if you're running nodes with less than 8 GB of ram you're likely to run into issues. The issue isn't so much how much RAM is being used (which is often small as far as Prometheus is concerned), but the node's available resources vs the minimum request size required for the Prometheus to work (more on that below). Meaning 4GB Raspberry Pi or similar devices won't work as the minumum request size is about 4 GB, so you'll you need at devices that have at least 8 GB, otherwise the RAM request size will exceed the node's resources. That being said, the 4 GB node will still work IF you have other nodes with sufficient resources, but you're going to get a lot of error alerts. 
+The Kube Prometheus Stack is rather resource intensive, so if you're running nodes with less than 8 GB of ram you're likely to run into issues. The issue isn't so much how much RAM is being used (which is often small as far as Prometheus is concerned), but the node's available resources vs the minimum request size required for the Prometheus to work (more on that below). Meaning 4GB Raspberry Pi or similar devices won't work as the minumum request size is about 4 GB, so you'll you need at devices that have at least 8 GB, otherwise the RAM request size will exceed the node's resources. That being said, the 4 GB node will still work IF you have other nodes with sufficient resources, but you're going to get a lot of error alerts. 
 
 *TL/DR your nodes need at least 8 GB or RAM and it should really be 16 GB, Prometheus won't use anywhere near that much, but if it's not available you'll run into issues.*
 
@@ -90,4 +90,3 @@ Doing this will give you ~three dozen dashboards that you can use to monitor var
 ### Final Thoughts
 
 * Setting RAM requests to 4GB and the limit at 8GB seemed like overkill when I first built the cluster, but as I use Prometheus for more and more things related to alerts, logging, monitoring specific apps, etc., I'm starting to think it's just unavoidable given how much data the solution is pulling together. I.e., the more I work with the cluster, the less I'm interested in a monitoring solution that "does less".
-* The above being said, I'm still interested in possibly building a cluster with lower powered machines using less than 4 GB of RAM for potential edge/IoT sensor use cases, so in those cases I may just limit monitoring to container logs for each workload + using something like Psutil to monitor the hardware if I can't find a lightweight Prometheus alternative.
