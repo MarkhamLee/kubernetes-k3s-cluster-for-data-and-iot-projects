@@ -25,7 +25,7 @@ We're going to create a few things that we'll use with the certificate we're goi
 1) Create custom domain name, if you use an external tool like Pi-Hole, Ad Guard or Technitium to manage your domain names, you should use that tool to create the domain instead. 
     1) We'll create private (or custom) domain name we're going to use to access pfSense. Go to services --> DNS resolver and then scroll down to the bottom of the page to the "Host Overrides" section and click "Add" 
         * Host = what you'd input before local.example.com, e.g., "pfsense" or "myfirewall"
-        * Domain = your domain name with local addeed or local.yourdomain.com 
+        * Domain = your domain name with local added or local.yourdomain.com 
         * IP address is the IP address you use to access pfSense 
 
     2) Click save and you'll see a message at the top of the page that looks like this
@@ -92,8 +92,3 @@ Presuming things have gone well, we can now issue a production certificate, are 
 
 
 At this point you should be good to go, if not refer to the troubleshooting steps or use the error messages to look up information on your specific error, as I only provided error info on the errors I've made in the past and you might make different mistakes. 
-
-
-### Final Steps
-
-1) 
