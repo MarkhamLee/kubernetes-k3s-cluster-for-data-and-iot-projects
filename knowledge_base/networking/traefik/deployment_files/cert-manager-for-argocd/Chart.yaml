@@ -1,0 +1,12 @@
+apiVersion: v2
+name: cert-manager
+description: umbrella chart for deploying cert-manager with argocd
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+dependencies:
+  - name: cert-manager
+    version: v1.16.2
+    repository: https://charts.jetstack.io
+    alias: cert-manager
+    condition: cert-manager.enabled

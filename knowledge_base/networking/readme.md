@@ -14,4 +14,6 @@ P.S. if it's a networking problem, there is a 99% chance that it's DNS
 
 Current content:
 
-* Read [external preparation](external-preparation.md) to figure out your networking software/hardware stack and setup key dependencies like a cloudflare account and domain name for secure certificates. 
+* [External preparation](external-preparation.md) has information on planning out your networking software/hardware stack, and how to resolve key dependencies like a cloudflare account and domain name for secure certificates. 
+* [Traefik](traefik/readme.md) covers setting up secure access to the services hosted on your K3s cluster via the Traefik reverse proxy app, cert manager and free let's encrypt secure certificates. The information provided includes documentation + deployment files. 
+* In the [internal](internal/fixing-common-problems.md) folder, there isn't much there currently, but there is a write-up on how to fix DNS issues that often occur after network equipment upgrades or broader network changes. 

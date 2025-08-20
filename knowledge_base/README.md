@@ -1,6 +1,6 @@
 ## k3s Knowledge Base
 
-I'm going to move a lot of the setup and day to day management documentation here, as well as start continually adding content around all the things I've learned on my *"Kubernetes based Homelab Journey"*. I have a large number of log entries, notes and the like around k3s that I've never shared and will start putting that content here. This front page have a short list of key things to consider before getting started, followed by a table of contents for the rest. 
+I'm going to move a lot of the setup and day to day management documentation here, as well as start continually adding content around all the things I've learned on my *"Kubernetes based Homelab Journey"*. I have a large number of log entries, notes and the like around k3s that I've never shared and will start putting that content here. This front page will have a short list of key things to consider before getting started, followed by a table of contents for the rest. 
 
 
 #### IMPORTANT Before Getting Started: seriously, read this first 
@@ -28,6 +28,9 @@ The above out of the way, see the sections below for more information.
 
 #### Networking 
 * [Preparing](networking/external-preparation.md) your home network to support Kubernetes 
+* [Deploying Traefik](networking/traefik/) with secure certificates to enable secure access to the services you're hosting on Kubernetes.
+* [Troubleshooting and solving K3s level DNS problems](networking/internal/fixing-common-problems.md)
+
 
 
 

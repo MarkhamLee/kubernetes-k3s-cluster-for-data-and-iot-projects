@@ -18,7 +18,13 @@ There are open source options for all the software you'd need to build a robust 
 * **Firewall:** [opnSense[(https://opnsense.org/)] and [pfSense](https://www.pfsense.org/download/) are both great options for an enterprise software firewall that is available for free. Which one is better is up to you, but you can't go wrong with either option. Keep in mind that since both sell commercial versions of their product, it's easy to get lost on that part of their web sites, the links I provided take you to the community editions.
 * **Router software:** [OpenWRT]](https://openwrt.org/) can be used in conjunction with the above to manage wireless access points OR it can be used stand alone as it has many of the same capabilities of the 'senses'. One cool thing about OpenWRT is that it was designed to give new life to low powered router hardware that would've otherwise been discarded, so it's fairly simple to find HW that can run it. 
 
-**Caveat:** many of these packages will require more control over your home network than your ISP may be willing to allow (E.g., Comcast), as you won't be able to set your own domain control, control IP addresses, etc. A common pattern is despite implementing the variety of work arounds you can find online, your network will randomly go down once your ISP tries to exert control in a way that your firewall software perceives as a threat. A possible solution so this is to use [OpenWRT]](https://openwrt.org/) as it functions more like a router than a firewall an is more tolerant of ISP shenanigans, while I've had success on this front, it goes without saying that YMMV and IPS love to change things up, so what works today may not work tomorrow. 
+**Caveat:** many of these packages will require more control over your home network than your ISP may be willing to allow (E.g., Comcast), as you won't be able to set your own domain control, control IP addresses, etc. A common pattern is despite implementing the variety of work arounds you can find online, your network will randomly go down once your ISP tries to exert control in a way that your firewall software perceives as a threat. A possible solution so this is to use [OpenWRT](https://openwrt.org/) as it functions more like a router than a firewall an is more tolerant of ISP shenanigans, while I've had success on this front, it goes without saying that YMMV and IPS love to change things up, so what works today may not work tomorrow. 
+
+#### Building the Firewall/Router/Primary Network Device:
+* opnSense and pfSense will require an x86 device with at least two LAN ports. An 8th Gen Intel i5 or faster should be sufficient 
+* OpenWRT can run on slower hardware than the "senses" but similar hardware is still a good idea so you can take full advantage of security features. 
+
+I started out with an N100 mini PC but later moved to mini-itx build so I could run more security features and run my local network at 10Gbe, plus run more security features. You can 100% say it's overkill, but that arguably applies to most home lab/that's the fun part and since you're here.... 
 
 
 ##### Additional network related software 
@@ -27,7 +33,7 @@ These are apps that would allow you to make things more robust by removing a sin
 
 * **Pi-Hole:** while primarily a *"network wide ad blocker"* [Pi-hole](https://pi-hole.net/) does this via blocking access to domains that are used for capturing your information, tracking or full-fledged nefarious/attacker like activities. This means it can also be used to define custom domains and manage your network's IP addresses. IF you have an ISP that works well with a tool like pfSense or openSense, this means that in the event of a firewall hardware failure, you could change a few settings in your ISP router and maintain your network despite losing your firewall. 
 
-* **Technitium:** is a robust, dedicated tool for self-hosting DNS and managing IP addresses. [Technitium](https://technitium.com/dns/) allows you to add/remove static IP assignments via an API, upload files with your custom domains and is more of an enterprise class solution for DHCP and DNS compared to Pi-Hole. However, it doesn't Pi-Hole's Ad blocking or DNS filtering capabilities, but you could use block lists and the APIs to add them. 
+* **Technitium:** is a robust, dedicated tool for self-hosting DNS and managing IP addresses. [Technitium](https://technitium.com/dns/) allows you to add/remove static IP assignments via an API, upload files with your custom domains and is more of an enterprise class solution for DHCP and DNS compared to Pi-Hole. However, it doesn't Pi-Hole's Ad blocking or DNS filtering capabilities, but you could use block lists and the APIs to add those capabilities. 
 
 #### Additional External Dependencies
 
