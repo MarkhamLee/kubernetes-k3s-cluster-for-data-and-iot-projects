@@ -1,8 +1,8 @@
 ## Kubernetes Powered Private Cloud/Home Lab
 
-This project started out as a small three node cluster I used to run a small number of 3rd party applications and the custom containers for my [data ingestion project](https://github.com/MarkhamLee/finance-productivity-iot-informational-weather-dashboard), strenghteing my DevOps skills and learning Kubernetes. It has since morphed into a veritable *private cloud* that hosts a wide variety of apps I used in my day to day life in addition to continuing to serve its original purpose of running containers for my various data ingestion and other projects.  
+This project started out as a small three node cluster I used to run a small number of 3rd party applications and the custom containers for my [data ingestion project](https://github.com/MarkhamLee/finance-productivity-iot-informational-weather-dashboard), strengthening my DevOps skills and learning Kubernetes. It has since morphed into a veritable *private cloud* that hosts a wide variety of apps I used in my day to day life in addition to continuing to serve its original purpose of running containers for my various data ingestion and other projects.  
 
-**The apps I'm currently self-hosting.** 
+**The apps I'm currently self-hosting** 
 
 ![Current Apps](images/homepage_current_apps_8-4-2025.png)
 The screen above was created with the Homepage App, which you can find [here](https://github.com/gethomepage/homepage).
