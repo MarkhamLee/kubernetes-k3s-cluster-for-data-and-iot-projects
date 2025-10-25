@@ -1,19 +1,23 @@
 ##  Installing longhorn for shared storage 
 
-## CRITICAL NOTE 2/09/24: 
+### Hardware & OS Preparation Notes 
+* I've noticed that things seem to work better if you use Ubuntu Desktop vs Headless, in some cases the volume attachments fail on reboot. If you were to ssh into the node the storage is available but it's not mounting properly in Longhorn. 
+* The ideal setup (even for a homelab) would be that you would have separate drives for the OS vs the storage. 
+* Ideally would you have dedicated Longhorn nodes as you get better performance that way and use node affinity to prevent general K3s workloads from being deployed on these nodes. I don't "quite" follow this approach and instead have nodes designed as "data nodes", that only run Longhorn + database workloads (e.g. InfluxDB, MariaDB and Postgres) and just used beefy HW for these nodes. Haven't had any issues. 
+* If you're running headless servers you may run into volume attach errors when redeploying workloads, as preventative measure follow the instructions [here](../../../knowledge_base/storage/fixing_volume_attach_errors.md) to update your multipath configuration, which should prevent many of the common causes of volume attachment problems.
 
-Upgrading to the newest Ubuntu kernel will cause issues for any deployment that uses ReadWriteMany for its persistent volumes, the error will be along the lines of "NFS protocol not supported". If this happens, you'll likely have to roll back to an older Kernel. I ran into this issue with 6.5 for Ubuntu, but it went away when I rolled back to 6.2. You can read more [here](https://longhorn.io/kb/troubleshooting-rwx-volume-fails-to-attached-caused-by-protocol-not-supported/). The big lesson here is having a test cluster where you try things like upgrading your OS and/or various applications and seeing if anything goes sideways is a very good idea. 
+### Installation
 
-* The big advantage here is that longhorn more or less aggregates about 2/3rds of the storage available to each pod into a shared pool of storage that all the pods can use. A must have if you're going to truly run a high availability setup. 
+* These instructions presume that you're going to be installing longhorn using Rancher. You can do it from the command line, but Rancher makes things a lot easier. There are a couple of things I install from the command line, but I more often than not use Rancher as it just makes life a lot easier, especially when it comes to editing the values.yaml files. 
 
-#### Installation
-
-* Note: these instructions presume that you're going to be installing longhorn using Rancher. You can do it from the command line, but Rancher makes things a lot easier. There are a couple of things I install from the command line, but I more often than not use Rancher as it just makes life a lot easier, especially when it comes to editing the values.yaml files. 
+* The ideal setup is that you would deploy Rancher on 
 
 * You'll have two things you'll need to do in order to make sure that longhorn installs and works properly:
 
     * Installing open-iscsi 
     * Installing the NFSv4 client to enable backups outside of your cluster. 
+
+***Note: these instructions were current as when I wrote up these instructions, you should refer to the Longhorn deployment documentation to make sure you're installing the most up to date versions of the clients*** 
 
 IF you skip these steps (open-iscsi in particular) the install will either fail or partially succeed and and not work. You can read more about the installation prerequisites [here](https://longhorn.io/docs/1.5.3/deploy/install/#installation-requirements). Luckily, the longhorn web site provides great instructions and makes things fairly easy, IF you use the right option(s) to install the dependencies. 
 
@@ -87,10 +91,11 @@ To solve it just go to settings and change the Backupstore Poll Interval to 0 an
 
 Change that 300 to 0 and you should save some money. 
 
-
 ### Additional Tips & Tricks
 * Periodically go to the Longhorn UI and validate that you've set up backups for all your volumes. It's easy to forget to do this after you deploy new workloads, create new volume claims, etc. 
 
 * Setup alerts and periodically check how much storage is being used by each service 
 
 * Some services (like Zigbee2MQTT) are constantly receiving or transmitting data and logging practically everything, check how your services log data to make sure you're not about to run out of space in your volume claim. Running out of space can cause your container/service to crash, and you'll need to manually increase the storage size in Longhorn before the deployment can spin up again. I.e., being proactive about storage use can save you a lot o headaches. 
+
+* Periodically check 
