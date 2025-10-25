@@ -15,7 +15,6 @@ This repo contains the documentation, deployment manifests (3rd party and custom
 *Note: you should use the resources here at your own risk, I guarantee nothing and am just sharing how I built out my setup/what worked for me.* 
 
 
-
 ![Cluster Architecture Diagram](architecture_diagrams/k3s_architecture-techstack_July16-2025.png)
 
  ***Current architecture as of July 16, 2025***
