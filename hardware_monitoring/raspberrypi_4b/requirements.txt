@@ -1,8 +1,0 @@
-entrypoints
-executing
-uuid
-clr==1.0.3
-psutil==5.9.5
-influxdb-client==1.49.0
-requests
-prometheus_client==0.22.1
