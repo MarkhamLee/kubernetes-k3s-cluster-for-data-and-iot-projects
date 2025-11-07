@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: postgres
+data:
+  postgresql.conf: |
+    wal_level = logical
+    max_replication_slots = 5
+    max_wal_senders = 5
+  pg_hba.conf: |  # you'll need to put down the IP addresses of the servers that can access the Postgres instance
+    host replication replicator 192.168.1.1/32 md5 # this is the IP for the server you're replicating data too
+    host all all 192.168.1.2/32 md5  # these are just other K3s nodes that would be running or need to access the Postgres instance
