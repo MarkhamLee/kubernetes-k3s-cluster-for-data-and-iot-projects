@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-master
+  labels:
+    app: redis
+spec:
+  serviceName: redis-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+      role: master
+  template:
+    metadata:
+      labels:
+        app: redis
+        role: master
+    spec:
+      serviceAccountName: redis-master
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        fsGroup: 1001
+      containers:
+        - name: redis
+          image: redis/redis-stack-server:latest
+          ports:
+            - containerPort: 6379
+              name: redis
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-auth-secrets
+                  key: redis-secret
+          command:
+            - "sh"
+            - "-c"
+            - "exec redis-server --requirepass \"$REDIS_PASSWORD\" --dir /data --dbfilename dump.rdb"
+          # resources: # Add limits/requests as needed
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+          securityContext:
+            runAsUser: 1001
+            runAsGroup: 1001
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: longhorn
+        resources:
+          requests:
+            storage: 12Gi
