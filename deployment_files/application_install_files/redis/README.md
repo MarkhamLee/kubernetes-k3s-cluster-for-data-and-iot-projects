@@ -1,6 +1,6 @@
 ## Deploying Redis via Kubernetes Manifests
 
-Previously, this was a Helm chart deployment using umbrella chart + values.yaml via ArgoCD, but with Bitnami putting their Helm charts behind a pay wall, I had to transition this (and others) to a Kubernetes manifests based on the official Redis Docker image. 
+Previously, this was a Helm chart deployment using umbrella chart + values.yaml via ArgoCD, but with Bitnami putting their Helm charts behind a pay wall, I had to transition this (and others) to a Kubernetes manifests based on the official Redis Docker image for redis. Keep in mind that this was deployed using the official docker image for redis-stack-server, if you just use regular redis a lot of the settings I put into the deployment files to enable passwords, replicas and masters writing to persistent volumes, etc., won't work. 
 
 * The master and replica stateful sets are to ensure that you have multiple instances running, if you feel you need more replicas  you can set the number of replicas in the statefulset_replicas.yaml file. 
 * Make sure you create a password in Kubernetes and then reference in the stateful set(s)
