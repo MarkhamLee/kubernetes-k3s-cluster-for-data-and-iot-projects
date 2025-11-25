@@ -8,7 +8,7 @@ A couple of things to keep in mind:
 
 * This setup presumes that you'll have an external Postgres server(s) that will have a pub-sub relationship with this one, meaning, after data is written to the Postgres instance(s) on K8s, it will then be replicated to the external server. 
 * You'll need to create a secret in Postgres and reference it in the stateful set
-* The service is so that the database can be exposed outside of the cluster. For an actual implementation using a mesh or overlay network might be wise here, or just make sure your network is properly secured so you don't increase risk via the external database mirroring
+* The service is so that the database can be exposed outside of the cluster. In this instance it would be exposed on a private network so the relative risk is low, however, it would be smart to consider using something like Tailscale or similar to further restrict access/reduce the risk surface area.
 * I'd also recommend installing PgAdmin to manage your Postgres instance, deployment files are [here](https://github.com/MarkhamLee/kubernetes-k3s-cluster-for-data-and-iot-projects/tree/main/deployment_files/application_install_files/pgadmin).
 
 
