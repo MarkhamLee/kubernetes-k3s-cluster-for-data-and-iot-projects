@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mariadb
+spec:
+  serviceName: "mariadb-headless"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      securityContext:
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 70
+              preference:
+                matchExpressions:
+                  - key: k3s_role
+                    operator: In
+                    values:
+                      - data_node
+            - weight: 30
+              preference:
+                matchExpressions:
+                  - key: agent_type
+                    operator: In
+                    values:
+                      - x86_worker      
+      containers:
+      - name: mariadb
+        image: mariadb:11.3.2
+        ports:
+          - containerPort: 3306
+            name: mariadb
+        env:
+          - name: MARIADB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-secret
+                key: mariadb-root-password
+          - name: MARIADB_USER
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-secret
+                key: username
+          - name: MARIADB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mariadb-secret
+                key: password
+        volumeMounts:
+          - name: datadir
+            mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+    - metadata:
+        name: datadir
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: longhorn
+        resources:
+          requests:
+            storage: 10Gi

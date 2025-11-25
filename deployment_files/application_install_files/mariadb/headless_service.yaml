@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb-headless
+  labels:
+    app: mariadb
+spec:
+  ports:
+    - port: 3306
+      name: mariadb
+  clusterIP: None
+  selector:
+    app: mariadb
