@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: linkwarden
+  namespace: linkwarden
+  annotations:  # get homepage annotations is so that things show up in homepage in the right category
+    kubernetes.io/ingress.class: traefik
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/description: Linkwarden Bookmark Aggregator
+    gethomepage.dev/group: Productivity
+    gethomepage.dev/icon: /icons/logos/linkwarden.png
+    gethomepage.dev/name: Link Warden
+    gethomepage.dev/pod-selector: ""
+    gethomepage.dev/weight: "0"
+spec:
+  rules:
+    - host: linkwarden.local.example.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: linkwarden
+                port:
+                  number: 3000
+            path: /
+            pathType: Prefix
+  tls:
+    - secretName: k3s-primary-cluster-cert-local-example-com-tls
+      hosts:
+        - linkwarden.local.markhamslab.com

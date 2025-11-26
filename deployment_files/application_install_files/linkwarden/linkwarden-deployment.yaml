@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: linkwarden
+  name: linkwarden
+  namespace: linkwarden
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: linkwarden
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: linkwarden
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 70
+              preference:
+                matchExpressions:
+                  - key: k3s_role
+                    operator: In
+                    values:
+                    - x86_worker
+            - weight: 30
+              preference:
+                matchExpressions:
+                  - key: agent_type
+                    operator: In
+                    values:
+                    - x86_worker
+      containers:
+        - env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_URL
+                  name: linkwarden-postgres-data
+            - name: MAX_WORKERS
+              value: "10"
+            - name: NEXTAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: NEXTAUTH_SECRET
+                  name: nextauth-data
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: POSTGRES_PASSWORD
+                  name: linkwarden-postgres-data
+          image: ghcr.io/linkwarden/linkwarden:latest
+          name: linkwarden
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data/data
+              name: linkwarden-claim0
+      restartPolicy: Always
+      volumes:
+        - name: linkwarden-claim0
+          persistentVolumeClaim:
+            claimName: linkwarden-claim0
