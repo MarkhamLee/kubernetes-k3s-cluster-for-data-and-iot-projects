@@ -55,6 +55,13 @@ spec:
                   name: linkwarden-postgres-data
           image: ghcr.io/linkwarden/linkwarden:latest
           name: linkwarden
+          resources:
+            limits:
+              cpu: 600m
+              memory: 1024Mi
+            requests:
+              cpu: 300m
+              memory: 256Mi
           ports:
             - containerPort: 3000
               protocol: TCP
