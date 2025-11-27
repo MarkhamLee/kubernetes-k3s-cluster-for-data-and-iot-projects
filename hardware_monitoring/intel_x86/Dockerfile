@@ -1,9 +1,11 @@
 # build phase
-FROM python:slim-bookworm as builder
+FROM python:slim-bookworm AS builder
 
 WORKDIR /app
 
-RUN apt-get update -y && apt-get install -y gcc  python3-dev
+RUN apt-get update -y && apt-get install -y gcc python3-dev g++ libblas-dev liblapack-dev build-essential
+
+RUN pip install --upgrade pip setuptools wheel
 
 COPY ./intel_x86/requirements.txt .
 
