@@ -15,6 +15,9 @@ sys.path.append(parent_dir)
 from hw_monitoring_libraries.logging_util import logger  # noqa: E402
 from hw_monitoring_libraries.intel_x86 import Intelx86  # noqa: E402
 from hw_monitoring_libraries.influx_client import InfluxClient  # noqa: E402
+from hw_monitoring_libraries.hw_monitoring import MonitoringUtilities
+
+hw_utilities = MonitoringUtilities()
 
 # instantiate InfluxDB class
 influxdb_write = InfluxClient()
@@ -26,7 +29,7 @@ logger.info('Monitoring utilities class instantiated')
 # load environmental variables
 BUCKET = os.environ['INFLUX_BUCKET']
 DEVICE_ID = os.environ['DEVICE_ID']
-HEARTBEAT_FLAG = int(os.environ['HEARTBEAT_FLAG'])
+PROMETHEUS_HEARTBEAT_FLAG = int(os.environ['HEARTBEAT_FLAG'])
 INTERVAL = int(os.environ['INTERVAL'])
 METRIC_IP = os.environ['METRIC_IP']
 METRIC_PORT = int(os.environ['METRIC_PORT'])
@@ -36,6 +39,8 @@ TOKEN = os.environ['INFLUX_TOKEN']
 URL = os.environ['INFLUX_URL']
 TAG_KEY = os.environ['TAG_KEY']
 TAG_VALUE = os.environ['TAG_VALUE']
+UPTIME_KUMA_WEBHOOK = os.environ['UPTIME_KUMA_WEBHOOK']  # just use 'NA' if not using Uptime Kuma
+UPTIME_KUMA_FLAG = int(os.environ['UPTIME_KUMA_FLAG'])
 
 
 logger.info('Creating base payload for writing to InfluxDB')
@@ -46,10 +51,15 @@ base_payload = {
     }
 }
 
+
+# The Prometheus & Uptime Kuma flags aren't needed for nodes
+# running on K8s, but I have the Prometheus and Uptime Kuma
+# options here so I can use the same monitoring container for
+# my k8s and non k8s nodes. 
+
 # if Prometheus flag is setup, turn on web server for exporting
 # hearbeat data
-
-if HEARTBEAT_FLAG == 1:
+if PROMETHEUS_HEARTBEAT_FLAG == 1:
     logger.info('Setting up Prometheus heartbeat metric export')
     METRIC_NAME = (f'{DEVICE_ID}_HEARTBEAT')
     heartbeat = Gauge(METRIC_NAME, DEVICE_ID)
@@ -88,13 +98,19 @@ def monitor(client: str):
                 "core_count": core
             }
 
+            # send heartbeats                         
+            if UPTIME_KUMA_FLAG == 1:
+                hw_utilities.send_uptime_kuma_heartbeat(UPTIME_KUMA_WEBHOOK,
+                                                        DEVICE_ID)
+            if PROMETHEUS_HEARTBEAT_FLAG == 1:
+                heartbeat.set(1)
+
             # write data to InfluxDB
             influxdb_write.write_influx_data(client,
                                              base_payload,
                                              payload,
                                              BUCKET)
-            if HEARTBEAT_FLAG == 1:
-                heartbeat.set(1)
+
 
         except Exception as e:
             logger.info(f'Data read loop failed with error: {e}')

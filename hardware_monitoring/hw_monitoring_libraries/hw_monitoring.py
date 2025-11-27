@@ -85,3 +85,13 @@ class MonitoringUtilities():
             logger.debug(f'Publishing of alert to Slack {type} failed, with error code {code}')  # noqa: E501
 
         return code
+    
+
+    @staticmethod
+    def send_uptime_kuma_heartbeat(uptime_kuma_webhook, id):
+
+        try:
+            requests.get(uptime_kuma_webhook)
+
+        except Exception as e:
+            logger.info(f'Publishing of Uptime Kuma alert for {id} failed with error: {e}')  # noqa: E501
