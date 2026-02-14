@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# Markham Lee (C) 2023 - 2025
+# Markham Lee (C) 2023 - 2026
 # K3s Data Platform
 # https://github.com/MarkhamLee/k3s-data-platform-IoT
 # Script to monitor CPU and NVME temp, plus RAM and CPU
@@ -15,7 +14,8 @@ sys.path.append(parent_dir)
 from hw_monitoring_libraries.logging_util import logger  # noqa: E402
 from hw_monitoring_libraries.intel_x86 import Intelx86  # noqa: E402
 from hw_monitoring_libraries.influx_client import InfluxClient  # noqa: E402
-from hw_monitoring_libraries.hw_monitoring import MonitoringUtilities
+from hw_monitoring_libraries.\
+    hw_monitoring import MonitoringUtilities  # noqa: E402
 
 hw_utilities = MonitoringUtilities()
 
@@ -39,7 +39,10 @@ TOKEN = os.environ['INFLUX_TOKEN']
 URL = os.environ['INFLUX_URL']
 TAG_KEY = os.environ['TAG_KEY']
 TAG_VALUE = os.environ['TAG_VALUE']
-UPTIME_KUMA_WEBHOOK = os.environ['UPTIME_KUMA_WEBHOOK']  # just use 'NA' if not using Uptime Kuma
+
+# just use 'NA' if not using Uptime Kuma in Docker compose
+# or K3s manifest, and then set the flag as 0
+UPTIME_KUMA_WEBHOOK = os.environ['UPTIME_KUMA_WEBHOOK']
 UPTIME_KUMA_FLAG = int(os.environ['UPTIME_KUMA_FLAG'])
 
 
@@ -55,7 +58,7 @@ base_payload = {
 # The Prometheus & Uptime Kuma flags aren't needed for nodes
 # running on K8s, but I have the Prometheus and Uptime Kuma
 # options here so I can use the same monitoring container for
-# my k8s and non k8s nodes. 
+# my k8s and non k8s nodes.
 
 # if Prometheus flag is setup, turn on web server for exporting
 # hearbeat data
@@ -98,7 +101,7 @@ def monitor(client: str):
                 "core_count": core
             }
 
-            # send heartbeats                         
+            # send heartbeats
             if UPTIME_KUMA_FLAG == 1:
                 hw_utilities.send_uptime_kuma_heartbeat(UPTIME_KUMA_WEBHOOK,
                                                         DEVICE_ID)
@@ -110,7 +113,6 @@ def monitor(client: str):
                                              base_payload,
                                              payload,
                                              BUCKET)
-
 
         except Exception as e:
             logger.info(f'Data read loop failed with error: {e}')
