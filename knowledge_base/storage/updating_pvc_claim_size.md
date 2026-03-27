@@ -23,7 +23,7 @@ Fixing this is somewhat convoluted but the steps are simple:
 3) Use kubectl to run a patching command from the command line, for example:
 
 ```
-kubectl -n postgres  patch pvc postgres-data-postgres-0 -p '{"spec":{"resources":{"requests":{"storage":"20Gi"}}}}
+kubectl -n postgres  patch pvc postgres-data-postgres-0 -p '{"spec":{"resources":{"requests":{"storage":"20Gi"}}}}'
 
 ```
 
@@ -47,6 +47,18 @@ kubectl delete statefulset postgres -n postgres --cascade=orphan
 
 ```
 
-7) UUpdate the storage size in volumeClaimTemplates section of the statefulset manifests, to the desired new size, it should match the size you patched/updated it to in step 3, otherwise, you'll a fresh set of errors.
+7) Presuming you're managing your configs in Git, update the volumeClaimTemplates section of the statefulset manifests to the desired new size, it should match the size you patched/updated it to in step 3, otherwise, you'll get a fresh set of errors. I.e., edit the resources --> requests --> storage section. 
 
-8) Resync via ArgoCD and turn back on auto sync. Verify that both the PVC and the stateful set show the updated size for the volume claim and that things are all "green" in ArgoCD. 
+```
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 20Gi
+        storageClassName: longhorn
+```
+
+8) After you've pushed the change to Git, resync via ArgoCD via turning auto sync back on. Verify that both the PVC and the stateful set show the updated size for the volume claim and that things are all "green" in ArgoCD. 
