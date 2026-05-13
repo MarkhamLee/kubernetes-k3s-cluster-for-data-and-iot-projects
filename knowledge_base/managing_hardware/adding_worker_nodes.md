@@ -91,7 +91,7 @@ chmod +x /tmp/k3s_install.sh
 Install K3s on the server 
 
 ~~~
-K3S_URL="https://192.168.47.222:6443" \
+K3S_URL="https://<cluster_ip>" \
 K3S_TOKEN="<use the full token string from the step above, JUST the token string, not the entire output>" \
 INSTALL_K3S_SKIP_ENABLE=true \
 INSTALL_K3S_SKIP_START=true \
