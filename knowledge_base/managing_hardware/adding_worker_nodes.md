@@ -81,20 +81,19 @@ Again, not explicitly required, but I always reboot after this step
 
 ### Install K3s 
 
-This will pull down and install the most recent K3s binaries, adjust this URL to match the version you're currently using IF your cluster hasn't been updated to the latest version of K3s. 
+This will pull down the K3s binaries. 
 
 ~~~
 curl -sfL https://get.k3s.io -o /tmp/k3s_install.sh
 chmod +x /tmp/k3s_install.sh
 ~~~
 
-Install K3s on the server 
+This is the command to install K3s on the server and here is where things can get tricky: you have to make sure that you're installing the exact same version that your cluster is already using, otherwise, you'll get similar issues as those described at the top of the page, only they'll be the kublet restarting and apps randomly not available, you just won't have the disk space issue. For example, if your cluster is running v1.31.10+k3s1:
 
 ~~~
-K3S_URL="https://<cluster_ip>" \
-K3S_TOKEN="<use the full token string from the step above, JUST the token string, not the entire output>" \
-INSTALL_K3S_SKIP_ENABLE=true \
-INSTALL_K3S_SKIP_START=true \
+INSTALL_K3S_VERSION="v1.31.10+k3s1" \
+K3S_URL="https://<cluster_ip>:6443" \
+K3S_TOKEN=<token> \
 /tmp/k3s_install.sh agent
 ~~~
 
