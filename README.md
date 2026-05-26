@@ -13,7 +13,7 @@ Self-hosted K3s cluster that is the shared services platform for active developm
 | Personal productivity & knowledge management | Obsidian LiveSync, LinkWarden, Paperless-ngx, Invoice Ninja                                                               |
 
 
-This repository is the operational record of the platform: architecture documentation, deployment references, maintenance runbooks, troubleshooting notes, and the custom container code used for hardware monitoring. It's organized so that rebuilding the cluster from scratch, diagnosing unfamiliar issues, or onboarding a new workload starts here.
+This repository is the operational record of the platform: architecture documentation, reference deployment configs (live IaC is maintained in a separate private repo), maintenance runbooks, troubleshooting notes, and the custom container code used for hardware monitoring. It's organized so that rebuilding the cluster from scratch, diagnosing unfamiliar issues, or onboarding a new workload starts here.
 
 
 ~~~mermaid
@@ -59,8 +59,8 @@ The above doesn't have each and every app, but these are the primary ones and/or
 | `docs/architecture/` | Platform design, node roles, networking, storage |
 | `docs/bootstrap/` | Cluster provisioning (Rancher-native; historical Ansible notes) |
 | `runbook/` | Operational procedures, maintenance tasks, incident notes |
-| `platform-services/` | Deployment configs for cluster infrastructure |
-| `workloads/` | Deployment configs for data, CV, IoT, and custom containers |
+| `platform-services/` | Reference deployment configs for cluster infrastructure |
+| `workloads/` | Reference deployment configs for 3rd party apps and custom workloads |
 | `hardware_monitoring/` | Custom container code for node and device monitoring |
 | `dashboards/` | Grafana dashboard exports |
 
