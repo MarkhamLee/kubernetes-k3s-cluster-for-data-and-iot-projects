@@ -1,27 +1,41 @@
-# stage one
-FROM python:slim-bookworm AS builder
+# Stage 1: build wheels
+FROM python:3.11-slim-bookworm AS builder
 
 WORKDIR /app
 
-RUN apt-get update -y && apt-get install -y gcc  python3-dev
+RUN apt-get update -y \
+    && apt-get install -y --no-install-recommends gcc python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY /hw_monitoring_libraries/requirements.txt .
 
 RUN pip3 wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
 
 
-# stage two
-FROM python:slim-bookworm
+# Stage 2: runtime image
+FROM python:3.11-slim-bookworm
+
+# Create non-root user and group
+RUN groupadd --system app_group \
+    && useradd --system --create-home --no-log-init --gid app_group app_user
+
+# Set workdir and copy wheels
+WORKDIR /hw_telemetry
 
 COPY --from=builder /app/wheels /wheels
 COPY --from=builder /app/requirements.txt .
 
-RUN pip3 install --no-cache /wheels/*
+RUN pip3 install --no-cache-dir /wheels/* \
+    && rm -rf /wheels
 
+# Copy application code
 COPY ./hw_monitoring_libraries ./hw_monitoring_libraries
-
-WORKDIR /hw_telemetry
-
 COPY ./amd64 ./
 
-ENTRYPOINT ["python3", "/hw_telemetry/main.py"] 
+# Ensure app files are owned by the non-root user
+RUN chown -R app_user:app_group /hw_telemetry /hw_monitoring_libraries
+
+# Drop privileges
+USER app_user
+
+ENTRYPOINT ["python3", "/hw_telemetry/main.py"]
