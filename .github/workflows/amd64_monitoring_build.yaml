@@ -25,8 +25,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./hardware_monitoring/
-          file: ./hardware_monitoring/amd64/Dockerfile
+          context: ./workloads/custom_containers/hardware_monitoring/
+          file: ./workloads/custom_containers/hardware_monitoring/amd64/Dockerfile
           platforms: linux/amd64
           push: true
           tags: markhamlee/linux_amd64monitoring:latest
