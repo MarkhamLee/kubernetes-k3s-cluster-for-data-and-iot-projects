@@ -1,3 +1,7 @@
+# DEPRECATED
+Moved away from Loki Stack in favor of Victoria Logs in June of '25. 
+
+
 ## Loki Stack Installation Instructions
 
 ### Prequisites
@@ -45,16 +49,16 @@ helm upgrade --install loki grafana/loki-stack -n loki-stack  --set grafana.enab
 
 Once you have this deployed you can go into Grafana and create logging dashboards by going to create dashboard --> add panel --> log browser  and then you can select the apps or containers you want to monitor. Make sure you're selecting at the highest level, e.g., apps or containers, as pods can be ephemeral and you might not have data when you update an image, redeploy something, etc. Once you select something click "show logs", and you'll either see data right away or will see a screen that looks similar to the below:
 
-![Loki-Grafana Numerical](../images/loki_numerical_missing.png)
+![Loki-Grafana Numerical](../../images/loki_numerical_missing.png)
 
 If you see the above it doesn't mean your query failed, it just means it's not the usual numerical often time series data that you usually use Grafana for. Just click one of the options, select the visualization type and you're good to go. I typicaly click "open visualization suggestions" and then choose the left hand option in the suggestions panel, as it's a format similar to AWS Cloudwatch and you have the ability to expand each row and get more data:
 
 My preferred log format
 
-![Loki-Grafana Numerical](../images/log_example.png)
+![Loki-Grafana Numerical](../../images/log_example.png)
 
 Preferred log format expanded 
 
-![Loki-Grafana Numerical](../images/expanded_log.png)
+![Loki-Grafana Numerical](../../images/expanded_log.png)
 
 You can also configure alerts within Grafana as well but keep in mind that they're numeric driven, meaning: x value is above y threshold. 
