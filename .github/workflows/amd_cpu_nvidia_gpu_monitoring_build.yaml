@@ -5,8 +5,8 @@ on:
     branches:
       - "main"
     paths:
-      - "hardware_monitoring/amdcpu_nvidiagpu/*"
-      - "hardware_monitoring/hw_monitoring_libraries/*"
+      - "workloads/custom_containers/hardware_monitoring/amdcpu_nvidiagpu/*"
+      - "workloads/custom_containers/hardware_monitoring/hw_monitoring_libraries/*"
       
 jobs:
   docker:
@@ -26,8 +26,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./hardware_monitoring/
-          file: ./hardware_monitoring/amdcpu_nvidiagpu/Dockerfile
+          context: ./workloads/
+          file: ./workloads/custom_containers/hardware_monitoring/amdcpu_nvidiagpu/Dockerfile
           platforms: linux/amd64
           push: true
           tags: markhamlee/amdcpu_nvidia_monitoring:latest
