@@ -6,7 +6,6 @@ TL/DR - don't ignore the external networking content, as in many cases it's ofte
 
 P.S. if it's a networking problem, there is a 99% chance that it's DNS
 
-
 ### How to use this section
 
 * The markdown files directly in this folder are the key things to read/learn before getting started, they'll ensure that you have a rock solid foundation and help you to avoid most issues. 
@@ -14,6 +13,7 @@ P.S. if it's a networking problem, there is a 99% chance that it's DNS
 
 Current content:
 
-* [External preparation](external-preparation.md) has information on planning out your networking software/hardware stack, and how to resolve key dependencies like a cloudflare account and domain name for secure certificates. 
-* [Traefik](traefik/readme.md) covers setting up secure access to the services hosted on your K3s cluster via the Traefik reverse proxy app, cert manager and free let's encrypt secure certificates. The information provided includes documentation + deployment files. 
-* In the [internal](internal/fixing-common-problems.md) folder, there isn't much there currently, but there is a write-up on how to fix DNS issues that often occur after network equipment upgrades or broader network changes. 
+* [External preparation](external_preparation.md) has information on planning out your networking software/hardware stack, and how to resolve key dependencies like a cloudflare account and domain name for secure certificates.
+* The [pfSense](pfsense) folder has information on configuring alerts and setting up secure certificates.
+* [Traefik](../../platform_services/traefik/readme.md) covers setting up secure access to the services hosted on your K3s cluster via the Traefik reverse proxy app, cert manager and free let's encrypt secure certificates. The information provided includes documentation + deployment files. 
+* [Fixing DNS Problems](fixing_dns_problems.md)

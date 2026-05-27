@@ -1,7 +1,7 @@
-## Methods to resolve common networking issues 
+## DNS Troubleshooting
 
 
-#### Intermittent Connectivity after ISP change, new router, etc. 
+#### Key Symptom: Intermittent Connectivity after ISP change, new router, etc. 
 
 Problem: you've switched firewalls, routers, redeployed with a different network appliance, etc., and now some services have internet connectivity and others don't, and your logs are full of things like can't find common endpoints like the GitHub API, Dockerhub, etc., despite the fact that the individual nodes can access those sites just fine/have working connectivity.  
 

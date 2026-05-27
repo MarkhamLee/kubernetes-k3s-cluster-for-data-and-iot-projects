@@ -1,4 +1,8 @@
-## Architecture Diagrams
+## DEPRECATED
+
+The items in docs/architecture have the most up to date information 
+
+### Architecture Diagrams
 
 This folder will contain the architecture diagrams for the cluster:
 
