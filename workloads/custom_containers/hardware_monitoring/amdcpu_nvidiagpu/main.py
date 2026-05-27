@@ -1,11 +1,6 @@
-#!/usr/bin/env python
-# Markham Lee (C) 2023
-# Hardware Monitor for Linux & Windows:
-# https://github.com/MarkhamLee/HardwareMonitoring
-# This is for Linux devices running on AMD CPUs
-# CLI instructions file_name + <MQTT topic name as a string>
-# + <Integer for sleep interval>
-# e.g., python3 monitor_amd_linux.py '/home/amd' 5
+# Markham Lee (C) 2023 - 2026
+# K3s Powered Private Cloud
+# Hardware monitoring - AMD CPU/NVIDIA GPU
 import gc
 import json
 import logging
