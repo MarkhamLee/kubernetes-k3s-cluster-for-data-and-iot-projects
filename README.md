@@ -16,32 +16,7 @@ Self-hosted K3s cluster that is the shared services platform for active developm
 This repository is the operational record of the platform: architecture documentation, reference deployment configs (live IaC is maintained in a separate private repo), maintenance runbooks, troubleshooting notes, and the custom container code used for hardware monitoring. It's organized so that rebuilding the cluster from scratch, diagnosing unfamiliar issues, or onboarding a new workload starts here.
 
 
-~~~mermaid
----
-config:
-  layout: dagre
----
-flowchart LR
- subgraph k3s["K3s Cluster"]
-    direction LR
-        cp["Control Nodes ×3\nBeelink SER5"]
-        wk["Worker Nodes ×2\nMinisforum MS-A1"]
-        dn["Data & Storage Nodes ×2\nMinisforum MS-01"]
-  end
- subgraph plat["Platform Services"]
-    direction LR
-        traefik["Traefik\nIngress"]
-        longhorn["Longhorn\nStorage"]
-        obs["Prometheus\nVictoria Logs"]
-  end
-    dev["Git Push / PR"] --> gha["GitHub Actions\nBuild · Test · Publish"] & cfg["GitOps Manifests\n(Helm / Raw YAML)"]
-    gha --> reg[("Container\nRegistry")]
-    cfg --> argo["ArgoCD"]
-    reg --> argo
-    argo --> k3s
-    k3s --> plat
-    plat --> w1["Data Engineering & IoT\nArgo Workflows · InfluxDB\nPostgres · MQTT · Node-RED"] & w2["Computer Vision\nEdge data via MQTT\nInfluxDB time series"] & w3["Agentic AI\nArgo Workflows\nPostgres agent memory"] & w4["Engineering & Productivity Tools\nCode Server · pgAdmin\nObsidian · Linkwarden"]
-~~~
+![Platform Architecture ](images/delivery_model_v1.png)
 
 
 **The apps I'm currently self-hosting** 
