@@ -19,21 +19,20 @@ FROM python:3.11-slim-bookworm
 RUN groupadd --system app_group \
     && useradd --system --create-home --no-log-init --gid app_group app_user
 
-# Set workdir and copy wheels
-WORKDIR /hw_telemetry
-
 COPY --from=builder /app/wheels /wheels
 COPY --from=builder /app/requirements.txt .
 
 RUN pip3 install --no-cache-dir /wheels/* \
     && rm -rf /wheels
 
-# Copy application code
-COPY ./hw_monitoring_libraries ./hw_monitoring_libraries
-COPY ./amd64 ./
+COPY --chown=appuser:appuser ./hw_monitoring_libraries ./hw_monitoring_libraries
+COPY --chown=appuser:appuser ./amd64 ./amd64
+
+# Set workdir and copy wheels
+WORKDIR /hw_telemetry
 
 # Ensure app files are owned by the non-root user
-RUN chown -R app_user:app_group /hw_telemetry /hw_monitoring_libraries
+RUN chown -R app_user:app_group ./amd64 ./
 
 # Drop privileges
 USER app_user
