@@ -1,6 +1,6 @@
 ## Traefik for reverse proxy with Lets Encrypt Certificates for Encryption & Security
 
-This section actually covers deploying multiple apps and setting up some integrations:
+This section covers deploying Traefik along with three additional apps for managing secure certificates:
 * Traefik for a reverse proxy and ingress to access your K3s services
 * Lets Encrypt integration to generate secure certificates for free
 * Cert Manager to manage the certificates
@@ -18,7 +18,7 @@ Once you complete the above, you'll be able to access the services deployed on K
 
 ### Pre-requisites
 
-* This section presumes you've either read and/or completed the items discussed in in the section on [preparing your home network](../../external-preparation.md). Meaning:
+* This section presumes you've either read and/or completed the items discussed in in the section on [preparing your home network](../../runbook/networking/external-preparation.md). Meaning:
     * You have a firewall or router up and running
     * You know how to create custom domains in the app above
     * You have your own domain setup and a cloudflare account 
