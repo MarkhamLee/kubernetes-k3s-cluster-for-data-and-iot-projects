@@ -21,6 +21,7 @@ FROM python:3.11-slim-bookworm
 RUN groupadd --system app_group \
     && useradd --system --create-home --no-log-init --gid app_group app_user
 
+# copy wheels
 COPY --from=builder /app/wheels /wheels
 COPY --from=builder /app/requirements.txt .
 
@@ -29,7 +30,7 @@ RUN pip3 install --no-cache-dir /wheels/* \
 
 COPY --chown=appuser:appuser ./hw_monitoring_libraries ./hw_monitoring_libraries
 
-# Set workdir and copy wheels
+# Set workdir
 WORKDIR /hw_telemetry
 
 COPY --chown=appuser:appuser ./amd64 ./
