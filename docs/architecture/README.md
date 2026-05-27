@@ -2,4 +2,4 @@
 
 
 ## Platform Architecture
-![Platform Architecture ](../../images/k3s_diagram_delivery_hardware_v2.png)
+![Platform Architecture ](../../images/k3s_platform_architecture.png)
