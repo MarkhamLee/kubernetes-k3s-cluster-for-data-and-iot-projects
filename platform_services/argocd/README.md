@@ -16,3 +16,9 @@ Next, use an ingress file like the one in this folder and you should be good to 
 ![Argo CD App Tiles](../images/argocd_app_tiles.png)
 
 Not sure why, but I really enjoy these app tiles. 
+
+#### Configuring GitHub repos to store application deployment files 
+
+* You'll need to setup a GitHub repo to store your application config files/manifests, IAC, etc. Persuming you keep the IAC repo private, you'll need to create a personal access token (PAT) so that ArgoCD can access the repo. 
+* You'll add the repo via the settings --> repositories menu, within that menu there will be user name and password field, just put "admin" for the user name and the PAT for the password. 
+* On a periodic basis you'll need to access the PAT. Keep in mind that you'll maintain the tokens via the UI and not via K3s secrets, so you'll need to edit the repo in the ArgoCD UI and update the PAT. 

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lw-pvc-helper
+  namespace: linkwarden
+spec:
+  containers:
+    - name: pvc-shell
+      image: alpine
+      command: ["sleep", "infinity"]
+      volumeMounts:
+        - name: lw-data
+          mountPath: /mnt/lw-data
+  volumes:
+    - name: lw-data
+      persistentVolumeClaim:
+        claimName: linkwarden-claim0
