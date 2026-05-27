@@ -15,11 +15,11 @@ Self-hosted K3s cluster that is the shared services platform for active developm
 
 This repository is the operational record of the platform: architecture documentation, reference deployment configs (live IaC is maintained in a separate private repo), maintenance runbooks, troubleshooting notes, and the custom container code used for hardware monitoring. It's organized so that rebuilding the cluster from scratch, diagnosing unfamiliar issues, or onboarding a new workload starts here.
 
-
+## Delivery Model
 ![Platform Architecture ](images/delivery_model_v1.png)
 
 
-**The apps I'm currently self-hosting** 
+### The Apps I'm currently self-hosting 
 
 ![Current Apps](images/homepage_current_apps_8-4-2025.png)
 The screen above was created with the Homepage App, which you can find [here](https://github.com/gethomepage/homepage).
