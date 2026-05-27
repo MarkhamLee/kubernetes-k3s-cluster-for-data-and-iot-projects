@@ -5,8 +5,8 @@ on:
     branches:
       - "main"
     paths:
-      - "hardware_monitoring/amd64/*"
-      - "hardware_monitoring/hw_monitoring_libraries/*"
+      - "workloads/custom_containers/hardware_monitoring/amd64/*"
+      - "workloads/custom_containers/hardware_monitoring/hw_monitoring_libraries/*"
 jobs:
   docker:
     runs-on: ubuntu-latest
