@@ -1,4 +1,4 @@
-# Markham Lee (C) 2023 - 2025
+# Markham Lee (C) 2023 - 2026
 # Private Cloud & Self Hosting with K3s
 # https://github.com/MarkhamLee/k3s-data-platform-IoT
 # Script to monitor AMD hardware, and also provide
