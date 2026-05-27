@@ -1,6 +1,8 @@
 # Stage 1: build wheels
 FROM python:3.11-slim-bookworm AS builder
 
+ENV PYTHONDONTWRITEBYTECODE=1
+
 WORKDIR /app
 
 RUN apt-get update -y \
@@ -26,13 +28,11 @@ RUN pip3 install --no-cache-dir /wheels/* \
     && rm -rf /wheels
 
 COPY --chown=appuser:appuser ./hw_monitoring_libraries ./hw_monitoring_libraries
-COPY --chown=appuser:appuser ./amd64 ./amd64
 
 # Set workdir and copy wheels
 WORKDIR /hw_telemetry
 
-# Ensure app files are owned by the non-root user
-RUN chown -R app_user:app_group ./amd64 ./
+COPY --chown=appuser:appuser ./amd64 ./
 
 # Drop privileges
 USER app_user
