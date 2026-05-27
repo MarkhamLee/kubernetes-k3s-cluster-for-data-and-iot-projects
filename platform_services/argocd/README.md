@@ -13,7 +13,7 @@ After the initial deployment you can use Argo CD to manage your Argo CD (Dev Ops
 
 Next, use an ingress file like the one in this folder and you should be good to go. Note, I put the ingress file in a GitHub folder and pointed ArgoCD to it, so it will monitor/manage the ingress file. Seemed a good idea given how tricky it can be when using Traefik for your load balancer. 
 
-![Argo CD App Tiles](../images/argocd_app_tiles.png)
+![Argo CD App Tiles](../../images/argocd_app_tiles.png)
 
 Not sure why, but I really enjoy these app tiles. 
 

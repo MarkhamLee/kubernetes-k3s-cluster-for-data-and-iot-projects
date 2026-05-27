@@ -4,7 +4,7 @@
 * I've noticed that things seem to work better if you use Ubuntu Desktop vs Headless, in some cases the volume attachments fail on reboot. If you were to ssh into the node the storage is available but it's not mounting properly in Longhorn. 
 * The ideal setup (even for a homelab) would be that you would have separate drives for the OS vs the storage. 
 * Ideally would you have dedicated Longhorn nodes as you get better performance that way and use node affinity to prevent general K3s workloads from being deployed on these nodes. I don't "quite" follow this approach and instead have nodes designed as "data nodes", that only run Longhorn + database workloads (e.g. InfluxDB, MariaDB and Postgres) and just used beefy HW for these nodes. Haven't had any issues. 
-* If you're running headless servers you may run into volume attach errors when redeploying workloads, as preventative measure follow the instructions [here](../../../knowledge_base/storage/fixing_volume_attach_errors.md) to update your multipath configuration, which should prevent many of the common causes of volume attachment problems.
+* If you're running headless servers you may run into volume attach errors when redeploying workloads, as preventative measure follow the instructions [here](../../runbook/storage/fixing_volume_attach_errors.md) to update your multipath configuration, which should prevent many of the common causes of volume attachment problems.
 
 ### Installation
 
@@ -35,7 +35,7 @@ kubectl get pod | grep longhorn-iscsi-installation
 
 You should see something that looks like this: 
 
-![iscsi screenshot](../images/screenshot_iscsi.png)
+![iscsi screenshot](../../images/screenshot_iscsi.png)
 
 
 Next, use the following to install the NFSv4 client, again, the rancher web site will give you several other options, but this option worked the best for me: 
@@ -51,7 +51,7 @@ kubectl get pod | grep longhorn-nfs-installation
 ```
 You should see something that looks like this: 
 
-![nfs screenshot](../images/nfs_screenshot.png) 
+![nfs screenshot](../../images/nfs_screenshot.png) 
 
 
 
@@ -79,7 +79,7 @@ You can read more about managing storage classes [here](https://kubernetes.io/do
 
 Once you have S3 configured you'll need to change a small setting that's only for disaster recovery volumes, it's a small but critical thing because if you leave the setting as is Longhorn will ping S3 **constantly** and you could easily find yourself racking up more charges for S3 actions than you do for storage. Case in point, for the month of January I was charged $0.15 for storage and $5.39 for requests. 
 
-![nfs screenshot](../images/s3_screenshot.png) 
+![nfs screenshot](../../images/s3_screenshot.png) 
 
 I discovered this by accident because I honestly don't pay that much attention to my AWS bill, but decided to go over it because I need to deploy an object store and was evaluting using AWS S3 or just buying another node to deploy MinIO on. 
 
@@ -87,7 +87,7 @@ You can read more about this issue in a GitHub issue [here](https://github.com/l
 
 To solve it just go to settings and change the Backupstore Poll Interval to 0 and the incessant S3 pings should stop. 
 
-![nfs screenshot](../images/backup_poll_setting.png) 
+![nfs screenshot](../../images/backup_poll_setting.png) 
 
 Change that 300 to 0 and you should save some money. 
 

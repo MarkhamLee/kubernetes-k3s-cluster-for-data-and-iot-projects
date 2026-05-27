@@ -1,3 +1,5 @@
+## Installing Rancher
+
 #### If you're using an ingress + secure certs this should get you setup nicely. 
 
 Note: this is what worked for me as of 11/21/2023, refer to the rancher web site to check if any steps have changed. However, steps 1-4 are fairly standard and the parameters in step five should be fairly stalbe, but it couldn't hurt to doublecheck or go to the [rancher web site](https://ranchermanager.docs.rancher.com/pages-for-subheaders/install-upgrade-on-a-kubernetes-cluster) for help if step five doesn't work. 
