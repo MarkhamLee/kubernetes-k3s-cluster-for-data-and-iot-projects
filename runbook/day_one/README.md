@@ -13,7 +13,7 @@ I'm going to move a lot of the setup and day to day management documentation her
 
 TL/DR – Management planes modify your cluster so they can monitor and maintain it’s health/state, while read only tools just make the requested changes and don’t per se “know anything” about your cluster. 
 
-**To properly secure** your cluster you’ll need to have a domain name (for SSL certificates), and a firewall or router that allows you setup custom domains on your LAN. If you’re just tinkering this probably doesn’t matter but if you want to deploy things you’ll make regularly use of, properly securing things is just the way to go. See the [networking section](networking/readme.md) for more.
+**To properly secure** your cluster you’ll need to have a domain name (for SSL certificates), and a firewall or router that allows you setup custom domains on your LAN. If you’re just tinkering this probably doesn’t matter but if you want to deploy things you’ll make regularly use of, properly securing things is just the way to go. See the [networking section](../networking/readme.md) for more.
 
 **Take lots of notes and document everything**, especially when you figure out something difficult. 
 
@@ -25,15 +25,15 @@ The above out of the way, see the sections below for more information.
 
 #### Kubernetes Management tools 
 
-* Installing [Kubectl](mgmt_tools/kubectl.md) on remote machines for managing your k3s cluster from the command line 
+* Installing [Kubectl](../k3s_mgmt_tools/kubectl.md) on remote machines for managing your k3s cluster from the command line 
 
 #### Networking 
-* [Preparing](networking/external-preparation.md) your home network to support Kubernetes 
-* [Deploying Traefik](networking/traefik/) with secure certificates to enable secure access to the services you're hosting on Kubernetes.
-* [Troubleshooting and solving K3s level DNS problems](networking/internal/fixing-common-problems.md)
+* [Preparing](../networking/external-preparation.md) your home network to support Kubernetes 
+* [Deploying Traefik](../../platform_services/traefik/readme.md) with secure certificates to enable secure access to the services you're hosting on Kubernetes.
+* [Troubleshooting and solving K3s level DNS problems](../networking/fixing_dns_problems.md)
 
 #### Storage
-* [Fixing Volume Attach Errors](storage/fixing_volume_attach_errors.md) - fixing a common cause(s) of volume attach errors when redeploying a workload.
+* [Fixing Volume Attach Errors](../storage/fixing_volume_attach_errors.md) - fixing a common cause(s) of volume attach errors when redeploying a workload.
 
 
 
