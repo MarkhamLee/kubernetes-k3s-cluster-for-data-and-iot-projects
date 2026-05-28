@@ -8,7 +8,7 @@ import gc
 import os
 import sys
 from time import sleep
-from intel_x86 import Intelx86
+from workloads.custom_containers.archive.hardware_monitoring.intel_x86.intel_x86 import Intelx86
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
