@@ -1,5 +1,5 @@
 # DEPRECATED
-Moved away from Loki Stack in favor of Victoria Logs in June of '25. 
+Moved away from Loki Stack in favor of Victoria Logs in June of '25, this is just for reference as this instructions are from the spring of 2024.
 
 
 ## Loki Stack Installation Instructions
