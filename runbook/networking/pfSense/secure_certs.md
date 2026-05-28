@@ -29,7 +29,7 @@ We're going to create a few things that we'll use with the certificate we're goi
         * IP address is the IP address you use to access pfSense 
 
     2) Click save and you'll see a message at the top of the page that looks like this
-    ![apply changes](../../images/dns_changes.png)
+    ![apply changes](../../../images/dns_changes.png)
 2) Less a step and more checking current status, go to System --> Certificates and then click the certificates tab, presuming you haven't created any certificates prior to this you should just see a certificate with "GUI default" in the name. This is the self-signed certificate created by your pfSense install. This "technically enables HTTPS but since it's self-signed and hasn't been verified by a 3rd party, it's easy to spoof it for a "man in the middle attack" where a bad actor inserts themselves between you and the browser and captures your login information. When we create certificates we'll see more data listed here.
 
 
@@ -45,13 +45,13 @@ We're going to create a few things that we'll use with the certificate we're goi
 4) Fill out the form, it's fairly straightforward, however:
     * Under Acme Account, you select the staging environment account you created earlier. 
     * Under domain make sure you have at least two entries like the below, you're adding an entry for the main domain e.g., local.example.com, and another wildcard for the specific services: *.local.example.com - the 2nd entry allows you create something like pfsense.local.example.com without having to register a certificate for that specific domain/or each specific domain you're setting up. 
-    ![cloudflare ](../../images/setting-up-domains.png)
+    ![cloudflare ](../../../images/setting-up-domains.png)
     * This next bit is critically important, you must use the Method drop down to select "DNS-Cloudflare" as this "method" is what we need to use validate that the domain name we created earlier is real. E.g., "homelab.com".
     * In the space for Token auth enter your Cloudflare API token 
     * In the space for Global key enter the Global API key
     * Enter in your email 
 
-    ![cloudflare ](../../images/creating_certificate.png)
+    ![cloudflare ](../../../images/creating_certificate.png)
 Before we click save let's review what we should have here:
     * At least two domains, something like local.example.com and a wildcard card *.local.example.com
     * We should have selected DNS-Cloudflare as the method and entered in our Cloudflare information 
@@ -81,14 +81,14 @@ Presuming things have gone well, we can now issue a production certificate, are 
 
 1) This time click "Issue/Renew" for production certificates
 2) Follow the same steps as before for filling out the form. Once the certificate is created, Services --> Acme Certificates and the certificates tab should look like this, showing the production and the staging certificates. 
-![secure browsing](../../images/completed_certificates.png)
+![secure browsing](../../../images/completed_certificates.png)
 
 
 3) Go to System --> Certificates and click the "Certificates" tab, to verify that your production certificate is there 
 4) Go to System --> Advanced and change the SSL/TLS certificate to the production you created via the drop down and then click save. 
 5) At this point it's a good idea to reboot and then try full domain name to access the UI, you should be able to access the UI without any browser warnings and by clicking the lock (or similar) icon in your browser you should see something like:
 
-![secure browsing](../../images/secure_connection.png)
+![secure browsing](../../../images/secure_connection.png)
 
 
 At this point you should be good to go, if not refer to the troubleshooting steps or use the error messages to look up information on your specific error, as I only provided error info on the errors I've made in the past and you might make different mistakes. 
