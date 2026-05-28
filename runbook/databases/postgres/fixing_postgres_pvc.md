@@ -1,4 +1,4 @@
-## Managing K3s on Postgres - Tips & Tricks
+## Resizing a Postgres Persistent Volume Claim
 
 
 ### Resizing the PVC 
