@@ -13,7 +13,7 @@ The Kube-Prometheus stack is well integrated into Rancher, so all you really nee
 * You'll need to update your RAM resource settings, as the default settings (for three nodes mind you) didn't work and the Prometheus container kept crashing: 
 
 **Standard Settings - Don't Use These**
-![Standard Settings](images/kube-prometheus-bad.png)
+![Standard Settings](../../../images/kube-prometheus-bad.png)
 
 On the screen you above can change the settings in the UI, but there is an additional setting you need to change for alert manager to work properly so click "Edit Yaml"
 
