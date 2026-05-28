@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kasa-plug-monitoring-influx-plug4
+  namespace: iot
+spec:
+  selector:
+    matchLabels:
+      app: kasa-plug-monitoring-influx-plug4
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kasa-plug-monitoring-influx-plug4
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 70
+              preference:
+                matchExpressions:
+                  - key: k3s_role
+                    operator: In
+                    values:
+                    - x86_worker
+            - weight: 30
+              preference:
+                matchExpressions:
+                  - key: agent_type
+                    operator: In
+                    values:
+                    - x86_worker
+      containers:
+        - name: kasa-plug-four
+          image: markhamlee/kasaplugs_influx:latest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 600m
+              memory: 256Mi
+            requests:
+              cpu: 300m
+              memory: 128Mi
+          env:
+            - name: TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: influx_token
+                  name: influx-auth
+                  optional: false 
+            - name: ORG
+              valueFrom:
+                configMapKeyRef:
+                  key: KASA_ORG
+                  name: influx-data
+            - name: URL
+              valueFrom:
+                configMapKeyRef:
+                  key: INFLUX_URL
+                  name: influx-data
+            - name: BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  key: KASA_PLUG_BUCKET
+                  name: influx-data
+            - name: SMART_PLUG_TABLE
+              valueFrom:
+                configMapKeyRef:
+                  key: KASA_MEASUREMENT_PLUG4
+                  name: influx-data
+            - name: DEVICE_IP
+              valueFrom:
+               secretKeyRef:
+                  key: KASA_PLUG_FOUR_IP
+                  name: kasa-plug-secrets
+            - name: DEVICE_ALERT_WEBHOOK
+              valueFrom:
+               secretKeyRef:
+                  key: SLACK_WEBHOOK
+                  name: iot-alert-manager-slack-webhook
+            - name: UPTIME_KUMA_WEBHOOK
+              valueFrom:
+               secretKeyRef:
+                  key: UPTIME_KUMA_WEBHOOK_PLUG4
+                  name: kasa-plugs-uptime-kuma-webhooks
+            - name: TAG_KEY
+              value: SMART_DEVICE_MONITORING
+            - name: TAG_VALUE
+              value: KASA_SMART_PLUG4
+            - name: INTERVAL
+              value: '5'
+            - name: DEVICE_ID
+              value: kasa_plug4
+      imagePullSecrets: 
+        - name: docker-secrets
+      restartPolicy: Always
