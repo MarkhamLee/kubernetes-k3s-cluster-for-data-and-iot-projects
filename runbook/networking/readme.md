@@ -14,6 +14,6 @@ P.S. if it's a networking problem, there is a 99% chance that it's DNS
 Current content:
 
 * [External preparation](external_preparation.md) has information on planning out your networking software/hardware stack, and how to resolve key dependencies like a cloudflare account and domain name for secure certificates.
-* The [pfSense](pfsense) folder has information on configuring alerts and setting up secure certificates.
+* The [OPNsense](opnsense/readme.md) folder contains information on initial setup for opnSense, inclusive of initial setup, creating multiple LANs, setting up firewall rules and configuring a VPN. 
 * [Traefik](../../platform_services/traefik/readme.md) covers setting up secure access to the services hosted on your K3s cluster via the Traefik reverse proxy app, cert manager and free let's encrypt secure certificates. The information provided includes documentation + deployment files. 
 * [Fixing DNS Problems](fixing_dns_problems.md)
