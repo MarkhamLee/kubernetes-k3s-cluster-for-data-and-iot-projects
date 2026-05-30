@@ -1,0 +1,50 @@
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - proxy
+    ports:
+      - 80:80
+      - 443:443
+      - 8082:8082
+    environment:
+      - CF_DNS_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+      - TRUE_NAS_NODE0_IP=${TRUE_NAS_NODE0_IP}
+      - TRAEFIK_CERTIFICATESRESOLVERS_CLOUDFLARE_ACME_EMAIL=${SA_SERVER_CERT_EMAIL}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /home/markham/Documents/GitHub/homelab-prod-compose-iac/production_node1/traefik/data/traefik.yml:/traefik.yml:ro
+      - /home/markham/Documents/GitHub/homelab-prod-compose-iac/production_node1/traefik/data/acme.json:/acme.json
+      - /home/markham/Documents/GitHub/homelab-prod-compose-iac/production_node1/traefik/data/config.yml:/config.yml:ro
+      - /home/markham/.app_data/traefik-mkii/traefik-logs:/var/log/traefik
+    command:
+      - "--log.level=INFO"
+      - "--accesslog=true"
+      - "--metrics.prometheus=true"
+      - "--entrypoints.metrics.address=:8082"
+      - "--metrics.prometheus.addrouterslabels=true"
+      - "--metrics.prometheus.addserviceslabels=true"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`prod-traefik.local.example.com`)"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_CREDS}"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`prod-traefik.local.example.com`)"
+      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=local.example.com"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.local.example.com"
+      - "traefik.http.routers.traefik-secure.service=api@internal"
+networks:
+  proxy:
+    external: true

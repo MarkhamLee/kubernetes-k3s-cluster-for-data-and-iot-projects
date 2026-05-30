@@ -1,0 +1,63 @@
+http:
+ #region routers0
+  routers:
+    homeassistant:
+      # For Homeassistant config, check: https://www.home-assistant.io/integrations/http/#reverse-proxies
+      # This relies on Homeassistant using http. No certs are needed in the Homeassistant config.
+      entryPoints:
+        - "https"
+      rule: "Host(`homeassistant.local.example.com`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: homeassistant
+
+#endregion
+#region services
+  services:
+    homeassistant:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.1.1:8123"
+        passHostHeader: true
+#endregion
+  middlewares:
+    addprefix-pihole:
+      addPrefix:
+        prefix: "/admin"
+    https-redirectscheme:
+      redirectScheme:
+        scheme: https
+        permanent: true
+    redirectregex-pihole:
+      redirectRegex:
+        regex: "/admin/(.*)"
+        replacement: /
+
+    default-headers:
+      headers:
+        frameDeny: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+        customRequestHeaders:
+          X-Forwarded-Proto: https
+
+    default-whitelist:
+      ipAllowList:
+        sourceRange:
+        - "10.0.0.0/24"
+        - "192.168.47.0/24"
+        - "172.16.0.0/12"
+        - "100.64.0.0/10"
+
+    secured:
+      chain:
+        middlewares:
+        - default-whitelist
+        - default-headers
