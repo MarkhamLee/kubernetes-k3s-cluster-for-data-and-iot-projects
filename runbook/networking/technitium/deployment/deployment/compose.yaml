@@ -1,0 +1,16 @@
+services:
+  dns-server-node0:
+    container_name: technitium-dns-dhcp
+    hostname: network-services-node0
+    image: technitium/dns-server:latest
+    network_mode: host
+    environment:
+      - TZ=America/Los_Angeles
+      - DNS_SERVER_DOMAIN=markhamslab-dns
+      - DNS_SERVER_ADMIN_PASSWORD=${TECHNITIUM_SECRET}
+      - DNS_SERVER_WEB_SERVICE_ENABLE_HTTPS=true
+      - DNS_SERVER_WEB_SERVICE_USE_SELF_SIGNED_CERT=true 
+      - DNS_SERVER_FORWARDERS=1.1.1.1,8.8.8.8 
+    volumes:
+      - /opt/technitium_data:/etc/dns
+    restart: unless-stopped 
