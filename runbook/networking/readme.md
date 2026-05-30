@@ -1,6 +1,7 @@
 ## Networking 
 
-In many respects, your cluster will only be as stable as the networking infrastructure you build around it, e.g., if your firewall provides DHCP (IP Addresses), DNS in addition to handling firewall functions and it goes down for some reason, your entire cluster will be thrown into disarray due to not being able to connect to the internet and disrupting a lot of internal cluster communications. this section will cover things that aren't per se Kubernetes specific but are absolutely important to properly maintaining your cluster. 
+The networking section of the run book contains information on building and maintaining a local network capable of supporting K3s. Ideally, the local network will at the very least use an enterprise class firewall like OPNsense or pfSense, and would also have dedicated DNS and DHCP servers and VPN capabilities. This will not only keep your services safe, but enable basic convenience features like local domains (e.g. service-name.local.private-cluster-domain-name.com) to make it easy to directly access services, and to enable self-hosted services internl and external to K3s to talk to each other. 
+
 
 TL/DR - don't ignore the external networking content, as in many cases it's often more important than the internal networking, as a good Kubernetes distribution + a solid reverse proxy application like Traefik will take care of a lot of those things for you. 
 
@@ -16,4 +17,6 @@ Current content:
 * [External preparation](external_preparation.md) has information on planning out your networking software/hardware stack, and how to resolve key dependencies like a cloudflare account and domain name for secure certificates.
 * The [OPNsense](opnsense/readme.md) folder contains information on initial setup for opnSense, inclusive of initial setup, creating multiple LANs, setting up firewall rules and configuring a VPN. 
 * [Traefik](../../platform_services/traefik/readme.md) covers setting up secure access to the services hosted on your K3s cluster via the Traefik reverse proxy app, cert manager and free let's encrypt secure certificates. The information provided includes documentation + deployment files. 
+* [External Traefik](traefik_external/readme.md) provides information on settint up Traefik instances on external to K3s servers dedicated to running/managing your network.
+* [Technitium](technitium/readme.md) information on deploying a dedicated DNS server. 
 * [Fixing DNS Problems](fixing_dns_problems.md)
