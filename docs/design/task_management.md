@@ -1,0 +1,9 @@
+## Argo Workflow for Task Management
+
+Airflow was the initial workflow orchestration choice, but it required more active maintenance and attention than was desirable. Argo Workflows proved to be a better fit because it is a Kubernetes‑native workflow engine implemented as Kubernetes custom resources. This allows cron jobs, tasks, and pipelines to be defined and deployed in the same way as any other Kubernetes resource, using ArgoCD as the delivery mechanism.
+
+This aligns well with the primary use case: running tasks, pipelines, and batch style workloads reliably without spending time maintaining the orchestration layer itself. Argo Workflows is deployed and updated through ArgoCD, and operational issues are surfaced via Prometheus and Alertmanager into Slack. Over the past two years, Argo Workflows has required very little maintenance beyond periodic version bumps applied through Git and ArgoCD. 
+
+Airflow still has clear strengths. Its UI is better suited for inspecting individual tasks and task groups, and its persistence model can make it easier to daisy‑chain tightly coupled tasks. However, in this cluster those advantages are not critical because state is persisted explicitly in PostgreSQL between steps. This keeps pipelines more tool‑agnostic and reduces dependence on orchestration‑specific behavior. In practice, simplicity and ease of maintenance outweighed Airflow’s UI and DAG‑persistence benefits.
+
+Because task‑style workloads are built in a containerized and tool‑agnostic way, switching back to Airflow or adopting an additional workflow tool alongside or instead of Argo Workflows would be relatively straightforward if requirements change in the future.
