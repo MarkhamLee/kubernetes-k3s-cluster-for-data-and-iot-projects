@@ -17,6 +17,6 @@ Current content:
 * [External preparation](external_preparation.md) has information on planning out your networking software/hardware stack, and how to resolve key dependencies like a cloudflare account and domain name for secure certificates.
 * The [OPNsense](opnsense/readme.md) folder contains information on initial setup for opnSense, inclusive of initial setup, creating multiple LANs, setting up firewall rules and configuring a VPN. 
 * [Traefik](../../platform_services/traefik/readme.md) covers setting up secure access to the services hosted on your K3s cluster via the Traefik reverse proxy app, cert manager and free let's encrypt secure certificates. The information provided includes documentation + deployment files. 
-* [External Traefik](traefik_external/readme.md) provides information on settint up Traefik instances on external to K3s servers dedicated to running/managing your network.
+* [External Traefik](traefik_external/readme.md) provides information on setting up Traefik instances on external to K3s servers dedicated to running/managing your network.
 * [Technitium](technitium/readme.md) information on deploying a dedicated DNS server. 
-* [Fixing DNS Problems](fixing_dns_problems.md)
+* [Fixing DNS Problems](fixing_dns_problems.md) dealing with various DNS related issues.
