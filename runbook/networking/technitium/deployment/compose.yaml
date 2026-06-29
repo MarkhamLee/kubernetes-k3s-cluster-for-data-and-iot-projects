@@ -2,7 +2,7 @@ services:
   dns-server-node0:
     container_name: technitium-dns-dhcp
     hostname: network-services-node0
-    image: technitium/dns-server:latest
+    image: technitium/dns-server:14.3.0
     network_mode: host
     environment:
       - TZ=America/Los_Angeles
