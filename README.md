@@ -36,7 +36,7 @@ The above doesn't have each and every app, but these are the primary ones and/or
 | `runbook/` | Operational procedures, maintenance tasks, incident notes |
 | `platform-services/` | Reference deployment configs for cluster infrastructure |
 | `workloads/` | Reference deployment configs for 3rd party apps and custom workloads |
-| `hardware_monitoring/` | Custom container code for node and device monitoring |
+| `workloads/custom_containers/hardware_monitoring/` | Custom container code for node and device monitoring |
 | `dashboards/` | Grafana dashboard exports |
 
 
