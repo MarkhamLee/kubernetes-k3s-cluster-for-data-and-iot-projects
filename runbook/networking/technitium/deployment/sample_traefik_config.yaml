@@ -1,0 +1,22 @@
+http:
+ #region routers
+  routers:
+    technitium-node0:
+      entryPoints:
+        - "https"
+      rule: "Host(`technitium1.local.<your-private-cloud-domain>.net`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: technitium-node1
+
+
+#endregion
+#region services
+  services:
+    technitium-node1:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.1.2:53443"
+        passHostHeader: true
