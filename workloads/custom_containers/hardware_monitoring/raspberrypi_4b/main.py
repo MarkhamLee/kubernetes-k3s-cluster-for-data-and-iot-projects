@@ -1,6 +1,6 @@
-# Markham Lee (C) 2023 - 2025
-# Homelab & Selfhosting Toolkit
-# https://github.com/MarkhamLee/homelab-and-self-hosting-toolkit
+# Markham Lee (C) 2023 - 2026
+# K3s Powered Private Cloud
+# https://github.com/MarkhamLee/k3s-data-platform-IoT
 # Script for monitoring a Raspberry Pi 4B, pulling CPU utilization,
 # temps, clock speed and RAM utilization data. There is also an
 # option to surface a Prometheus scrape point.
