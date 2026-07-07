@@ -3,7 +3,9 @@
 # https://github.com/MarkhamLee/k3s-data-platform-IoT
 # Script for monitoring a Raspberry Pi 4B, pulling CPU utilization,
 # temps, clock speed and RAM utilization data. There is also an
-# option to surface a Prometheus scrape point.
+# option to surface a Prometheus scrape point and push "heartbeats"
+# to Uptime Kuma, for the purposes of receiving near real time alerts
+# if the device goes down.
 import os
 import sys
 import time

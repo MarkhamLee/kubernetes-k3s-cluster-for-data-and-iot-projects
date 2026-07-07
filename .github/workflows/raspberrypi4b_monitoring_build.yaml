@@ -5,8 +5,8 @@ on:
     branches:
       - "main"
     paths:
-      - "monitoring/hardware/raspberrypi_4b/*"
-      - "monitoring/hardware/hw_monitoring_libraries/*"
+      - "workloads/custom_containers/hardware_monitoring/raspberrypi_4b/*"
+      - "workloads/custom_containers/hardware_monitoring/hw_monitoring_libraries/*"
 
 jobs:
   docker:
