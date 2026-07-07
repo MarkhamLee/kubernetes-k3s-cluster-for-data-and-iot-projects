@@ -1,0 +1,31 @@
+services:
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: ghcr.io/koenkk/zigbee2mqtt:2.6
+    restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - /home/server1/.app_data/zigbee2mqtt/data:/app/data
+      - /run/udev:/run/udev:ro
+    ports:
+      # Frontend port
+      - 30065:30065
+    environment:
+      - TZ=America/Los_Angeles
+      - ZIGBEE2MQTT_CONFIG_SERIAL_PORT=tcp://${ZIGBEE_DONGLE_IP}:${ZIGBEE_DONGLE_PORT}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.zigbee2mqtt.entrypoints=http"
+      - "traefik.http.routers.zigbee2mqtt.rule=Host(`zigbee2mqtt.local.example.com`)"
+      - "traefik.http.middlewares.zigbee2mqtt-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.zigbee2mqtt.middlewares=zigbee2mqtt-https-redirect"
+      - "traefik.http.routers.zigbee2mqtt-secure.entrypoints=https"
+      - "traefik.http.routers.zigbee2mqtt-secure.rule=Host(`zigbee2mqtt.local.example.com`)"
+      - "traefik.http.routers.zigbee2mqtt-secure.tls=true"
+      - "traefik.http.routers.zigbee2mqtt-secure.service=zigbee2mqtt"
+      - "traefik.http.services.zigbee2mqtt.loadbalancer.server.port=30065"
+      - "traefik.docker.network=proxy"
+networks:
+  proxy:
+    external: true
