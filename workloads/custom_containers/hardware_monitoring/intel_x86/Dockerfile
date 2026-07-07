@@ -1,5 +1,5 @@
 # Stage 1: build wheels
-FROM python:3.11-slim-bookworm AS builder
+FROM python:3.11.9-slim-bookworm AS builder
 
 ENV PYTHONDONTWRITEBYTECODE=1
 
@@ -15,7 +15,7 @@ RUN pip3 wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.
 
 
 # Stage 2: runtime image
-FROM python:3.11-slim-bookworm
+FROM python:3.11.9-slim-bookworm
 
 # Create non-root user and group
 RUN groupadd --system app_group \
