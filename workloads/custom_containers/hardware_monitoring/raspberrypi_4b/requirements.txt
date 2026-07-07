@@ -5,5 +5,5 @@ uuid
 clr==1.0.3
 psutil==5.9.5
 influxdb-client==1.49.0
-requests==2.32.4
+requests==2.33.0
 prometheus_client==0.22.1
