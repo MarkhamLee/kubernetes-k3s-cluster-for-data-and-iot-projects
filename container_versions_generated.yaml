@@ -13,9 +13,19 @@ services:
     dockerfile: workloads/custom_containers/hardware_monitoring/intel_x86/Dockerfile
     image: markhamlee/intel_x86
     path: workloads/custom_containers/hardware_monitoring/intel_x86
-    version: 2.1.2
+    version: 2.1.3
   intel_x86_nvidia_gpu:
     dockerfile: workloads/custom_containers/hardware_monitoring/intel_x86_nvidia_gpu/Dockerfile
     image: markhamlee/intel_x86_nvidia_gpu
     path: workloads/custom_containers/hardware_monitoring/intel_x86_nvidia_gpu
     version: 2.1.2
+  raspberrypi5:
+    dockerfile: workloads/custom_containers/hardware_monitoring/raspberrypi5/Dockerfile
+    image: markhamlee/raspberrypi5
+    path: workloads/custom_containers/hardware_monitoring/raspberrypi5
+    version: 1.0.3
+  rockchip3588:
+    dockerfile: workloads/custom_containers/hardware_monitoring/rockchip3588/Dockerfile
+    image: markhamlee/rockchip3588
+    path: workloads/custom_containers/hardware_monitoring/rockchip3588
+    version: 1.8.1
