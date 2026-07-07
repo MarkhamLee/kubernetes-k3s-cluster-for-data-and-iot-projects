@@ -1,0 +1,21 @@
+services:
+  amd64:
+    dockerfile: workloads/custom_containers/hardware_monitoring/amd64/Dockerfile
+    image: markhamlee/amd64
+    path: workloads/custom_containers/hardware_monitoring/amd64
+    version: 2.1.2
+  amdcpu_nvidiagpu:
+    dockerfile: workloads/custom_containers/hardware_monitoring/amdcpu_nvidiagpu/Dockerfile
+    image: markhamlee/amdcpu_nvidiagpu
+    path: workloads/custom_containers/hardware_monitoring/amdcpu_nvidiagpu
+    version: 2.1.2
+  intel_x86:
+    dockerfile: workloads/custom_containers/hardware_monitoring/intel_x86/Dockerfile
+    image: markhamlee/intel_x86
+    path: workloads/custom_containers/hardware_monitoring/intel_x86
+    version: 2.1.2
+  intel_x86_nvidia_gpu:
+    dockerfile: workloads/custom_containers/hardware_monitoring/intel_x86_nvidia_gpu/Dockerfile
+    image: markhamlee/intel_x86_nvidia_gpu
+    path: workloads/custom_containers/hardware_monitoring/intel_x86_nvidia_gpu
+    version: 2.1.2
