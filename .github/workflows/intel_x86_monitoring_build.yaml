@@ -15,10 +15,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
- - name: Read version
-        id: version
-        run: echo "value=$(cat workloads/custom_containers/hardware_monitoring/intel_x86/VERSION)" >> "$GITHUB_OUTPUT"      
-      
+      - name: Read version
+              id: version
+              run: echo "value=$(cat workloads/custom_containers/hardware_monitoring/intel_x86/VERSION)" >> "$GITHUB_OUTPUT"      
+            
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       
