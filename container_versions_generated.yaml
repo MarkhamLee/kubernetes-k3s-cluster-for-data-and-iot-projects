@@ -28,7 +28,7 @@ services:
     dockerfile: workloads/custom_containers/hardware_monitoring/raspberrypi_4b/Dockerfile
     image: markhamlee/raspberrypi_4b
     path: workloads/custom_containers/hardware_monitoring/raspberrypi_4b
-    version: 1.8.1
+    version: 1.8.2
   rockchip3588:
     dockerfile: workloads/custom_containers/hardware_monitoring/rockchip3588/Dockerfile
     image: markhamlee/rockchip3588
