@@ -1,12 +1,12 @@
-# Markham Lee (C) 2023 - 2025
-# Homelab & Selfhosting Toolkit
-# https://github.com/MarkhamLee/homelab-and-self-hosting-toolkit
+# Markham Lee (C) 2023 - 2026
+# K3s Powered Private Cloud
+# https://github.com/MarkhamLee/k3s-data-platform-IoT
 # HW monitoring Script for an Orange Pi 5+, customized for the chipset
 # vs the more generic and often "somewhat off" data you'd get from
 # something like Prometheus. However, there is also an option to
 # to create a Proemetheus scrape target to collect "heartbeat" data
 # This script "should work" on any device running a Rockchip 3588
-# System on Chip (SOC). But it was specifically built and tested \
+# System on Chip (SOC). But it was specifically built and tested
 # on an Orange Pi 5+.
 import os
 import sys
