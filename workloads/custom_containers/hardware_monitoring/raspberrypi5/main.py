@@ -1,8 +1,9 @@
-# Markham Lee (C) 2025
-# kubernetes-k3s-data-and-IoT-platform
-# https://github.com/MarkhamLee/homelab-and-self-hosting-toolkit
-# Very basic monitoring script for Linux HW, would be used as
-# starting point for building a custom script for a specific device
+# Markham Lee (C) 2023 - 2026
+# K3s Powered Private Cloud
+# https://github.com/MarkhamLee/k3s-data-platform-IoT
+# HW Monitoring for Raspberry Pi 5, main difference
+# between this one and the one for the Pi 4B is that this
+# one has the capability to monitor NVME temps.
 import os
 import sys
 import time
