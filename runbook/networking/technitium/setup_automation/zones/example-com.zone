@@ -1,0 +1,6 @@
+$ORIGIN local.example.com.
+@                     900       IN  SOA           private-cloud-dns. hostadmin 3 900 300 604800 900
+@                     3600      IN  NS            private_cloud-dns.
+service1              3600      IN  A             192.168.1.9
+service2              3600      IN  A             192.168.1.12
+service3              3600      IN  A             192.168.9.12
