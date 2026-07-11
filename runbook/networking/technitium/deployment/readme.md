@@ -58,6 +58,8 @@ You can also upload with zone information in them to either add sub-domains or c
     ![Technitium Config - Source IP](../../../../images/technitium_dns_source_ip.png)
     This controls the source IP for your DNS server's outgoing requests
 
+3) In the [Setup Automation](../setup_automation/dhcp/README.md) folder, there is is an example of how you can use the API and CSV file to bulk upload DHCP reservations. 
+
 ### DNS Filtering & Security 
 
 1) DNS Filtering (optional, but highly recommended): presumably you'll want to enable DNS filtering/blocking of domains used for mischief and tracking. Go to Settings --> Blocking to enable this capability  
