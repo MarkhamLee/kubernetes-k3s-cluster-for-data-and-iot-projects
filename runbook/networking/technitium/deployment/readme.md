@@ -18,28 +18,6 @@ Note: when I first set this up, I had OPNsense providing DNS and DHCP and then I
 7) Run `sudo -E docker compose up -d  --force-recreate --remove-orphans` to start up Technitium
 8) Go to <technitium_server_ip>:53443 to access the UI
 
-
-### Setup 
-
-Note: Technitium has an API that allows you to configure domain names and DHCP without having to go through the UI, e.g., you could just upload your list of domains from a CSV, ditto for the static leases. 
-
-1) Technitium refers to your domains (e.g., my-private-cluster.com) as a "zone", go to Zones --> Add a Zone, to add a Zone for one of your domains (if needed)
-2) Go to DHCP --> Scopes --> Add Scope to configure IP address ranges and DNS servers. 
-    * Here you can specify the IP address ranges. For the domain name put the same domain as is being used by your firewall. Note: this is the same domain you should use when creating a Technitium cluster. On this page (near the bottom) can also set side ranges of IPs that won't be dynamically assigned (i.e., reserved for static assignments), etc. Once you've created a scope, you can go back and click the edit button to add static IP addresses. 
-![Add IP Address Ranges](../../../../images/technitium_add_scope.png)
-
-    * Add DNS Server IPs - while not needed if you have just one DNS server, I would still uncheck the box and add the IP of the server Technitium is running on, just makes it easier when you add additional DNS servers in the future. 
-![Add IP Address Ranges](../../../../images/technitium_add_dns_ip.png)
-
-3) Go to Settings --> General and put in the server's IP as the DNS server source IP similar to the below 
-
-    ![Technitium Config - Source IP](../../../../images/technitium_dns_source_ip.png)
-    This controls the source IP for your DNS server's outgoing requests
-
-4) DNS Filtering (optional): presumably you'll want to enable DNS filtering/blocking of domains used for mischief and tracking. Go to Settings --> Blocking to enable this capability  
-
-    ![Technitium - Blocking Config](../../../../images/technitium_blocking_config.png)
-
 ### Firewall Configs 
 
 Now that Technitium is setup, you need to configure OPNsense (or your Firewall) to use Technitium for DHCP an DNS. 
@@ -53,3 +31,40 @@ Now that Technitium is setup, you need to configure OPNsense (or your Firewall) 
     ![OPNsense DHCP](../../../../images/opnsense_dhcp.png)
 
     E.g. If Technitium is running on LAN1, there shouldn't be checkbox next to it.  
+
+
+### Managing Internal Domains
+1) Technitium refers to your domains (e.g., my-private-cluster.com) as a "zone", go to Zones --> Add a Zone, to add a Zone for one of your domains (if needed)
+2) Once you've created a zone, you can add subdomains in the UI via Zones --> Domain name (e.g. example.com) --> Add Zone and then type in the sub-domain name as per the below:
+
+![Add Subdomain](../../../../images/add_zone.png)
+
+#### Automation & IAC for Zones & Local Domains
+You can also upload with zone information in them to either add sub-domains or create a zone. You can find more details in the [automation section](../setup_automation/zones/READMD.md)
+
+![Add Subdomain](../../../../images/import_zone.png)
+
+### DHCP 
+
+1) Go to DHCP --> Scopes --> Add Scope to configure IP address ranges and DNS servers. 
+    * Here you can specify the IP address ranges. For the domain name put the same domain as is being used by your firewall. Note: this is the same domain you should use when creating a Technitium cluster. On this page (near the bottom) can also set side ranges of IPs that won't be dynamically assigned (i.e., reserved for static assignments), etc. Once you've created a scope, you can go back and click the edit button to add static IP addresses. 
+![Add IP Address Ranges](../../../../images/technitium_add_scope.png)
+
+    * Add DNS Server IPs - while not needed if you have just one DNS server, I would still uncheck the box and add the IP of the server Technitium is running on, just makes it easier when you add additional DNS servers in the future. 
+![Add IP Address Ranges](../../../../images/technitium_add_dns_ip.png)
+
+2) Go to Settings --> General and put in the server's IP as the DNS server source IP similar to the below 
+
+    ![Technitium Config - Source IP](../../../../images/technitium_dns_source_ip.png)
+    This controls the source IP for your DNS server's outgoing requests
+
+### DNS Filtering & Security 
+
+1) DNS Filtering (optional, but highly recommended): presumably you'll want to enable DNS filtering/blocking of domains used for mischief and tracking. Go to Settings --> Blocking to enable this capability  
+
+    ![Technitium - Blocking Config](../../../../images/technitium_blocking_config.png)
+
+
+### On-going maintenance
+
+Technitium has an API that allows you to configure domain names and DHCP without having to go through the UI, e.g., you could use a python script and csv file to upload your list of domains from a CSV file, ditto for the static leases. 
