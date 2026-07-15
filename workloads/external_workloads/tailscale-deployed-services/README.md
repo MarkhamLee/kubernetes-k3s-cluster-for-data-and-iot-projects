@@ -9,3 +9,4 @@ These services are deployed directly to a server that is functioning a Tailscale
 
 The advantage of this type of approach is that you could deploy a server or back-up server running critical application at a relative's house, at a co-location, etc., as long as the device has internet it's just plug and play in terms of deploying the server outside of your home. 
 
+The deployment files: Docker compose, config files, etc., in this folder are just examples. The versions that are used to deploy to production are in a separate IAC GitHub repo specifically for the services deployed to stand alone servers. 
