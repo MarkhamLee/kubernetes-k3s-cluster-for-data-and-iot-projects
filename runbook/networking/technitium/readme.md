@@ -9,7 +9,7 @@ Technitium's scope goes beyond the cluster as its managing numerous functions at
 
 The firewall (OPNsense) is configured to use the Technitium servers for DNS and DHCP. Each technitium instance runs its own instance of Traefik that uses Cloudflare and Lets Encrypt certificates to secure access to the technitium UI and to any other services running on that server. 
 
-The initial approach was to use two Technitium server in parallel and then use the API to quickly mirror configs, static IPs, custom domain configurations, etc. However, Technitium recently release clustering and now two Technitium servers are run in a cluster to ensure redundancy. 
+The initial approach was to use two Technitium server in parallel and then use the API to quickly mirror configs, static IPs, custom domain configurations, etc. However, Technitium recently release clustering and now the two Technitium servers are run in a cluster to ensure redundancy. 
 
 
 ### Deploying Services
@@ -20,7 +20,6 @@ Deploying a new service on K3s involves the following networking related steps:
 * The configured domain is added to the service's ingress definition 
 
 After the service is deployed to the cluster by Argo CD, requests for that service will be routed to the cluster by Technitium in concert with the Firewall/Router, and then to the service by Traefik. 
-
 
 #### Stand Alone Services
 
