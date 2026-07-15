@@ -19,7 +19,7 @@ The initial approach was to use two Technitium server in parallel and then use t
 ### Deployment Resources 
 
 * An example Docker Compose is available [here](deployment/compose.yaml) and the deployment instructions are available [here](deployment/readme.md)
-*  [Instructions](deploying_services.yaml) on using Technitium for deploying services on your home network.
+*  [Instructions](deploying_services.md) on using Technitium for deploying services on your home network.
 
 
 
