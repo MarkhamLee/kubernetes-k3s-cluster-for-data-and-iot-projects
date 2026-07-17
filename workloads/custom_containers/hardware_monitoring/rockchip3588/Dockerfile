@@ -17,7 +17,7 @@ FROM python:3.11.9-slim-bookworm
 
 # Create non-root user and group
 RUN groupadd --system app_group \
-    && useradd --system --create-home --no-log-init --gid app_group app_use
+    && useradd --system --create-home --no-log-init --gid app_group app_user
 
 COPY --from=builder /app/wheels /wheels
 COPY --from=builder /app/requirements.txt .
