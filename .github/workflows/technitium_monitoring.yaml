@@ -17,7 +17,7 @@ jobs:
 
       - name: Read version
         id: version
-        run: echo "value=$(cat network_management/technitium_monitoring/VERSION)" >> "$GITHUB_OUTPUT"
+        run: echo "value=$(cat workloads/custom_containers/network_monitoring/technitium_monitoring/VERSION)" >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
