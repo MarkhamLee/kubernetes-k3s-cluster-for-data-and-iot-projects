@@ -34,3 +34,8 @@ services:
     image: markhamlee/rockchip3588
     path: workloads/custom_containers/hardware_monitoring/rockchip3588
     version: 1.8.4
+  technitium_monitoring:
+    dockerfile: workloads/custom_containers/network_monitoring/technitium_monitoring/Dockerfile
+    image: markhamlee/technitium_monitoring
+    path: workloads/custom_containers/network_monitoring/technitium_monitoring
+    version: 1.4.2
