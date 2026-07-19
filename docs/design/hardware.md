@@ -1,31 +1,33 @@
 The current hardware architecture is built around the following principles:
 
-- Dedicated nodes for control, data/storage, and stateless workloads.
+- Dedicated nodes for control, data/storage, and stateless workloads. This separation of concerns provides for a cleaner and easier to manage cluster, while also enabling hardware to be selected and/or customized specifically for their workload type. E.g., Data/storage nodes have significantly faster networking than the control nodes. 
 - Data nodes and stateless nodes should each be powerful enough to run the majority of the cluster’s workloads in the event of a major failure.
 - Data/storage nodes should support 10 Gbps networking and be purchased new to minimize the risks associated with used hardware.
 - The majority of stateless compute capacity should be purchased new, and all stateless nodes should support at least 2.5 Gbps networking.
 
 These principles are the result of running the cluster in several configurations, including a three-node setup, mixed x86 and small ARM devices (Raspberry Pis), and a mix of used/refurbished x86 hardware. Those earlier iterations surfaced reliability, performance, and capacity limits that informed the current design.
 
-All nodes have upgraded cooling via Honeywell PTM7950 thermal pads. This higher‑end thermal interface material reduced average CPU temperatures by approximately 6 °C and improved overall thermal headroom. CPU temperatures, NVME drive temps, and average load are monitored in real time so that hardware issues related to over-allocation can be identified and addressed proactively.
+All nodes have upgraded cooling via Honeywell PTM7950 thermal pads. This higher‑end thermal interface material reduced average CPU temperatures (on average) by 6° C. 
+
+CPU temperatures, NVME drive temps, and average load are monitored in real time so that hardware issues related to over-allocation can be identified and addressed proactively.
 
 ## Control nodes – K3s control plane and networking
 
-The three control nodes run the K3s control plane (for example, the Kubernetes API server) and management-plane workloads such as Rancher. They are also responsible for networking-related workloads like cert-manager and Traefik. This separation of concerns ensures that agent nodes are responsible only for general workloads and are not required to run the cluster’s core control-plane components.
+The three control nodes run the K3s control plane (for example, the Kubernetes API server) and management-plane workloads such as Rancher. They are also responsible for networking related workloads like cert-manager and Traefik. Using three control nodes enables the cluster to run in a High Availability cluster, if one of the nodes goes down the others can continue to run the cluster. 
 
 ## Data nodes – storage and stateful workloads
 
 The data nodes are the only nodes that run Longhorn and thus provide the storage backbone for the entire cluster. They are also the preferred placement for stateful workloads such as MariaDB and PostgreSQL, ensuring that data‑intensive applications run on the machines closest to the storage layer.
 
-Stateful applications are deployed with a 70/30 preference for data nodes over general worker nodes. As long as data nodes have capacity, they will receive those workloads; otherwise, the workloads can fall back to worker nodes, preserving availability.
+Longhorn is restricted to only run on these nodes, while stateful applications are deployed with a 70/30 preference for data nodes over general worker nodes. As long as data nodes have the compute capacity they will receive the stateful workloads, and even some stateless workloads if the stateless worker nodes go down or lack capacity. 
 
-The selected data‑node platform is the Minisforum MS‑01 with the Intel 13900H CPU. This platform combines strong compute capacity with dual 2.5 GbE and 10 GbE networking. The 10 GbE interfaces are intended for a future dedicated Longhorn storage network, so that data replication traffic can run over a high‑bandwidth, isolated path. In line with the hardware principles, these devices are purchased new and are sized to be capable of running most cluster workloads if a large portion of the fleet becomes unavailable.
+The selected data‑node platform is the Minisforum MS‑01 with the Intel 13900H CPU. This platform combines strong compute capacity with dual 2.5 GbE and 10 GbE networking. The 10 GbE interfaces are intended for a future dedicated Longhorn storage network, so that data replication traffic can run over a high‑bandwidth, isolated path. In line with the hardware principles, these devices are purchased new and are capable of running most cluster workloads if a large portion of the fleet becomes unavailable.
 
 ## Worker nodes – stateless workloads
 
 Worker nodes are responsible for everything that does not fall under cluster management, stateful applications, or storage. Typical workloads include agentic AI workloads, data ingestion jobs, and applications such as Grafana and Linkwarden.
 
-The primary worker nodes are two Minisforum MS‑A1 systems. Each MS‑A1 is capable of running most cluster workloads and can host a full‑sized NVIDIA GPU via an external dock, which is useful for AI agents and other accelerated workloads. Both MS‑A1s have dual 2.5 Gbps networking, and their CPUs (currently AMD 7700X) can be upgraded or replaced with other AM5‑compatible processors, providing a clear hardware upgrade path.
+The primary worker nodes are two Minisforum MS‑A1 systems. Each MS‑A1 is capable of running most cluster workloads and can host a full‑sized NVIDIA GPU via an external dock, which is useful for AI agents and other accelerated workloads. Both MS‑A1s have dual 2.5 Gbps networking, and their CPUs (currently AMD 7700X) can be upgraded or replaced with other AMD AM5 compatible processor. 
 
 The MS‑A1s are supplemented by two HP G6 mini PCs that have been upgraded to support 2.5 Gbps networking. These units act as “spillover” or pressure‑relief nodes, ensuring that even when the MS‑A1s are heavily utilized, there is still stateless capacity available so those workloads are not scheduled onto the data nodes under normal conditions.
 

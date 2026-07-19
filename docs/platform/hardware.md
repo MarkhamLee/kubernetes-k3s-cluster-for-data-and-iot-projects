@@ -19,7 +19,6 @@ After experimenting with various hardware, K3s configurations, hardware roles, e
 I use labels, taints and tolerations to ensure that these nodes only run the Kubernetes orchestration software, manage the API and run critical network infrastructure like Cert Manager and Traefik. The reason for only running network apps like Traefik on the control nodes, is that if they were comprised those nodes don't access to any apps or their data. While this may seem like overkill when I first setup the cluster I was only running three nodes that did everything, and I'd get concessional instability and the devices I was using (Beelink SER 5s with AMD 5 5560Us) would thermal throttle fairly regularly. I.e., while it seems like overkill, it really isn't. Currently, the control nodes are **three Beelink SER5s running Ryzen 5 5560U chips with 64 GB of RAM**, and despite being a bit overworked in the beginning they've been problem free.
 
   
-
 Future Plans: replace the Beelink devices with ones with 2.5Gbe networking and that can support two m.2 drives, so I can deploy the OS into a ZFS pool as opposed to a single disk.
 
 
