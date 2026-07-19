@@ -1,16 +1,19 @@
 ## Technitium Clustering 
 
-These instructions presume the following:
+Historically, if you wanted to run multiple Technitium DNS servers your options for ensuring all the servers had the same data for DHCP reservations, local entries, etc., would be:
+
+* Manually enter in key settings like DHCP reservations and local DNS entries on each server
+* Use the API + custom code to copy the settings between servers. 
+
+Technitium's recently introduced clustering features, allows you to run multiple DNS servers that are linked together, meaning, you can update key settings like DHCP reservations, local DNS entries, etc., on one server and they'll propagate to the rest. Additionally, the dashboard will enable you to view aggregate traffic data across all of your DNS servers or view data for a singular server.  
+
+### Clustering Pre-Requisites 
+
+These instructions presume the following: 
+
 * You already have a primary or existing instance of Technitium up and running. If you don't, you should skip these instructions for now and go to the [instructions](deployment/readme.md) for setting up a single instance, get that setup and once it's stable, then come back to these instructions to setup your cluster. 
-* You're running OPNsense, you'll need to make some adjustments for a different firewall in terms of where to input the DNS IP addresses
-* You're using a reverse proxy with internal domains that point to the primary Technitium instance. 
-
-Setting up a Technitium cluster will enable the following capabilities: 
-
-* Redundancy as devices on your network will now have two or more DNS servers
-* You can make a change on one node and the data will be copied over to the rest, you won't have to manually enter in config changes on each DNS server separately or use custom code and the API to ensure that all the nodes have the same config data. 
-* When you login to any of the nodes, the dashboard will show the aggregate activity across all of the nodes 
-* Setting up additional nodes is very easy, adding them to the cluster only takes a few minutes and the configs in terms of DHCP leases, DNS entries, etc., will propagate over in a few mintues. 
+* You're running OPNsense, if you're not running OPNsense you'll need to refer your firewall's documentation to see where you would input the IP address for your DNS services. 
+* You're using a reverse proxy server and local DNS entries to point to local domain for the Technitium UI, e.g., something in the form of "technitium.local.your-private-cloud.com" 
 
 For ease of administration, it is recommended that once you get the cluster setup, you just do all your admin tasks from the primary node. 
 
