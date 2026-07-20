@@ -1,0 +1,39 @@
+services:
+  portainer:
+    image: portainer/portainer-ce:2.39.3
+    container_name: portainer
+    hostname: portainer
+    restart: unless-stopped
+
+    command: --base-url /portainer
+
+    privileged: true
+
+    security_opt:
+      - no-new-privileges:true
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /home/admin/.app_data/portainer/data:/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+    networks:
+      - proxy
+
+    ports:
+      - "9443:9443"
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.portainer.entrypoints=https"
+      - "traefik.http.routers.portainer.rule=Host(`tailscale_url.ts.net`) && PathPrefix(`/portainer`)"
+      - "traefik.http.routers.portainer.tls=true"
+      - "traefik.http.routers.portainer.tls.certresolver=tsresolver"
+      - "traefik.http.routers.portainer.middlewares=portainer-strip"
+      - "traefik.http.middlewares.portainer-strip.stripprefix.prefixes=/portainer"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+
+networks:
+  proxy:
+    external: true
