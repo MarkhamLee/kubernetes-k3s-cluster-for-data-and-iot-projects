@@ -23,7 +23,7 @@ services:
     dockerfile: workloads/custom_containers/hardware_monitoring/raspberrypi5/Dockerfile
     image: markhamlee/raspberrypi5
     path: workloads/custom_containers/hardware_monitoring/raspberrypi5
-    version: 1.0.5
+    version: 1.0.6
   raspberrypi_4b:
     dockerfile: workloads/custom_containers/hardware_monitoring/raspberrypi_4b/Dockerfile
     image: markhamlee/raspberrypi_4b
