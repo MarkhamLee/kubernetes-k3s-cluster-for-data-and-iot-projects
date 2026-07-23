@@ -36,8 +36,7 @@ jobs:
         with:
           context: ./workloads/custom_containers/network_monitoring/
           file: ./workloads/custom_containers/network_monitoring/technitium_monitoring/Dockerfile
-          platforms: 
-            linux/amd64
+          platforms: linux/amd64
           push: true
           tags: |
             markhamlee/technitium_monitoring:latest
