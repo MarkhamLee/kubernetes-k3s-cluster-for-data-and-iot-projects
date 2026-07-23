@@ -69,8 +69,6 @@ def write_data(base_payload: dict,
 
     # note: create payload with "types" defined before sending
     # data
-    # Will streamline this and the other method once I've changed
-    # the other methods that already use this library
 
     # combine the baseline payload with the data to be written to InfluxDB
     base_payload.update({"fields": data})
