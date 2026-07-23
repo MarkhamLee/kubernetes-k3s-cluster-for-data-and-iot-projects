@@ -38,4 +38,4 @@ services:
     dockerfile: workloads/custom_containers/network_monitoring/technitium_monitoring/Dockerfile
     image: markhamlee/technitium_monitoring
     path: workloads/custom_containers/network_monitoring/technitium_monitoring
-    version: 1.5.2
+    version: 1.6.2
