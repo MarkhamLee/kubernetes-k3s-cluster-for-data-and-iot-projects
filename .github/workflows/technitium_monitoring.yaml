@@ -34,8 +34,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./network_management/
-          file: ./network_management/technitium_monitoring/Dockerfile
+          context: ./workloads/custom_containers/network_monitoring/
+          file: ./workloads/custom_containers/network_monitoring/technitium_monitoring/Dockerfile
           platforms: 
             linux/amd64
           push: true
